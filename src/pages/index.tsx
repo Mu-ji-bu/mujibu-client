@@ -1,8 +1,9 @@
-import Head from "next/head";
+import Head from 'next/head';
+import Button from '@mui/material/Button';
 
-import { Inter } from "next/font/google";
+import { Inter } from 'next/font/google';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <h1>木質部，募質部。</h1>
+        <Button variant="outlined">Hello World</Button>
       </main>
     </>
   );
