@@ -32,6 +32,21 @@ Mujibu is the best fundraising website around Taiwan!
 - Coding Style
   - [Mujibu-coding style](https://hackmd.io/K9bC7ZroTeawGVpLXXvShQ)
 
+## Components Structure
+
+- components
+  - block -> define basic components(ex: button)
+  - pages -> define components for specific page(ex: projects)
+
+## Type Structure
+
+- button
+  - Button.tsx -> write interface here
+  - index.ts -> export this component
+- types
+  - pages
+    - projects -> like projects page, you may define some type, which can be centrally managed here
+
 ## Contributors
 
 - [Butters]()
