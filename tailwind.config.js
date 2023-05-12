@@ -36,7 +36,6 @@ module.exports = {
           accent: '#FF9D21',
         },
         white: {
-          87: 'rgba(255, 255, 255, 0.87)',
           DEFAULT: '#FFFFFF',
         },
         error: '#E44461',
