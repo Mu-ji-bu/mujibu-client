@@ -20,19 +20,7 @@ interface Post {
   body: string;
 }
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
-  const { id } = context.query;
-  console.log('id', id);
-  if (typeof id === 'string') {
-    store.dispatch(getPosts.initiate(id));
-  }
-  const [data] = await Promise.all(store.dispatch(getRunningQueriesThunk()));
-  return {
-    props: {
-      data: data.data,
-    },
-  };
-});
+
 
 const Projects = ({ data }: { data: Post }) => {
   const { projectName, isFollow } = useAppSelector(selectProject);
@@ -97,5 +85,19 @@ const Projects = ({ data }: { data: Post }) => {
     </>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  const { id } = context.query;
+  console.log('id', id);
+  if (typeof id === 'string') {
+    store.dispatch(getPosts.initiate(id));
+  }
+  const [data] = await Promise.all(store.dispatch(getRunningQueriesThunk()));
+  return {
+    props: {
+      data: data.data,
+    },
+  };
+});
 
 export default Projects;
