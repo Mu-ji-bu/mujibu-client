@@ -20,8 +20,6 @@ interface Post {
   body: string;
 }
 
-
-
 const Projects = ({ data }: { data: Post }) => {
   const { projectName, isFollow } = useAppSelector(selectProject);
   const dispatch = useAppDispatch();
