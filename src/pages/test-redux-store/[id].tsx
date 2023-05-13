@@ -9,26 +9,18 @@ import {
   getRunningQueriesThunk,
   getPosts,
 } from '../../store/services/postApi';
-
 import Button from '@mui/material/Button';
 import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
 import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
-  const { id } = context.query;
-  console.log('id', id);
-  if (typeof id === 'string') {
-    store.dispatch(getPosts.initiate(id));
-  }
-  const [data] = await Promise.all(store.dispatch(getRunningQueriesThunk()));
-  return {
-    props: {
-      data: data.data,
-    },
-  };
-});
+interface Post {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}
 
-const Projects = ({ data }) => {
+const Projects = ({ data }: { data: Post }) => {
   const { projectName, isFollow } = useAppSelector(selectProject);
   const dispatch = useAppDispatch();
 
@@ -91,5 +83,19 @@ const Projects = ({ data }) => {
     </>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  const { id } = context.query;
+  console.log('id', id);
+  if (typeof id === 'string') {
+    store.dispatch(getPosts.initiate(id));
+  }
+  const [data] = await Promise.all(store.dispatch(getRunningQueriesThunk()));
+  return {
+    props: {
+      data: data.data,
+    },
+  };
+});
 
 export default Projects;
