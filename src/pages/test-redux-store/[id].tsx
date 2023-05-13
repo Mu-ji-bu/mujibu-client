@@ -9,10 +9,16 @@ import {
   getRunningQueriesThunk,
   getPosts,
 } from '../../store/services/postApi';
-
 import Button from '@mui/material/Button';
 import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
 import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
+
+interface Post {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
   const { id } = context.query;
@@ -28,7 +34,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
   };
 });
 
-const Projects = ({ data }) => {
+const Projects = ({ data }: { data: Post }) => {
   const { projectName, isFollow } = useAppSelector(selectProject);
   const dispatch = useAppDispatch();
 
