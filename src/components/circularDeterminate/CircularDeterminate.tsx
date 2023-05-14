@@ -1,5 +1,12 @@
 import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+const StyledCircularProgress = styled(CircularProgress)(({ theme }) => ({
+  '& .MuiCircularProgress-circle': {
+    strokeLinecap: 'round',
+  },
+}));
 
 interface ICircularDeterminateProps {
   value: number;
@@ -11,13 +18,13 @@ const CircularDeterminate: React.FC<ICircularDeterminateProps> = (props) => {
 
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-      <CircularProgress
+      <StyledCircularProgress
         className="bottom-circle absolute z-0 text-secondary-10"
         variant="determinate"
         value={100}
         size={size}
       />
-      <CircularProgress variant="determinate" value={value} size={size} className="text-green-accent" />
+      <StyledCircularProgress variant="determinate" value={value} size={size} className="text-green-accent" />
       <Box
         sx={{
           top: 0,
