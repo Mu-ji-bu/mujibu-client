@@ -1,7 +1,7 @@
 import { Container, Box, Grid, Stack, Button, IconButton, Typography, Avatar } from '@mui/material';
 import { Bolt, Add, Facebook, Instagram, YouTube, Search, Google, EmailOutlined, Public } from '@mui/icons-material';
 import Link from 'next/link';
-import CircularDeterminate from '@/components/circularDeterminate';
+import CircularDeterminate from '@/components/block/circularDeterminate';
 const Mui = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -94,7 +94,7 @@ const Mui = () => {
           </Button>
         </Stack>
         <Stack direction="row" spacing={2} className="mb-5">
-          <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="facebook">
+          <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="search">
             <Search />
           </Button>
           <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="facebook">
