@@ -1,6 +1,7 @@
-import { Container, Box, Grid, Stack, Button, IconButton, Typography, Link, Avatar } from '@mui/material';
+import { Container, Box, Grid, Stack, Button, IconButton, Typography, Avatar } from '@mui/material';
 import { Bolt, Add, Facebook, Instagram, YouTube, Search, Google, EmailOutlined, Public } from '@mui/icons-material';
-
+import Link from 'next/link';
+import CircularDeterminate from '@/components/block/circularDeterminate';
 const Mui = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,12 +48,8 @@ const Mui = () => {
           Text / caption
         </Typography>
 
-        <Link href="#" className="block text-secondary-66 hover:text-secondary" variant="h5" underline="none">
-          Link / H5 Secondary
-        </Link>
-
-        <Link href="#" className="block hover:text-secondary" variant="h6" underline="none">
-          Link / H6 Primary
+        <Link href="#" className="no-underline visited:text-primary text-primary font-medium hover:text-secondary">
+          Link 這邊須引入Next的Link 不能用mui的Link 樣式直接用tailwind處理
         </Link>
       </Box>
       <Box className="mb-10">
@@ -97,7 +94,7 @@ const Mui = () => {
           </Button>
         </Stack>
         <Stack direction="row" spacing={2} className="mb-5">
-          <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="facebook">
+          <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="search">
             <Search />
           </Button>
           <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="facebook">
@@ -148,6 +145,11 @@ const Mui = () => {
         <Button type="submit" fullWidth variant="outlined" startIcon={<Google />}>
           使用 Google 登入
         </Button>
+      </Box>
+      <Box className="mb-10">
+        <CircularDeterminate value={42} size={'5em'} />
+        <CircularDeterminate value={66} size={'5em'} />
+        <CircularDeterminate value={80} size={'5em'} />
       </Box>
     </Container>
   );
