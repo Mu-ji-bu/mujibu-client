@@ -1,6 +1,7 @@
 import { Container, Box, Grid, Stack, Button, IconButton, Typography, Avatar } from '@mui/material';
 import { Bolt, Add, Facebook, Instagram, YouTube, Search, Google, EmailOutlined, Public } from '@mui/icons-material';
 import Link from 'next/link';
+import CircularDeterminate from '@/components/circularDeterminate';
 const Mui = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -144,6 +145,11 @@ const Mui = () => {
         <Button type="submit" fullWidth variant="outlined" startIcon={<Google />}>
           使用 Google 登入
         </Button>
+      </Box>
+      <Box className="mb-10">
+        <CircularDeterminate value={42} size={'5em'} />
+        <CircularDeterminate value={66} size={'5em'} />
+        <CircularDeterminate value={80} size={'5em'} />
       </Box>
     </Container>
   );
