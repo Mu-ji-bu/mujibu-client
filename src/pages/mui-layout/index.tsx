@@ -1,7 +1,7 @@
 import { Container, Box, Grid, Stack, Button, IconButton, Typography, Avatar } from '@mui/material';
 import { Bolt, Add, Facebook, Instagram, YouTube, Search, Google, EmailOutlined, Public } from '@mui/icons-material';
 import Link from 'next/link';
-import CircularDeterminate from '@/components/circularDeterminate';
+import CircularDeterminate from '@/components/block/circularDeterminate';
 const Mui = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
