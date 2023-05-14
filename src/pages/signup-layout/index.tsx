@@ -1,17 +1,10 @@
-import { useState } from 'react';
-import {
-  Container,
-  Box,
-  Grid,
-  Stack,
-  Button,
-  Typography,
-  Link,
-  FormControlLabel,
-  TextField,
-  Checkbox,
-} from '@mui/material';
+import Link from 'next/link';
+import clsxm from '@/lib/clsxm';
+import { Button, Typography, TextField } from '@mui/material';
 import { Google } from '@mui/icons-material';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 
 const SignUp = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -20,12 +13,19 @@ const SignUp = () => {
   };
 
   return (
-    <Container component="div" maxWidth="sm">
-      <Box className="border border-solid border-secondary-10 shadow-md my-20 py-10 px-20 flex flex-col items-center rounded-md">
+    <div className="max-w-xl mx-auto px-5 py-20">
+      <div
+        className={clsxm(
+          'py-10 px-5 sm:px-20',
+          'flex flex-col items-center',
+          'border border-solid border-secondary-10',
+          'shadow-md rounded-md',
+        )}
+      >
         <Typography className="text-secondary mb-5" component="h2" variant="h5">
           立即加入會員
         </Typography>
-        <Box className="mb-10" component="form" onSubmit={handleSubmit}>
+        <form className="mb-10 w-full" onSubmit={handleSubmit}>
           <TextField
             margin="dense"
             required
@@ -72,6 +72,19 @@ const SignUp = () => {
             size="small"
           />
 
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={['DatePicker']}>
+              <DatePicker
+                className="mb-1"
+                label="生日"
+                slotProps={{
+                  textField: {
+                    size: 'small',
+                  },
+                }}
+              />
+            </DemoContainer>
+          </LocalizationProvider>
           <TextField
             margin="dense"
             required
@@ -95,41 +108,48 @@ const SignUp = () => {
             autoComplete="passwordConfirm"
             size="small"
           />
-          <Box className="flex flex-col items-center mb-5">
+          <div className="flex flex-col items-center mb-5">
             <Typography component="p" variant="caption">
               已經有帳號了嗎 ?{' '}
-              <Link href="#" className="hover:text-secondary ml-1" variant="caption" underline="none">
+              <Link
+                href="/login"
+                className="no-underline visited:text-primary text-primary hover:text-secondary font-medium mx-1"
+              >
                 登入
               </Link>
             </Typography>
-          </Box>
+          </div>
 
           <Button type="submit" fullWidth variant="contained">
             註冊
           </Button>
-        </Box>
-
+        </form>
         <Typography className="text-secondary mb-10" component="h2" variant="h6">
           — 透過其他方式登入 —
         </Typography>
-
         <Button className="mb-5" type="submit" fullWidth variant="outlined" startIcon={<Google />}>
           使用 Google 登入
         </Button>
-        <Box className="flex flex-col items-center mb-5">
+        <div className="flex flex-col items-center mb-5">
           <Typography component="p" variant="caption">
             註冊即表示您同意
-            <Link href="#" className="hover:text-secondary mx-1" variant="caption" underline="none">
+            <Link
+              href="/user-terms"
+              className="no-underline visited:text-primary text-primary hover:text-secondary font-medium mx-1"
+            >
               使用條款
             </Link>
             及
-            <Link href="#" className="hover:text-secondary mx-1" variant="caption" underline="none">
+            <Link
+              href="/user-privacy"
+              className="no-underline visited:text-primary text-primary hover:text-secondary font-medium mx-1"
+            >
               隱私權政策
             </Link>
           </Typography>
-        </Box>
-      </Box>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 export default SignUp;
