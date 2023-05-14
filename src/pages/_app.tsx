@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 import { wrapper } from '../store/store';
 import { Provider as StoreProvider } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
+import Layout from '@/components/layout/Layout';
 import theme from '../lib/muiTheme';
 
 export default function App({ Component, ...rest }: AppProps) {
@@ -13,7 +14,9 @@ export default function App({ Component, ...rest }: AppProps) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <StoreProvider store={store}>
-        <Component {...props.pageProps} />
+        <Layout>
+          <Component {...props.pageProps} />
+        </Layout>
       </StoreProvider>
     </ThemeProvider>
   );
