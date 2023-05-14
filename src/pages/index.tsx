@@ -1,4 +1,3 @@
-import Button from '@/components/block/button';
 import Seo from '@/components/Seo';
 
 export default function Home() {

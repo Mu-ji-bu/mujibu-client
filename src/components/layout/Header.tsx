@@ -7,7 +7,7 @@ import NotificationsMenu, { INotificationsMenuOption } from '../block/notificati
 import SearchButton from '../block/searchButton';
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const accountOptions: IAccountMenuOption[] = [
     { label: '個人設定', href: '/member', hasBorderBottom: false },
@@ -52,12 +52,12 @@ const Header = () => {
             <SearchButton />
             <div className="division w-[1px] h-6 bg-secondary-30 ml-10 mr-10"></div>
             <Button variant="contained">
-              <Link className="no-underline visited:text-current" href={'/signup'}>
+              <Link className="no-underline visited:text-current text-white" href={'/signup'}>
                 註冊
               </Link>
             </Button>
             <Button variant="outlined" color="secondary" className="ml-5">
-              <Link className="no-underline visited:text-current" href={'/login'}>
+              <Link className="no-underline visited:text-current text-secondary" href={'/login'}>
                 登入
               </Link>
             </Button>
