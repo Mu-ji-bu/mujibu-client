@@ -1,6 +1,6 @@
-import { Container, Box, Grid, Stack, Button, IconButton, Typography, Link, Avatar } from '@mui/material';
+import { Container, Box, Grid, Stack, Button, IconButton, Typography, Avatar } from '@mui/material';
 import { Bolt, Add, Facebook, Instagram, YouTube, Search, Google, EmailOutlined, Public } from '@mui/icons-material';
-
+import Link from 'next/link';
 const Mui = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,12 +47,8 @@ const Mui = () => {
           Text / caption
         </Typography>
 
-        <Link href="#" className="block text-secondary-66 hover:text-secondary" variant="h5" underline="none">
-          Link / H5 Secondary
-        </Link>
-
-        <Link href="#" className="block hover:text-secondary" variant="h6" underline="none">
-          Link / H6 Primary
+        <Link href="#" className="no-underline visited:text-primary text-primary font-medium hover:text-secondary">
+          Link 這邊須引入Next的Link 不能用mui的Link 樣式直接用tailwind處理
         </Link>
       </Box>
       <Box className="mb-10">

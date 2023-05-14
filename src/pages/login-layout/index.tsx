@@ -1,15 +1,6 @@
-import {
-  Container,
-  Box,
-  Grid,
-  Stack,
-  Button,
-  Typography,
-  Link,
-  FormControlLabel,
-  TextField,
-  Checkbox,
-} from '@mui/material';
+import Link from 'next/link';
+import clsxm from '@/lib/clsxm';
+import { Button, Typography, TextField } from '@mui/material';
 import { Google } from '@mui/icons-material';
 
 const LogIn = () => {
@@ -23,12 +14,19 @@ const LogIn = () => {
   };
 
   return (
-    <Container component="div" maxWidth="sm">
-      <Box className="border border-solid border-secondary-10 shadow-md my-20 py-10 px-20 flex flex-col items-center rounded-md">
+    <div className="max-w-xl mx-auto px-5 py-20">
+      <div
+        className={clsxm(
+          'py-10 px-5 sm:px-20',
+          'flex flex-col items-center',
+          'border border-solid border-secondary-10',
+          'shadow-md rounded-md',
+        )}
+      >
         <Typography className="text-secondary mb-5" component="h2" variant="h5">
           開始你的募資旅程
         </Typography>
-        <Box className="mb-10" component="form" onSubmit={handleSubmit}>
+        <form className="mb-10 w-full" onSubmit={handleSubmit}>
           <TextField
             margin="normal"
             required
@@ -50,37 +48,42 @@ const LogIn = () => {
             id="password"
             autoComplete="current-password"
           />
-          <Box className="flex flex-col items-center mb-5">
+          <div className="flex flex-col items-center mb-5">
             <Typography component="p" variant="caption">
               忘記密碼了嗎 ?{' '}
-              <Link href="#" className="hover:text-secondary ml-1" variant="caption" underline="none">
+              <Link
+                href="/forget-password"
+                className="no-underline visited:text-primary text-primary hover:text-secondary font-medium mx-1"
+              >
                 重設密碼
               </Link>
             </Typography>
-          </Box>
+          </div>
 
           <Button type="submit" fullWidth variant="contained">
             登入
           </Button>
-        </Box>
+        </form>
 
         <Typography className="text-secondary mb-10" component="h2" variant="h6">
           — 透過其他方式登入 —
         </Typography>
-
         <Button className="mb-5" type="submit" fullWidth variant="outlined" startIcon={<Google />}>
           使用 Google 登入
         </Button>
-        <Box className="flex flex-col items-center mb-5">
+        <div className="flex flex-col items-center mb-5">
           <Typography component="p" variant="caption">
             還沒有帳號嗎 ?{' '}
-            <Link href="#" className="hover:text-secondary ml-1" variant="caption" underline="none">
+            <Link
+              href="/signup"
+              className="no-underline visited:text-primary text-primary hover:text-secondary font-medium mx-1"
+            >
               馬上註冊
             </Link>
           </Typography>
-        </Box>
-      </Box>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 export default LogIn;
