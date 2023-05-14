@@ -1,0 +1,16 @@
+.login-form {
+  padding: 10px;
+  width: 300px;
+  input {
+    border-bottom: 1px solid;
+    width: 100%;
+  }
+  button {
+    background: gray;
+    width: 100%;
+  }
+  .error-text {
+    color: red;
+    font-size: 12px;
+  }
+}

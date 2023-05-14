@@ -94,7 +94,7 @@ const Mui = () => {
           </Button>
         </Stack>
         <Stack direction="row" spacing={2} className="mb-5">
-          <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="facebook">
+          <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="search">
             <Search />
           </Button>
           <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="facebook">
