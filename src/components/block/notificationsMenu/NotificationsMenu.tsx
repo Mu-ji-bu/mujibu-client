@@ -9,11 +9,11 @@ export interface INotificationsMenuOption {
   type: string;
 }
 
-interface IAccountMenuProps {
+interface INotificationsMenuProps {
   options: INotificationsMenuOption[];
 }
 
-const NotificationsMenu: React.FC<IAccountMenuProps> = ({ options }) => {
+const NotificationsMenu: React.FC<INotificationsMenuProps> = ({ options }) => {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -90,9 +90,24 @@ const NotificationsMenu: React.FC<IAccountMenuProps> = ({ options }) => {
             </div>
           </MenuItem>
         ))}
-        <div className="flex justify-end">
-          <div className="ml-auto p-2">查看更多</div>
-        </div>
+        <MenuItem
+          onClick={() => router.push('/notifications')}
+          sx={{
+            minWidth: '58px',
+            minHeight: '40px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontSize: '14px',
+            fontWeight: '500',
+            lineHeight: '20px',
+            padding: '12px 40px',
+            color: '#484848',
+            borderBottom: '1px solid #E5E5E5',
+          }}
+        >
+          查看更多
+        </MenuItem>
       </Menu>
     </>
   );
