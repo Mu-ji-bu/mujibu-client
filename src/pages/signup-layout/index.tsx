@@ -2,9 +2,9 @@ import Link from 'next/link';
 import clsxm from '@/lib/clsxm';
 import { Button, Typography, TextField } from '@mui/material';
 import { Google } from '@mui/icons-material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 
 const SignUp = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -72,7 +72,7 @@ const SignUp = () => {
             size="small"
           />
 
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={['DatePicker']}>
               <DatePicker
                 className="mb-1"
@@ -84,7 +84,7 @@ const SignUp = () => {
                 }}
               />
             </DemoContainer>
-          </LocalizationProvider>
+          </LocalizationProvider> */}
           <TextField
             margin="dense"
             required
@@ -152,4 +152,5 @@ const SignUp = () => {
     </div>
   );
 };
+
 export default SignUp;
