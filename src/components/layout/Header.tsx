@@ -12,7 +12,7 @@ import { Menu, Search } from '@mui/icons-material';
 
 const Header = () => {
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const accountOptions: IAccountMenuOption[] = [
     { label: '個人設定', href: '/member', hasBorderBottom: false },
