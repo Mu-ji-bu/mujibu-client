@@ -1,12 +1,17 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import clsxm from '@/lib/clsxm';
 import { useState } from 'react';
-import Button from '../block/button';
+import { Button, Typography } from '@mui/material';
+import { useRouter } from 'next/router';
+// import Button from '../block/button';
 import AccountMenu, { IAccountMenuOption } from '../block/accountMenu/AccountMenu';
 import NotificationsMenu, { INotificationsMenuOption } from '../block/notificationsMenu/NotificationsMenu';
 import SearchButton from '../block/searchButton';
+import { Menu, Search } from '@mui/icons-material';
 
 const Header = () => {
+  const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const accountOptions: IAccountMenuOption[] = [
@@ -24,47 +29,78 @@ const Header = () => {
   ];
 
   return (
-    <div className="flex justify-between items-center py-6 px-10 border-0 border-b-[1px] border-secondary-10 border-solid">
-      <div className="header-left flex items-center">
-        <Link href={'/'}>
-          <Image src={'/logo@2x.png'} alt={'mujibu logo'} width={128} height={48} />
-        </Link>
-        <div className="logo-text text-primary text-[20px] leading-[1] pr-5 border-0 border-r border-secondary-30 border-solid">
-          讓創意萌芽
+    <header className="border-0 border-b border-solid border-secondary-10">
+      <div className="max-w-screen-xl mx-auto px-5 py-2 flex justify-between items-center">
+        <div className="flex items-center">
+          <Link href={'/'} className="flex items-center mr-4">
+            <Image src={'/logo@2x.png'} alt={'募質部 Mujibu logo'} width={128} height={48} />
+          </Link>
+          <Typography component="span" variant="h6" className="md:block hidden text-primary">
+            讓創意萌芽
+          </Typography>
+          <div className="division w-[1px] h-6 bg-secondary-30 mx-6 md:block hidden"></div>
+          <Link
+            className="mr-6 text-secondary-66 hover:text-secondary visited:text-secondary-66 no-underline md:block hidden"
+            href={'/projects'}
+          >
+            <Typography component="p" variant="h6">
+              探索
+            </Typography>
+          </Link>
+          <Link
+            className="mr-2 text-secondary-66 hover:text-secondary visited:text-secondary-66 no-underline md:block hidden"
+            href={'/proposal'}
+          >
+            <Typography component="p" variant="h6">
+              提案
+            </Typography>
+          </Link>
         </div>
-        <Link className="ml-8 text-secondary-66 hover:text-secondary text-[20px] no-underline" href={'/projects'}>
-          探索
-        </Link>
-        <Link className="ml-10 text-secondary-66 hover:text-secondary text-[20px] no-underline" href={'/proposal'}>
-          提案
-        </Link>
+        <div className="flex items-center">
+          {isLoggedIn ? (
+            <>
+              <div className="hidden md:block">
+                <SearchButton />
+              </div>
+              <div className="w-[1px] h-6 bg-secondary-30 mx-6 hidden md:block"></div>
+              <NotificationsMenu options={notificationOptions} />
+              <AccountMenu options={accountOptions} />
+            </>
+          ) : (
+            <>
+              {' '}
+              <div className="hidden md:flex items-center">
+                <SearchButton />
+                <div className="w-[1px] h-6 bg-secondary-30 mx-6"></div>
+                <Button variant="contained" onClick={() => router.push('/signup')}>
+                  註冊
+                </Button>
+                <Button variant="outlined" color="secondary" className="ml-5" onClick={() => router.push('/login')}>
+                  登入
+                </Button>
+              </div>
+              <Button
+                variant="outlined"
+                color="secondary"
+                className="p-[6px] min-w-0 md:hidden ml-5"
+                aria-label="instagram"
+              >
+                <Search />
+              </Button>
+            </>
+          )}
+
+          <Button
+            variant="outlined"
+            color="secondary"
+            className="p-[6px] min-w-0 md:hidden ml-5"
+            aria-label="instagram"
+          >
+            <Menu />
+          </Button>
+        </div>
       </div>
-      <div className="header-right flex items-center">
-        {isLoggedIn ? (
-          <>
-            <SearchButton />
-            <div className="division w-[1px] h-6 bg-secondary-30 ml-10 mr-10"></div>
-            <NotificationsMenu options={notificationOptions} />
-            <AccountMenu options={accountOptions} />
-          </>
-        ) : (
-          <>
-            <SearchButton />
-            <div className="division w-[1px] h-6 bg-secondary-30 ml-10 mr-10"></div>
-            <Button variant="contained">
-              <Link className="no-underline visited:text-current text-white" href={'/signup'}>
-                註冊
-              </Link>
-            </Button>
-            <Button variant="outlined" color="secondary" className="ml-5">
-              <Link className="no-underline visited:text-current text-secondary" href={'/login'}>
-                登入
-              </Link>
-            </Button>
-          </>
-        )}
-      </div>
-    </div>
+    </header>
   );
 };
 
