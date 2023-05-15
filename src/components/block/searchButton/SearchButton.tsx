@@ -2,6 +2,7 @@ import * as React from 'react';
 import { InputBase } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import Button from '../button/Button';
+import clsxm from '@/lib/clsxm';
 
 const SearchButton = () => {
   const [open, setOpen] = React.useState(false);
@@ -18,16 +19,16 @@ const SearchButton = () => {
 
   return (
     <div
-      className={`relative flex items-center rounded-md border border-solid ${
+      className={`relative flex items-center rounded-md border border-solid  ${
         open ? 'border-secondary' : 'border-secondary-50'
       } hover:border-secondary`}
     >
       <InputBase
+        className={clsxm(open ? 'w-[90px] lg:w-[200px]' : 'w-0')}
         placeholder="Search..."
         inputProps={{ 'aria-label': 'search' }}
         sx={{
           ml: open ? 1 : 0,
-          width: open ? '200px' : '0px',
           height: 36,
           transition: 'width 0.5s ease-in-out',
           display: 'flex',
