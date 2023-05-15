@@ -1,14 +1,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import clsxm from '@/lib/clsxm';
 import { useState } from 'react';
 import { Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-// import Button from '../block/button';
 import AccountMenu, { IAccountMenuOption } from '../block/accountMenu/AccountMenu';
 import NotificationsMenu, { INotificationsMenuOption } from '../block/notificationsMenu/NotificationsMenu';
 import SearchButton from '../block/searchButton';
-import { Menu, Search } from '@mui/icons-material';
+import { Menu } from '@mui/icons-material';
 
 const Header = () => {
   const router = useRouter();
@@ -79,23 +77,12 @@ const Header = () => {
                   登入
                 </Button>
               </div>
-              <Button
-                variant="outlined"
-                color="secondary"
-                className="p-[6px] min-w-0 md:hidden ml-5"
-                aria-label="instagram"
-              >
-                <Search />
-              </Button>
             </>
           )}
-
-          <Button
-            variant="outlined"
-            color="secondary"
-            className="p-[6px] min-w-0 md:hidden ml-5"
-            aria-label="instagram"
-          >
+          <div className="md:hidden">
+            <SearchButton />
+          </div>
+          <Button variant="outlined" color="secondary" className="p-[6px] min-w-0 md:hidden ml-5" aria-label="search">
             <Menu />
           </Button>
         </div>
