@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { DeterminateSize } from '@/components/types/enum';
 
 const StyledCircularProgress = styled(CircularProgress)(({ theme }) => ({
   '& .MuiCircularProgress-circle': {
@@ -11,10 +12,11 @@ const StyledCircularProgress = styled(CircularProgress)(({ theme }) => ({
 interface ICircularDeterminateProps {
   value: number;
   size: string;
+  textSize: DeterminateSize;
 }
 
 const CircularDeterminate: React.FC<ICircularDeterminateProps> = (props) => {
-  const { value, size } = props;
+  const { value, size, textSize } = props;
 
   return (
     <Box className="relative inline-flex">
@@ -26,13 +28,43 @@ const CircularDeterminate: React.FC<ICircularDeterminateProps> = (props) => {
       />
       <StyledCircularProgress variant="determinate" value={value} size={size} className="text-green-accent" />
       <Box className="absolute inset-0 flex items-center justify-center">
-        <Typography variant="body16" component="span" color="primary">
-          {`${Math.round(value)}`}
-          <span className="text-xs pl-px">%</span>
-        </Typography>
+        <TextComponent textSize={textSize} value={value} />
       </Box>
     </Box>
   );
+};
+
+const TextComponent: React.FC<{ textSize: DeterminateSize; value: number }> = ({ textSize, value }) => {
+  switch (textSize) {
+    case DeterminateSize.Large:
+      return (
+        <>
+          <span className=" text-3xl text-primary">{`${Math.round(value)}`}</span>
+          <span className="text-xl pl-px text-primary">%</span>
+        </>
+      );
+    case DeterminateSize.Small:
+      return (
+        <>
+          <span className="text-base text-primary">{`${Math.round(value)}`}</span>
+          <span className="text-xs pl-px text-primary">%</span>
+        </>
+      );
+    case DeterminateSize.Medium:
+      return (
+        <>
+          <span className="text-2xl text-primary">{`${Math.round(value)}`}</span>
+          <span className="text-base pl-px text-primary">%</span>
+        </>
+      );
+    default:
+      return (
+        <>
+          <span className="text-2xl text-primary">{`${Math.round(value)}`}</span>
+          <span className="text-base pl-px text-primary">%</span>
+        </>
+      );
+  }
 };
 
 export default CircularDeterminate;
