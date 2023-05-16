@@ -1,15 +1,17 @@
 import Link from 'next/link';
+import { useState } from 'react';
 import clsxm from '@/lib/clsxm';
 import { Button, Typography, TextField } from '@mui/material';
 import { Google } from '@mui/icons-material';
-// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 
 const SignUp = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    console.log(event);
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    console.log(data.get('birthday'), data.get('email'));
   };
 
   return (
@@ -71,20 +73,17 @@ const SignUp = () => {
             autoFocus
             size="small"
           />
-
-          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']}>
-              <DatePicker
-                className="mb-1"
-                label="生日"
-                slotProps={{
-                  textField: {
-                    size: 'small',
-                  },
-                }}
-              />
-            </DemoContainer>
-          </LocalizationProvider> */}
+          <DatePicker
+            className="mb-1 mt-2 w-full"
+            label="生日"
+            slotProps={{
+              textField: {
+                id: 'birthday',
+                name: 'birthday',
+                size: 'small',
+              },
+            }}
+          />
           <TextField
             margin="dense"
             required
