@@ -23,14 +23,15 @@ const StyledLinearProgressBase = styled(LinearProgress)(({ theme }) => ({
 
 interface ILinearDeterminate {
   value: number;
+  haslabel?: boolean;
 }
 
 const LinearDeterminate: React.FC<ILinearDeterminate> = (props) => {
-  const { value } = props;
+  const { value, haslabel } = props;
 
   return (
     <Box className="flex items-center">
-      <Box className="w-full mr-3 relative">
+      <Box className="w-full relative">
         <StyledLinearProgressBase
           className="opacity-50 absolute w-full"
           color="secondary"
@@ -39,9 +40,11 @@ const LinearDeterminate: React.FC<ILinearDeterminate> = (props) => {
         />
         <StyledLinearProgress color="secondary" variant="determinate" {...props} />
       </Box>
-      <Box className="text-right">
-        <Typography className="opacity-60" variant="caption" color="secondary">{`${Math.round(value)}%`}</Typography>
-      </Box>
+      {haslabel && (
+        <Box className="ml-3 text-right">
+          <Typography className="opacity-60" variant="caption" color="secondary">{`${Math.round(value)}%`}</Typography>
+        </Box>
+      )}
     </Box>
   );
 };

@@ -6,10 +6,20 @@ const Projects = () => {
 
   return (
     <>
-      <h1>1.0 探索 yo</h1>
+      <h1>1.0 探索</h1>
       <Card
         isPC={isPC}
-        projectType="inProgress"
+        projectType="InProgress"
+        projectName="Balance衡壓坐墊｜市場唯一衡壓概念健康坐墊，坐出 Q 軟好體態！"
+      />
+      <Card
+        isPC={isPC}
+        projectType="Success"
+        projectName="Balance衡壓坐墊｜市場唯一衡壓概念健康坐墊，坐出 Q 軟好體態！"
+      />
+      <Card
+        isPC={isPC}
+        projectType="LongTerm"
         projectName="Balance衡壓坐墊｜市場唯一衡壓概念健康坐墊，坐出 Q 軟好體態！"
       />
     </>
