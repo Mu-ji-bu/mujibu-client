@@ -1,10 +1,8 @@
 import Link from 'next/link';
-import { useState } from 'react';
 import clsxm from '@/lib/clsxm';
 import { Button, Typography, TextField } from '@mui/material';
 import { Google } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
 
 const SignUp = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

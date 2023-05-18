@@ -1,10 +1,9 @@
 import Link from 'next/link';
 import clsxm from '@/lib/clsxm';
-import { Button, Typography, TextField } from '@mui/material';
+import { Button, Typography, TextField, Avatar } from '@mui/material';
 import { Google } from '@mui/icons-material';
-import useFirebaseAuthentication from '@libraries/hooks/useFirebaseAuthentication';
 
-const LogIn = () => {
+const PersonalSettings = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -13,14 +12,15 @@ const LogIn = () => {
       password: data.get('password'),
     });
   };
-  const { handleGoogleAuth, googleToken } = useFirebaseAuthentication();
-
-  const handleLogin = () => {
-    handleGoogleAuth();
-  };
 
   return (
     <div className="max-w-xl mx-auto px-5 py-20">
+      <div>
+        <Avatar className="bg-primary" alt="Remy Sharp" src="/broken-image.jpg">
+          B
+        </Avatar>
+      </div>
+      5.0 會員中心 5.4 個人設定
       <div
         className={clsxm(
           'py-10 px-5 sm:px-20',
@@ -74,14 +74,7 @@ const LogIn = () => {
         <Typography className="text-secondary mb-10" component="h2" variant="h6">
           — 透過其他方式登入 —
         </Typography>
-        <Button
-          className="mb-5"
-          type="button"
-          onClick={() => handleLogin()}
-          fullWidth
-          variant="outlined"
-          startIcon={<Google />}
-        >
+        <Button className="mb-5" type="submit" fullWidth variant="outlined" startIcon={<Google />}>
           使用 Google 登入
         </Button>
         <div className="flex flex-col items-center mb-5">
@@ -99,4 +92,4 @@ const LogIn = () => {
     </div>
   );
 };
-export default LogIn;
+export default PersonalSettings;
