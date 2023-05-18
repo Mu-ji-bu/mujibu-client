@@ -17,18 +17,16 @@ type FirebaseConfig = {
   measurementId: string;
 };
 
-// TODO:之後需要創建firebase共用帳號，並改為此帳號config
 const firebaseConfig: FirebaseConfig = {
-  apiKey: 'AIzaSyDSvslrOogv5YzQ9OKjMcwjd7KU4j6-nU8',
-  authDomain: 'fir-test-78a87.firebaseapp.com',
-  projectId: 'fir-test-78a87',
-  storageBucket: 'fir-test-78a87.appspot.com',
-  messagingSenderId: '738090365839',
-  appId: '1:738090365839:web:41ed34c2740dd319be11fa',
-  measurementId: 'G-J83VJ6FKSN',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? '',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ?? '',
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? '',
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? '',
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ?? '',
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID ?? '',
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID ?? '',
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 export const authentication = getAuth(app);
