@@ -9,6 +9,7 @@ export interface IAccountMenuOption {
   href: string;
   hasBorderBottom: boolean;
   icon?: JSX.Element;
+  handleCustomEvent?: Function;
 }
 
 interface IAccountMenuProps {
@@ -74,7 +75,9 @@ const AccountMenu: React.FC<IAccountMenuProps> = ({ options }) => {
         {options.map((option, index) => (
           <MenuItem
             key={option.label}
-            onClick={() => router.push(option.href)}
+            onClick={() => {
+              option.handleCustomEvent ? option.handleCustomEvent() : router.push(option.href);
+            }}
             // className={clsx(
             //   option.hasBorderBottom ? 'border-b border-gray-300' : '',
             //   index === options.length - 1 ? 'border-b-0' : '',
