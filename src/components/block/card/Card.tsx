@@ -7,6 +7,7 @@ import Chip from '@mui/material/Chip';
 import CircularDeterminate from '@/components/block/circularDeterminate';
 import LinearDeterminate from '@/components/block/linearDeterminate';
 import Link from 'next/link';
+import { DeterminateSize } from '@/components/types/enum';
 
 interface ImgMediaCardProps {
   isPC: boolean;
@@ -16,6 +17,7 @@ interface ImgMediaCardProps {
 
 const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
   const { projectType, projectName } = props;
+  const textSize = DeterminateSize.Medium;
 
   return (
     <Card className="md:max-w-card-pc max-w-card-mobile md:p-card-pc p-card-mobile rounded-lg border-secondary shadow-none border border-solid border-opacity-[.12]">
@@ -47,7 +49,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
           </div>
         )}
         <div className="flex items-center gap-5">
-          {isPC && <CircularDeterminate value={30} size={'4em'} />}
+          {isPC && <CircularDeterminate value={30} size={'4em'} textSize={textSize} />}
           <div>
             <div>
               <Typography className="opacity-60 mr-2" component="span" variant="caption" color="secondary">
