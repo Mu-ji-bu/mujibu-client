@@ -26,9 +26,7 @@ interface ILinearDeterminate {
   haslabel?: boolean;
 }
 
-const LinearDeterminate: React.FC<ILinearDeterminate> = (props) => {
-  const { value, haslabel } = props;
-
+const LinearDeterminate: React.FC<ILinearDeterminate> = ({ value, haslabel, ...props }) => {
   return (
     <Box className="flex items-center">
       <Box className="w-full relative">
@@ -38,7 +36,7 @@ const LinearDeterminate: React.FC<ILinearDeterminate> = (props) => {
           variant="determinate"
           value={0}
         />
-        <StyledLinearProgress color="secondary" variant="determinate" {...props} />
+        <StyledLinearProgress color="secondary" variant="determinate" value={value} {...props} />
       </Box>
       {haslabel && (
         <Box className="ml-3 text-right">

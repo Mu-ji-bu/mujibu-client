@@ -19,12 +19,11 @@ interface ImgMediaCardProps {
 
 const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
   const { projectType, projectName } = props;
-  const textSize = DeterminateSize.Medium;
 
   const renderIndicator = (projectType: string) => {
     switch (projectType) {
       case 'InProgress':
-        return <CircularDeterminate value={30} size={'4em'} textSize={textSize} />;
+        return <CircularDeterminate value={30} size={'4em'} textSize={DeterminateSize.Small} />;
       case 'Success':
         return <CircleCheckIcon />;
       default:
@@ -32,7 +31,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
     }
   };
 
-  const renderLinearProgress = (projectType) => {
+  const renderLinearProgress = (projectType: string) => {
     switch (projectType) {
       case 'InProgress':
         return <LinearDeterminate value={30} haslabel={true} />;
@@ -43,7 +42,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
     }
   };
 
-  const renderCardBottom = (projectType) => {
+  const renderCardBottom = (projectType: string) => {
     if (projectType === 'InProgress' || projectType === 'Success') {
       return (
         <>
