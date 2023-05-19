@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import clsxm from '@/lib/clsxm';
+import clsxm from '@/libraries/utils/clsxm';
 import { Button, Typography, TextField, Avatar } from '@mui/material';
 import { Google } from '@mui/icons-material';
 

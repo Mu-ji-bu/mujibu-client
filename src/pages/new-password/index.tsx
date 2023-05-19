@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import clsxm from '@/lib/clsxm';
+import clsxm from '@/libraries/utils/clsxm';
 import { Button, Typography, TextField } from '@mui/material';
 
 const NewPassword = () => {

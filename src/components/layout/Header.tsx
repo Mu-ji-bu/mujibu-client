@@ -8,7 +8,6 @@ import NotificationsMenu, { INotificationsMenuOption } from '../block/notificati
 import SearchButton from '../block/searchButton';
 import { Menu } from '@mui/icons-material';
 import routePath from '@routes/routePath';
-import { getRoutePathLink } from '@libraries/utils/routeUtils';
 import Cookies from 'js-cookie';
 
 const Header = () => {
@@ -23,15 +22,12 @@ const Header = () => {
     router.push(routePath.home);
   };
 
-  const { memberFavoriteLink, memberFundingRecordLink, memberPersonalManagementLink, memberPersonalTeamSettingLink } =
-    getRoutePathLink(loginToken);
-
   const accountOptions: IAccountMenuOption[] = [
-    { label: '個人設定', href: routePath.member, hasBorderBottom: false },
-    { label: '贊助紀錄', href: memberFundingRecordLink, hasBorderBottom: false },
-    { label: '我的收藏', href: memberFavoriteLink, hasBorderBottom: true },
-    { label: '團隊設定', href: memberPersonalTeamSettingLink, hasBorderBottom: false },
-    { label: '提案管理', href: memberPersonalManagementLink, hasBorderBottom: true },
+    { label: '個人設定', href: routePath.userPersonalSettings, hasBorderBottom: false },
+    { label: '贊助紀錄', href: routePath.userOrders, hasBorderBottom: false },
+    { label: '我的收藏', href: routePath.userFollows, hasBorderBottom: true },
+    { label: '團隊設定', href: routePath.userTeamSettings, hasBorderBottom: false },
+    { label: '提案管理', href: routePath.userProjects, hasBorderBottom: true },
     { label: '登出', href: routePath.home, hasBorderBottom: true, handleCustomEvent: handleLogout },
   ];
   const notificationOptions: INotificationsMenuOption[] = [

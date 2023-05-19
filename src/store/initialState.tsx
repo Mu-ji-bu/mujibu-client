@@ -1,40 +1,11 @@
-interface UserState {
-  readonly id: string;
-  avatar?: string;
-  name: string;
-  nickname?: string;
-  birthday?: string;
-  gender?: number;
-  email: string;
-  phone?: string;
-  subscribeNewsletter?: boolean;
-  category?: string[];
-  contactName?: string;
-  contactPhone?: string;
-  city?: string;
-  district?: string;
-  postalCode?: string;
-  address?: string;
-  readonly createdAt: number;
-}
-
-interface ProjectState {
-  projectName: string;
-  isFollow: boolean;
-}
-
-interface InitialState {
-  userState: UserState;
-  projectState: ProjectState;
-}
-
-const initialState: InitialState = {
+import type { IInitialState } from '../types/index.d';
+const initialState: IInitialState = {
   userState: {
     id: 'uid',
     avatar: 'https://mui.com/static/images/avatar/1.jpg',
-    name: 'Melon Hung',
+    userName: 'Melon Hung',
     nickname: 'Melon',
-    birthday: '1995-04-21',
+    birthDate: '1995-04-21',
     gender: 1,
     email: 'melon@gmail.com',
     phone: '0930258318',
