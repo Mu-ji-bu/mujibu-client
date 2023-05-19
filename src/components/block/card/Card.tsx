@@ -9,6 +9,7 @@ import LinearDeterminate from '@/components/block/linearDeterminate';
 import Link from 'next/link';
 import CircleCheckIcon from '@/components/block/circleCheckIcon';
 import clsxm from '@/lib/clsxm';
+import { DeterminateSize } from '@/components/types/enum';
 
 interface ImgMediaCardProps {
   isPC: boolean;
@@ -18,11 +19,12 @@ interface ImgMediaCardProps {
 
 const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
   const { projectType, projectName } = props;
+  const textSize = DeterminateSize.Medium;
 
   const renderIndicator = (projectType: string) => {
     switch (projectType) {
       case 'InProgress':
-        return <CircularDeterminate value={30} size={'4em'} />;
+        return <CircularDeterminate value={30} size={'4em'} textSize={textSize} />;
       case 'Success':
         return <CircleCheckIcon />;
       default:
@@ -30,7 +32,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
     }
   };
 
-  const renderLinearProgress = (projectType: string) => {
+  const renderLinearProgress = (projectType) => {
     switch (projectType) {
       case 'InProgress':
         return <LinearDeterminate value={30} haslabel={true} />;
@@ -41,7 +43,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
     }
   };
 
-  const renderCardBottom = (projectType: string) => {
+  const renderCardBottom = (projectType) => {
     if (projectType === 'InProgress' || projectType === 'Success') {
       return (
         <>

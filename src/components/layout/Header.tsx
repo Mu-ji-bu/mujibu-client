@@ -1,30 +1,50 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import AccountMenu, { IAccountMenuOption } from '../block/accountMenu/AccountMenu';
 import NotificationsMenu, { INotificationsMenuOption } from '../block/notificationsMenu/NotificationsMenu';
 import SearchButton from '../block/searchButton';
 import { Menu } from '@mui/icons-material';
+import routePath from '@routes/routePath';
+import { getRoutePathLink } from '@libraries/utils/routeUtils';
+import Cookies from 'js-cookie';
 
 const Header = () => {
   const router = useRouter();
+  const loginToken = Cookies.get('googleToken');
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const handleLogout = () => {
+    Cookies.remove('googleToken');
+    setIsLoggedIn(false);
+    router.push(routePath.home);
+  };
+
+  const { memberFavoriteLink, memberFundingRecordLink, memberPersonalManagementLink, memberPersonalTeamSettingLink } =
+    getRoutePathLink(loginToken);
+
   const accountOptions: IAccountMenuOption[] = [
-    { label: '個人設定', href: '/member', hasBorderBottom: false },
-    { label: '贊助紀錄', href: '/member/1/funding-record', hasBorderBottom: false },
-    { label: '我的收藏', href: '/member/1/favorite', hasBorderBottom: true },
-    { label: '團隊設定', href: '/member/1/team-setting', hasBorderBottom: false },
-    { label: '提案管理', href: '/member/1/proposal-management', hasBorderBottom: true },
-    { label: '登出', href: '/', hasBorderBottom: true },
+    { label: '個人設定', href: routePath.member, hasBorderBottom: false },
+    { label: '贊助紀錄', href: memberFundingRecordLink, hasBorderBottom: false },
+    { label: '我的收藏', href: memberFavoriteLink, hasBorderBottom: true },
+    { label: '團隊設定', href: memberPersonalTeamSettingLink, hasBorderBottom: false },
+    { label: '提案管理', href: memberPersonalManagementLink, hasBorderBottom: true },
+    { label: '登出', href: routePath.home, hasBorderBottom: true, handleCustomEvent: handleLogout },
   ];
   const notificationOptions: INotificationsMenuOption[] = [
     { type: '您的提案有新通知', label: '您提案募資人數超過 100 人!!!' },
     { type: '你參與的提案有新通知', label: '您參與的提案目前累積進度 50 %!!!' },
     { type: '您追蹤的提案有新通知', label: '您追蹤的提案剩下十天就募資完畢囉～' },
   ];
+
+  useEffect(() => {
+    if (loginToken) {
+      setIsLoggedIn(true);
+    }
+  }, [loginToken]);
 
   return (
     <header className="border-0 border-b border-solid border-secondary-10">

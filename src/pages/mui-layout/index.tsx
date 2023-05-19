@@ -2,6 +2,8 @@ import { Container, Box, Grid, Stack, Button, IconButton, Typography, Avatar } f
 import { Bolt, Add, Facebook, Instagram, YouTube, Search, Google, EmailOutlined, Public } from '@mui/icons-material';
 import Link from 'next/link';
 import CircularDeterminate from '@/components/block/circularDeterminate';
+import { DeterminateSize } from '@/components/types/enum';
+
 const Mui = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -11,6 +13,10 @@ const Mui = () => {
       password: data.get('password'),
     });
   };
+
+  const determinateSmall = DeterminateSize.Small;
+  const determinateMedium = DeterminateSize.Medium;
+  const determinateLarge = DeterminateSize.Large;
 
   return (
     <Container component="div" maxWidth="xs">
@@ -147,9 +153,9 @@ const Mui = () => {
         </Button>
       </Box>
       <Box className="mb-10">
-        <CircularDeterminate value={42} size={'5em'} />
-        <CircularDeterminate value={66} size={'5em'} />
-        <CircularDeterminate value={80} size={'5em'} />
+        <CircularDeterminate value={42} size={'5em'} textSize={determinateSmall} />
+        <CircularDeterminate value={66} size={'5em'} textSize={determinateMedium} />
+        <CircularDeterminate value={80} size={'5em'} textSize={determinateLarge} />
       </Box>
     </Container>
   );
