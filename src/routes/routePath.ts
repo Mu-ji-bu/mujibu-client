@@ -9,13 +9,14 @@ const routePath = {
   memberFundingRecord: '/member/:id/funding-record',
   memberPersonalSetting: '/member/:id/personal-setting',
   memberPersonalManagement: '/member/:id/proposal-management',
-  memberPersonalTeamSetting: '/member/:id/proposal-team-setting',
+  memberPersonalTeamSetting: '/member/:id/team-setting',
   newPassword: '/new-password',
   notifications: '/notifications',
   porposal: '/porposal',
   projects: '/projects',
   signup: '/signup',
   userPrivacy: '/user-privacy',
+  userTerms: '/user-terms',
 };
 
 export default routePath;
