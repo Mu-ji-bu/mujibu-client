@@ -57,6 +57,7 @@ const Header = () => {
 
   useEffect(() => {
     onAuthStateChanged(authentication, (user) => {
+      console.log(user?.getIdToken(), user);
       if (user) {
         const userData = {
           userName: user.displayName,
