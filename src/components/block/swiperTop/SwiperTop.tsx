@@ -13,8 +13,8 @@ import 'swiper/css/navigation';
 import CircularDeterminate from '../circularDeterminate/CircularDeterminate';
 import { DeterminateSize } from '@/components/types/enum';
 import { IconButton, Tooltip, Typography } from '@mui/material';
-import clsxm from '@/lib/clsxm';
-import useBreakpoints from '@/hooks/useBreakPoints';
+import clsxm from '@/libraries/utils/clsxm';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 
 export interface ISlideOption {
   title: string;
