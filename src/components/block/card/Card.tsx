@@ -8,7 +8,7 @@ import CircularDeterminate from '@/components/block/circularDeterminate';
 import LinearDeterminate from '@/components/block/linearDeterminate';
 import Link from 'next/link';
 import CircleCheckIcon from '@/components/block/circleCheckIcon';
-import clsxm from '@/lib/clsxm';
+import clsxm from '@/libraries/utils/clsxm';
 import { DeterminateSize } from '@/components/types/enum';
 
 interface ImgMediaCardProps {

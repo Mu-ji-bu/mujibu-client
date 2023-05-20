@@ -6,7 +6,7 @@ import { Provider as StoreProvider } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
 
 import Layout from '@/components/layout/Layout';
-import theme from '../lib/muiTheme';
+import theme from '@/libraries/utils/muiTheme';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
