@@ -11,18 +11,6 @@ module.exports = {
   important: '#__next',
   theme: {
     extend: {
-      height: {
-        'card-title-pc': 90,
-        'card-title-mobile': 72,
-      },
-      maxWidth: {
-        'card-pc': 416,
-        'card-mobile': 351,
-      },
-      padding: {
-        'card-pc': 24,
-        'card-mobile': 16,
-      },
       colors: {
         primary: {
           DEFAULT: '#1CA69A',
