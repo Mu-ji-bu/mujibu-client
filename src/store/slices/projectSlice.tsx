@@ -1,15 +1,8 @@
 import { RootState } from '@/store/store';
 import { createSlice } from '@reduxjs/toolkit';
+import { projectState } from '../initialState';
 
-interface ProjectState {
-  projectName: string;
-  isFollow: boolean;
-}
-
-const initialState: ProjectState = {
-  projectName: '專案名稱...',
-  isFollow: false,
-};
+const initialState = projectState;
 
 export const projectSlice = createSlice({
   name: 'project',

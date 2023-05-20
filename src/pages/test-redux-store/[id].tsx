@@ -1,5 +1,5 @@
-import { setIsFollow, selectProject } from '../../store/slices/projects/projectSlice';
-import { useAppSelector, useAppDispatch } from '../../hooks/reduxHooks';
+import { setIsFollow, selectProject } from '../../store/slices/projectSlice';
+import { useAppSelector, useAppDispatch } from '../../libraries/hooks/reduxHooks';
 import { wrapper } from '../../store/store';
 
 import {
