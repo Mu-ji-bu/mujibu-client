@@ -47,7 +47,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
           </div>
         )}
         <div className="flex items-center gap-5">
-          {isPC && <CircularDeterminate value={30} size={'4em'} />}
+          {/* {isPC && <CircularDeterminate value={30} size={'4em'} textSize={} />} */}
           <div>
             <div>
               <Typography className="opacity-60 mr-2" component="span" variant="caption" color="secondary">
