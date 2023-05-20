@@ -9,17 +9,30 @@ import SearchButton from '../block/searchButton';
 import { Menu } from '@mui/icons-material';
 import routePath from '@routes/routePath';
 import Cookies from 'js-cookie';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { authentication } from '../../../firebaseConfig';
+
+import { useAppDispatch, useAppSelector } from '@libraries/hooks/reduxHooks';
+import { updateUser } from '../../store/slices/userSlice';
+import { clearToken, selectAuth, setToken } from '../../store/slices/authSlice';
 
 const Header = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const loginToken = Cookies.get('googleToken');
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLogin } = useAppSelector(selectAuth);
 
   const handleLogout = () => {
-    Cookies.remove('googleToken');
-    setIsLoggedIn(false);
-    router.push(routePath.home);
+    signOut(authentication)
+      .then(() => {
+        Cookies.remove('googleToken');
+        dispatch(clearToken());
+        router.push(routePath.home);
+        console.log('Signed out successfully');
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
   };
 
   const accountOptions: IAccountMenuOption[] = [
@@ -38,16 +51,34 @@ const Header = () => {
 
   useEffect(() => {
     if (loginToken) {
-      setIsLoggedIn(true);
+      dispatch(setToken(loginToken));
     }
-  }, [loginToken]);
+  }, [loginToken, dispatch]);
+
+  useEffect(() => {
+    onAuthStateChanged(authentication, (user) => {
+      if (user) {
+        const userData = {
+          userName: user.displayName,
+          email: user.email,
+          avatar: user.photoURL,
+          uid: user.uid,
+          createdAt: user.metadata.creationTime,
+        };
+
+        dispatch(updateUser(userData));
+      } else {
+        console.log('無使用者資料，使用者已登出');
+      }
+    });
+  }, [dispatch]);
 
   return (
     <header className="border-0 border-b border-solid border-secondary-10">
       <div className="max-w-screen-xl mx-auto px-5 py-2 flex justify-between items-center">
         <div className="flex items-center">
           <Link href={'/'} className="flex items-center mr-4">
-            <Image src={'/logo@2x.png'} alt={'募質部 Mujibu logo'} width={128} height={48} />
+            <Image src={'/logo@2x.png'} alt={'募質部 Mujibu logo'} width={128} height={48} priority={true} />
           </Link>
           <Typography component="span" variant="h6" className="md:block hidden text-primary">
             讓創意萌芽
@@ -71,7 +102,7 @@ const Header = () => {
           </Link>
         </div>
         <div className="flex items-center">
-          {isLoggedIn ? (
+          {isLogin ? (
             <>
               <div className="hidden md:block">
                 <SearchButton />
@@ -93,11 +124,12 @@ const Header = () => {
                   登入
                 </Button>
               </div>
+              <div className="md:hidden">
+                <SearchButton />
+              </div>
             </>
           )}
-          <div className="md:hidden">
-            <SearchButton />
-          </div>
+
           <Button variant="outlined" color="secondary" className="p-[6px] min-w-0 md:hidden ml-5" aria-label="search">
             <Menu />
           </Button>

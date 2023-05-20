@@ -1,6 +1,7 @@
 export declare interface IUserState {
-  id: string;
-  avatar?: string;
+  id?: string;
+  uid: string;
+  avatar?: string | undefined;
   userName: string;
   email: string;
   nickname?: string;
@@ -15,5 +16,5 @@ export declare interface IUserState {
   district?: string;
   postalCode?: string;
   address?: string;
-  readonly createdAt?: number;
+  createdAt?: Date | null;
 }

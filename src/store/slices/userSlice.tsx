@@ -2,19 +2,20 @@ import { RootState } from '@/store/store';
 import { createSlice } from '@reduxjs/toolkit';
 import { userState } from '../initialState';
 
-const initialState = userState;
-
 export const userSlice = createSlice({
   name: 'user',
-  initialState,
+  initialState: userState,
   reducers: {
-    // 1. state -> 當下的狀態
-    // 2. action -> 對應的動作
-    getUser: (state) => {
-      console.log(state);
-    },
-    updateUser: (state) => {
-      console.log(state);
+    updateUser: (state, action) => {
+      const userData = action.payload;
+      return {
+        ...state,
+        userName: userData.userName,
+        email: userData.email,
+        avatar: userData.avatar,
+        uid: userData.uid,
+        createdAt: userData.createdAt,
+      };
     },
   },
 });

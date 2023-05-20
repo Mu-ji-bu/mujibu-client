@@ -1,5 +1,5 @@
-import { IUserState } from './user.d';
-import { IProjectState } from './project.d';
+import { IUserState } from './user';
+import { IProjectState } from './project';
 
 export declare interface IInitialState {
   userState: IUserState;

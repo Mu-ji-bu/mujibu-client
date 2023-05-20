@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { IconButton, Menu, MenuItem, ListItemIcon, Tooltip } from '@mui/material';
+import { IconButton, Menu, MenuItem, ListItemIcon, Tooltip, Avatar } from '@mui/material';
 import { PersonOutlineRounded as PersonOutlineRoundedIcon } from '@mui/icons-material';
 import Button from '../button';
+import clsxm from '@/libraries/utils/clsxm';
+import { useAppSelector } from '@libraries/hooks/reduxHooks';
+import { selectUser } from '../../../store/slices/userSlice';
 
 export interface IAccountMenuOption {
   label: string;
@@ -18,6 +21,7 @@ interface IAccountMenuProps {
 
 const AccountMenu: React.FC<IAccountMenuProps> = ({ options }) => {
   const router = useRouter();
+  const { avatar, userName } = useAppSelector(selectUser);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -37,14 +41,18 @@ const AccountMenu: React.FC<IAccountMenuProps> = ({ options }) => {
         <Button
           variant="outlined"
           color="secondary"
-          className="p-[6px] min-w-0"
+          className={clsxm(avatar ? 'p-0' : 'p-[6px]', 'min-w-0')}
           aria-label="search"
           onClick={handleClick}
           aria-controls={open ? 'account-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <PersonOutlineRoundedIcon />
+          {avatar ? (
+            <Avatar className="w-[36px] h-[36px]" alt={userName} variant="square" src={avatar}></Avatar>
+          ) : (
+            <PersonOutlineRoundedIcon />
+          )}
         </Button>
       </div>
       <Menu
@@ -78,11 +86,6 @@ const AccountMenu: React.FC<IAccountMenuProps> = ({ options }) => {
             onClick={() => {
               option.handleCustomEvent ? option.handleCustomEvent() : router.push(option.href);
             }}
-            // className={clsx(
-            //   option.hasBorderBottom ? 'border-b border-gray-300' : '',
-            //   index === options.length - 1 ? 'border-b-0' : '',
-            //   'min-w-[58px] min-h-[40px] flex justify-center text-sm text-secondary leading-5 px-3 py-10',
-            // )}
             sx={{
               minWidth: '58px',
               minHeight: '40px',
