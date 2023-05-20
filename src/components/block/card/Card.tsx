@@ -99,7 +99,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
       className={clsxm(
         { 'max-w-[351px]': projectType !== 'Success' },
         { 'max-w-[257px]': projectType === 'Success' },
-        'p-4',
+        'm-auto p-4',
         'md:max-w-[416px] md:p-6',
         'rounded-lg border-secondary shadow-none border border-solid border-opacity-[.12]',
       )}
