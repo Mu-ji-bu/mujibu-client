@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import clsxm from '@/lib/clsxm';
+import clsxm from '@/libraries/utils/clsxm';
 import { Button, Typography, TextField } from '@mui/material';
 import { Google } from '@mui/icons-material';
 import useFirebaseAuthentication from '@libraries/hooks/useFirebaseAuthentication';
@@ -22,7 +22,7 @@ type LoginFormValues = {
 };
 
 const schema = Yup.object().shape({
-  email: Yup.string().required('email為必填欄位'),
+  email: Yup.string().required('email為必填欄位').email('email格式不對'),
   password: Yup.string().required('密碼為必填欄位'),
 });
 
@@ -35,6 +35,10 @@ const LogIn = () => {
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
 
   const onSubmit: SubmitHandler<FormData> = (data) => {

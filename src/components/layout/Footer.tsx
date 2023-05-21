@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import clsxm from '@/lib/clsxm';
+import clsxm from '@/libraries/utils/clsxm';
 
 import { Button, Typography } from '@mui/material';
 import { Facebook, Instagram } from '@mui/icons-material';
