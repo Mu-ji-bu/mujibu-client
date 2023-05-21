@@ -1,13 +1,28 @@
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Card from '@/components/block/card';
 import Select from '@/components/block/select';
+import Pagination from '@/components/block/pagination';
 
 //TODO: 把 { id: number; projectType: number; projectName: string, ... } 拉出來共用
 let projectData: { id: number; projectType: number; projectName: string }[] = [];
-for (let i = 0; i < 12; i++) {
+for (let i = 0; i < 3; i++) {
   projectData.push({
     id: i,
     projectType: 0,
+    projectName: 'Balance衡壓坐墊｜市場唯一衡壓概念健康坐墊，坐出 Q 軟好體態！',
+  });
+}
+for (let i = 0; i < 3; i++) {
+  projectData.push({
+    id: i,
+    projectType: 1,
+    projectName: 'Balance衡壓坐墊｜市場唯一衡壓概念健康坐墊，坐出 Q 軟好體態！',
+  });
+}
+for (let i = 0; i < 3; i++) {
+  projectData.push({
+    id: i,
+    projectType: 2,
     projectName: 'Balance衡壓坐墊｜市場唯一衡壓概念健康坐墊，坐出 Q 軟好體態！',
   });
 }
@@ -52,6 +67,9 @@ const Projects = () => {
             <Card isPC={isPC} {...project} />
           </div>
         ))}
+      </div>
+      <div className="w-full flex justify-center my-10">
+        <Pagination />
       </div>
     </main>
   );

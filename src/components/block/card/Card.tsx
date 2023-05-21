@@ -98,7 +98,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
     <Card
       className={clsxm(
         { 'max-w-[351px]': projectType !== 2 },
-        { 'max-w-[257px]': projectType === 2 },
+        { 'max-w-[257px]': projectType === 2 }, //TODO: 探索頁寬度
         'm-auto p-4',
         'md:max-w-[416px] md:p-6',
         'rounded-lg border-secondary shadow-none border border-solid border-opacity-[.12]',
