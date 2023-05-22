@@ -8,14 +8,22 @@ export const userSlice = createSlice({
   reducers: {
     updateUser: (state, action) => {
       const userData = action.payload;
-      return {
-        ...state,
-        userName: userData.userName,
-        email: userData.email,
-        avatar: userData.avatar,
-        uid: userData.uid,
-        createdAt: userData.createdAt,
-      };
+      if (!userData.email) {
+        return {
+          ...state,
+          name: userData.name,
+        };
+      } else {
+        return {
+          ...state,
+          name: userData.name,
+          email: userData.email,
+          avatar: userData.avatar,
+          uid: userData.uid,
+          createdAt: userData.createdAt,
+          id: userData.id,
+        };
+      }
     },
   },
 });

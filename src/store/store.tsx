@@ -11,13 +11,17 @@ import tabsReducer from './slices/tabsSlice';
 
 // Middleware
 // import { loggerMiddleware } from './middleware';
+import { authApiService } from './services/authApi';
 import { postApiService } from './services/postApi';
+import { userApiService } from './services/userApi';
 
 const reducers = combineReducers({
   projectReducer,
   userReducer,
   authReducer,
   tabsReducer,
+  [authApiService.reducerPath]: authApiService.reducer,
+  [userApiService.reducerPath]: userApiService.reducer,
   [postApiService.reducerPath]: postApiService.reducer,
 });
 
@@ -25,7 +29,10 @@ export const makeStore = wrapMakeStore(() =>
   configureStore({
     reducer: reducers,
     middleware: (getCurrentMiddleware) => {
-      return getCurrentMiddleware().concat(postApiService.middleware);
+      return getCurrentMiddleware()
+        .concat(authApiService.middleware)
+        .concat(userApiService.middleware)
+        .concat(postApiService.middleware);
     },
   }),
 );
