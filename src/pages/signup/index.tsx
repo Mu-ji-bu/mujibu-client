@@ -15,7 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Cookies from 'js-cookie';
 
 type FormData = {
-  userName: string;
+  name: string;
   nickname: string;
   email: string;
   gender: number | '';
@@ -25,7 +25,7 @@ type FormData = {
 };
 
 type SignUpFormValues = {
-  userName: string;
+  name: string;
   nickname: string;
   email: string;
   gender: number | '';
@@ -35,7 +35,7 @@ type SignUpFormValues = {
 };
 
 const schema = Yup.object().shape({
-  userName: Yup.string().required('姓名為必填欄位'),
+  name: Yup.string().required('姓名為必填欄位'),
   nickname: Yup.string().required('暱稱為必填欄位'),
   gender: Yup.string().required('性別為必填欄位'),
   birthDate: Yup.string().required('生日為必填欄位'),
@@ -64,7 +64,7 @@ const SignUp = () => {
   } = useForm<SignUpFormValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      userName: '',
+      name: '',
       nickname: '',
       email: '',
       gender: '',
@@ -109,14 +109,14 @@ const SignUp = () => {
           <TextField
             margin="dense"
             fullWidth
-            id="userName"
+            id="name"
             label="姓名 *"
-            autoComplete="userName"
+            autoComplete="name"
             autoFocus
             size="small"
-            {...register('userName', { required: true })}
-            error={!!errors.userName}
-            helperText={errors.userName?.message}
+            {...register('name', { required: true })}
+            error={!!errors.name}
+            helperText={errors.name?.message}
           />
           <TextField
             margin="dense"

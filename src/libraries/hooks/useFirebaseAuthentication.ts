@@ -8,10 +8,9 @@ const useFirebaseAuthentication = () => {
 
   const handleGoogleAuth = () => {
     signInWithPopup(authentication, googleProvider)
-      .then((res) => {
-        const { uid } = res.user;
-        console.log(res);
-        setGoogleToken(uid);
+      .then((res: any) => {
+        const token = res.user?.accessToken;
+        setGoogleToken(token);
       })
       .catch((err) => {
         console.log('error :', err);

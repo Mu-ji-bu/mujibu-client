@@ -2,16 +2,18 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import clsxm from '@/libraries/utils/clsxm';
-import { useAppSelector } from '@libraries/hooks/reduxHooks';
-import { selectUser } from '../../../store/slices/userSlice';
+import UserLayout from '../../../components/layout/UserLayout';
+
+import { useAppDispatch, useAppSelector } from '@libraries/hooks/reduxHooks';
+import { usePatchUserMutation } from '../../../store/services/userApi';
+import { selectUser, updateUser } from '../../../store/slices/userSlice';
+
 import {
   Button,
   Typography,
   TextField,
   Avatar,
   MenuItem,
-  Tab,
-  Tabs,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -22,7 +24,6 @@ import {
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import KeyIcon from '@mui/icons-material/Key';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import UserLayout from '../../../components/layout/UserLayout';
 
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
@@ -32,51 +33,42 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-const options = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
+const categoryOptions = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
 
-type FormData = {
-  userName: string;
+type FormValues = {
+  name: string;
   nickname: string;
-  email: string;
-  gender: number | '';
   birthDate: string;
-  password: string;
-  passwordConfirm: string;
-};
-
-type SignUpFormValues = {
-  userName: string;
-  nickname: string;
-  email: string;
   gender: number | '';
-  birthDate: string;
-  password: string;
-  passwordConfirm: string;
+  phone: string;
+  subscribeNewsletter: boolean;
+  category: string[];
+  contactName: string;
+  contactPhone: string;
+  address: string;
 };
 
 const schema = Yup.object().shape({
-  userName: Yup.string().required('姓名為必填欄位'),
-  nickname: Yup.string().required('暱稱為必填欄位'),
-  gender: Yup.string().required('性別為必填欄位'),
-  birthDate: Yup.string().required('生日為必填欄位'),
-  email: Yup.string().required('email為必填欄位').email('email格式不對'),
-  password: Yup.string()
-    .required('密碼為必填欄位')
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
-      '密碼必須包含8個字符，其中至少包含一個大寫字母，一個小寫字母，一個數字',
-    ),
-  passwordConfirm: Yup.string()
-    .required('確認密碼為必填欄位')
-    .oneOf([Yup.ref('password')], '與上方密碼不相同'),
+  name: Yup.string().required('姓名為必填欄位'),
+  nickname: Yup.string(),
+  birthDate: Yup.string(),
+  gender: Yup.string(),
+  phone: Yup.string(),
+  subscribeNewsletter: Yup.boolean(),
+  category: Yup.array(),
+  contactName: Yup.string(),
+  contactPhone: Yup.string(),
+  address: Yup.string(),
 });
+
 const PersonalSettings = () => {
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
   const router = useRouter();
-  const { avatar, userName, email } = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
+  const [patchUser] = usePatchUserMutation();
+  const userData = useAppSelector(selectUser);
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-
   const handleCategoryChange = (category: string) => {
     if (selectedCategories.includes(category)) {
       setSelectedCategories(selectedCategories.filter((item) => item !== category));
@@ -90,50 +82,61 @@ const PersonalSettings = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<SignUpFormValues>({
+  } = useForm<FormValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      userName: '',
-      nickname: '',
-      email: '',
-      gender: '',
-      birthDate: '',
-      password: '',
-      passwordConfirm: '',
+      name: userData.name,
+      // nickname: userData.nickname,
+      // birthDate: userData.birthDate,
+      // gender: userData.gender,
+      // phone: userData.phone,
+      // subscribeNewsletter: userData.subscribeNewsletter,
+      // category: userData.category,
+      // contactName: '',
+      // contactPhone: '',
+      // address: '',
     },
   });
 
   const handleDateSelect = (newValue: Dayjs | null) => {
     const value = dayjs(newValue).format('YYYY-MM-DD');
     setSelectedDate(dayjs(value));
-    setValue('birthDate', value);
+    // setValue('birthDate', value);
   };
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log('form data : ', data);
-    console.log('birthDate : ', data.birthDate);
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    // console.log('form data : ', data);
+    try {
+      const res = await patchUser({ id: userData.id, body: data }).unwrap();
+      // console.log(res);
+
+      const updateData = {
+        name: res.name,
+      };
+
+      dispatch(updateUser(updateData));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <UserLayout>
-      <form className="flex space-x-5 px-10 py-5" onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-1/3 shrink-0 flex flex-col items-center ">
-          <Avatar className="w-[200px] h-[200px] mb-5" alt="" src=""></Avatar>
-          <Button variant="outlined" component="label" startIcon={<AddPhotoAlternateIcon />}>
+      <div className="flex justify-end px-0 md:px-10">
+        <Button onClick={() => router.push('/new-password')} className="" variant="outlined" startIcon={<KeyIcon />}>
+          修改密碼
+        </Button>
+      </div>
+
+      <form className="flex md:flex-row flex-col md:space-x-5 px-0 md:px-10 py-5" onSubmit={handleSubmit(onSubmit)}>
+        <div className="w-full md:w-1/3 shrink-0 flex flex-col items-center mb-5 md:mb-0">
+          <Avatar className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] mb-5" alt="個人大頭貼" src=""></Avatar>
+          <Button className="" variant="outlined" component="label" startIcon={<AddPhotoAlternateIcon />}>
             選擇上傳圖片
             <input type="file" hidden />
           </Button>
         </div>
-        <div className={clsxm('w-2/3 flex flex-col ')}>
-          <Button
-            onClick={() => router.push('/new-password')}
-            className="self-end"
-            variant="outlined"
-            startIcon={<KeyIcon />}
-          >
-            修改密碼
-          </Button>
-
+        <div className={clsxm('w-full md:w-2/3 flex flex-col ')}>
           <div className="mb-10 w-full">
             <Typography className="text-secondary mb-5" component="h2" variant="h5">
               修改個人資料
@@ -142,14 +145,14 @@ const PersonalSettings = () => {
               <TextField
                 fullWidth
                 className=""
-                id="userName"
+                id="name"
                 label="姓名 *"
-                autoComplete="userName"
+                autoComplete="name"
                 autoFocus
                 size="small"
-                {...register('userName', { required: true })}
-                error={!!errors.userName}
-                helperText={errors.userName?.message}
+                {...register('name', { required: true })}
+                error={!!errors.name}
+                helperText={errors.name?.message}
               />
               <TextField
                 fullWidth
@@ -159,9 +162,9 @@ const PersonalSettings = () => {
                 autoComplete="nickname"
                 autoFocus
                 size="small"
-                {...register('nickname', { required: true })}
-                error={!!errors.nickname}
-                helperText={errors.nickname?.message}
+                // {...register('nickname', { required: true })}
+                // error={!!errors.nickname}
+                // helperText={errors.nickname?.message}
               />
 
               <DatePicker
@@ -173,8 +176,8 @@ const PersonalSettings = () => {
                     id: 'birthDate',
                     name: 'birthDate',
                     size: 'small',
-                    error: !!errors.birthDate,
-                    helperText: errors.birthDate?.message,
+                    // error: !!errors.birthDate,
+                    // helperText: errors.birthDate?.message,
                     // ...register('birthDate', { required: true }),
                   },
                 }}
@@ -188,9 +191,9 @@ const PersonalSettings = () => {
                 autoComplete="gender"
                 autoFocus
                 size="small"
-                {...register('gender', { required: true })}
-                error={!!errors.gender}
-                helperText={errors.gender?.message}
+                // {...register('gender', { required: true })}
+                // error={!!errors.gender}
+                // helperText={errors.gender?.message}
                 select
                 defaultValue={''}
               >
@@ -205,13 +208,11 @@ const PersonalSettings = () => {
               <TextField
                 fullWidth
                 id="email"
-                label="Email *"
+                label="Email"
                 autoComplete="email"
-                autoFocus
                 size="small"
-                {...register('email', { required: true })}
-                error={!!errors.email}
-                helperText={errors.email?.message}
+                disabled
+                value={userData.email}
               />
 
               <TextField
@@ -237,7 +238,7 @@ const PersonalSettings = () => {
               <FormControl component="fieldset" className="col-span-full">
                 <FormLabel component="legend">請選擇感興趣的類別</FormLabel>
                 <FormGroup className="flex-row">
-                  {options.map((category) => (
+                  {categoryOptions.map((category) => (
                     <FormControlLabel
                       className="text-secondary"
                       key={category}
@@ -319,7 +320,7 @@ export default PersonalSettings;
   /* id?: string;
   uid: string;
   avatar?: string | undefined;
-  userName: string;
+  name: string;
   email: string;
   nickname?: string;
   birthDate?: string;
