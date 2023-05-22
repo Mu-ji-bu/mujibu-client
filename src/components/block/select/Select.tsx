@@ -34,15 +34,7 @@ const BasicSelect: React.FC<IBasicSelect> = (props) => {
   return (
     <Box sx={{ minWidth: 180 }}>
       <StyledFormControl fullWidth>
-        <Select
-          value={selectedValue}
-          onChange={handleChange}
-          size="small"
-          IconComponent={ExpandMoreIcon}
-          // MenuProps={{
-          //   sx: { color: 'red' },
-          // }}
-        >
+        <Select value={selectedValue} onChange={handleChange} size="small" IconComponent={ExpandMoreIcon}>
           <MenuItem sx={{ paddingBlock: '12px' }} value={placeholder} disabled>
             {placeholder}
           </MenuItem>
@@ -52,6 +44,7 @@ const BasicSelect: React.FC<IBasicSelect> = (props) => {
             </MenuItem>
           ))}
         </Select>
+        test
       </StyledFormControl>
     </Box>
   );
