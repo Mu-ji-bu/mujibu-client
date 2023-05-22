@@ -2,7 +2,7 @@ import * as React from 'react';
 import { InputBase } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import Button from '../button/Button';
-import clsxm from '@/lib/clsxm';
+import clsxm from '@/libraries/utils/clsxm';
 
 const SearchButton = () => {
   const [open, setOpen] = React.useState(false);
