@@ -7,12 +7,13 @@ import { ThemeProvider } from '@mui/material/styles';
 
 import Layout from '@/components/layout/Layout';
 import theme from '@/libraries/utils/muiTheme';
+import withAuth from '@libraries/hocs/withAuth';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/zh-tw';
 
-export default function App({ Component, ...rest }: AppProps) {
+const App = ({ Component, ...rest }: AppProps) => {
   const { store, props } = wrapper.useWrappedStore(rest);
 
   return (
@@ -27,4 +28,6 @@ export default function App({ Component, ...rest }: AppProps) {
       </StoreProvider>
     </ThemeProvider>
   );
-}
+};
+
+export default withAuth(App);
