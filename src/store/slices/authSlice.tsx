@@ -1,14 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '@/store/store';
+import type { UserToken } from '../services/authApi';
 
 type AuthState = {
   token: string | null;
   isLogin: boolean;
+  userToken: UserToken;
 };
 
 const initialState: AuthState = {
   token: '',
   isLogin: false,
+  userToken: {
+    access: { token: '', expires: null },
+    refresh: { token: '', expires: null },
+  },
 };
 
 export const authSlice = createSlice({
@@ -23,10 +29,13 @@ export const authSlice = createSlice({
       state.token = '';
       state.isLogin = false;
     },
+    setUserToken: (state, action) => {
+      state.userToken = action.payload;
+    },
   },
 });
 
-export const { setToken, clearToken } = authSlice.actions;
+export const { setToken, clearToken, setUserToken } = authSlice.actions;
 
 export const selectAuth = (state: RootState) => state.authReducer;
 

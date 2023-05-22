@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import AccountMenu, { IAccountMenuOption } from '../block/accountMenu/AccountMenu';
@@ -11,16 +11,46 @@ import routePath from '@routes/routePath';
 import Cookies from 'js-cookie';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { authentication } from '../../../firebaseConfig';
-
 import { useAppDispatch, useAppSelector } from '@libraries/hooks/reduxHooks';
+import { useLoginMutation } from '../../store/services/authApi';
 import { updateUser } from '../../store/slices/userSlice';
-import { clearToken, selectAuth, setToken } from '../../store/slices/authSlice';
+import { clearToken, selectAuth, setToken, setUserToken } from '../../store/slices/authSlice';
 
 const Header = () => {
+  const loginToken: string | undefined = Cookies.get('googleToken');
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const loginToken = Cookies.get('googleToken');
   const { isLogin } = useAppSelector(selectAuth);
+  const [login] = useLoginMutation();
+
+  const handleGetUser = useCallback(async () => {
+    try {
+      const res = await login().unwrap();
+      const resUser = res.user;
+      console.log(res);
+
+      dispatch(setUserToken(res.tokens));
+
+      onAuthStateChanged(authentication, (user: any) => {
+        if (user) {
+          const userData = {
+            name: resUser.name,
+            email: resUser.email,
+            avatar: user.photoURL,
+            uid: user.uid,
+            createdAt: user.metadata.creationTime,
+            id: resUser.id,
+          };
+
+          dispatch(updateUser(userData));
+        } else {
+          console.log('無使用者資料，使用者已登出');
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [login, dispatch]);
 
   const handleLogout = () => {
     signOut(authentication)
@@ -52,27 +82,9 @@ const Header = () => {
   useEffect(() => {
     if (loginToken) {
       dispatch(setToken(loginToken));
+      handleGetUser();
     }
-  }, [loginToken, dispatch]);
-
-  useEffect(() => {
-    onAuthStateChanged(authentication, (user) => {
-      console.log(user?.getIdToken(), user);
-      if (user) {
-        const userData = {
-          userName: user.displayName,
-          email: user.email,
-          avatar: user.photoURL,
-          uid: user.uid,
-          createdAt: user.metadata.creationTime,
-        };
-
-        dispatch(updateUser(userData));
-      } else {
-        console.log('無使用者資料，使用者已登出');
-      }
-    });
-  }, [dispatch]);
+  }, [loginToken, dispatch, handleGetUser]);
 
   return (
     <header className="border-0 border-b border-solid border-secondary-10">
