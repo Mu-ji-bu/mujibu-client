@@ -21,7 +21,7 @@ interface IAccountMenuProps {
 
 const AccountMenu: React.FC<IAccountMenuProps> = ({ options }) => {
   const router = useRouter();
-  const { avatar, userName } = useAppSelector(selectUser);
+  const { avatar, name } = useAppSelector(selectUser);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -49,7 +49,7 @@ const AccountMenu: React.FC<IAccountMenuProps> = ({ options }) => {
           aria-expanded={open ? 'true' : undefined}
         >
           {avatar ? (
-            <Avatar className="w-[36px] h-[36px]" alt={userName} variant="square" src={avatar}></Avatar>
+            <Avatar className="w-[36px] h-[36px]" alt={name} variant="square" src={avatar}></Avatar>
           ) : (
             <PersonOutlineRoundedIcon />
           )}
