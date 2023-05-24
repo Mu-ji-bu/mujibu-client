@@ -10,14 +10,16 @@ import Link from 'next/link';
 import CircleCheckIcon from '@/components/block/circleCheckIcon';
 import clsxm from '@/libraries/utils/clsxm';
 import { DeterminateSize } from '@/components/types/enum';
+import { CardWidth } from '@/components/types/enum';
 
 interface ImgMediaCardProps {
   isPC: boolean;
+  cardWidth?: CardWidth;
   projectType: number;
   projectName: string;
 }
 
-const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
+const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, cardWidth = CardWidth.Normal, ...props }) => {
   const { projectType, projectName } = props;
 
   const renderIndicator = (projectType: number) => {
@@ -97,8 +99,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
   return (
     <Card
       className={clsxm(
-        { 'max-w-[351px]': projectType !== 2 },
-        { 'max-w-[257px]': projectType === 2 }, //TODO: 探索頁寬度
+        `max-w-[${cardWidth}]`,
         'm-auto p-4',
         'md:max-w-[416px] md:p-6',
         'rounded-lg border-secondary shadow-none border border-solid border-opacity-[.12]',
