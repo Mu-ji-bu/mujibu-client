@@ -2,13 +2,12 @@ import type { IInitialState } from '../types';
 const initialState: IInitialState = {
   userState: {
     id: '',
-    uid: '',
     avatar: '',
+    email: '',
     name: '',
     nickname: '',
     birthDate: '',
-    gender: 0,
-    email: '',
+    gender: '',
     phone: '',
     subscribeNewsletter: false,
     isEmailVerified: false,
@@ -19,6 +18,7 @@ const initialState: IInitialState = {
     district: '',
     postalCode: '',
     address: '',
+    role: '',
     createdAt: null,
   },
   projectState: {

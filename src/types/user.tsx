@@ -1,12 +1,11 @@
 export declare interface IUserState {
   id?: string;
-  uid?: string;
   avatar?: string | undefined;
-  name?: string;
   email?: string;
+  name?: string;
   nickname?: string;
   birthDate?: string;
-  gender?: number;
+  gender?: string;
   phone?: string;
   subscribeNewsletter?: boolean;
   isEmailVerified?: boolean;
@@ -18,5 +17,6 @@ export declare interface IUserState {
   district?: string;
   postalCode?: string;
   address?: string;
+  role?: string;
   createdAt?: Date | null;
 }

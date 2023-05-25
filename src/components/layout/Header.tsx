@@ -26,27 +26,28 @@ const Header = () => {
   const handleGetUser = useCallback(async () => {
     try {
       const res = await login().unwrap();
-      const resUser = res.user;
-      console.log(res);
 
       dispatch(setUserToken(res.tokens));
+      dispatch(updateUser(res.user));
 
-      onAuthStateChanged(authentication, (user: any) => {
-        if (user) {
-          const userData = {
-            name: resUser.name,
-            email: resUser.email,
-            avatar: user.photoURL,
-            uid: user.uid,
-            createdAt: user.metadata.creationTime,
-            id: resUser.id,
-          };
+      // console.log(res);
 
-          dispatch(updateUser(userData));
-        } else {
-          console.log('無使用者資料，使用者已登出');
-        }
-      });
+      // onAuthStateChanged(authentication, (user: any) => {
+      //   if (user) {
+      //     const userData = {
+      //       name: resUser.name,
+      //       email: resUser.email,
+      //       avatar: user.photoURL,
+      //       uid: user.uid,
+      //       createdAt: user.metadata.creationTime,
+      //       id: resUser.id,
+      //     };
+
+      //     dispatch(updateUser(userData));
+      //   } else {
+      //     console.log('無使用者資料，使用者已登出');
+      //   }
+      // });
     } catch (err) {
       console.log(err);
     }

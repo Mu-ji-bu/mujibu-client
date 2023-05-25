@@ -25,12 +25,16 @@ const withAuth = <P extends object>(Component: React.ComponentType<P>) => {
         routePath.proposal,
       ];
 
+      const protectedLoginRoutes = [routePath.login, routePath.signup];
+
       if (!isAuthenticated && protectedRoutes.includes(currentPath)) {
         //TODO: 需改為登入popup
         alert('請登錄');
         router.push(routePath.login);
+      } else if (isAuthenticated && protectedLoginRoutes.includes(currentPath)) {
+        router.push(routePath.home);
       }
-    }, [currentPath]);
+    }, [currentPath, router]);
 
     return <Component {...props} />;
   };

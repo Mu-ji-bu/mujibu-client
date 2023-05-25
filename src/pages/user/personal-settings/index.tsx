@@ -86,10 +86,10 @@ const PersonalSettings = () => {
     resolver: yupResolver(schema),
     defaultValues: {
       name: userData.name,
-      // nickname: userData.nickname,
-      // birthDate: userData.birthDate,
+      nickname: userData.nickname,
+      birthDate: userData.birthDate,
       // gender: userData.gender,
-      // phone: userData.phone,
+      phone: userData.phone,
       // subscribeNewsletter: userData.subscribeNewsletter,
       // category: userData.category,
       // contactName: '',
@@ -105,16 +105,16 @@ const PersonalSettings = () => {
   };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    // console.log('form data : ', data);
+    console.log('form data : ', data);
     try {
       const res = await patchUser({ id: userData.id, body: data }).unwrap();
-      // console.log(res);
 
       const updateData = {
-        name: res.name,
+        ...res,
       };
 
       dispatch(updateUser(updateData));
+      console.log(updateData);
     } catch (err) {
       console.log(err);
     }
@@ -162,9 +162,9 @@ const PersonalSettings = () => {
                 autoComplete="nickname"
                 autoFocus
                 size="small"
-                // {...register('nickname', { required: true })}
-                // error={!!errors.nickname}
-                // helperText={errors.nickname?.message}
+                {...register('nickname', { required: true })}
+                error={!!errors.nickname}
+                helperText={errors.nickname?.message}
               />
 
               <DatePicker
@@ -174,11 +174,11 @@ const PersonalSettings = () => {
                 slotProps={{
                   textField: {
                     id: 'birthDate',
-                    name: 'birthDate',
+                    // name: 'birthDate',
                     size: 'small',
-                    // error: !!errors.birthDate,
-                    // helperText: errors.birthDate?.message,
-                    // ...register('birthDate', { required: true }),
+                    error: !!errors.birthDate,
+                    helperText: errors.birthDate?.message,
+                    ...register('birthDate', { required: true }),
                   },
                 }}
                 value={selectedDate}
@@ -222,9 +222,9 @@ const PersonalSettings = () => {
                 autoComplete="phone"
                 autoFocus
                 size="small"
-                // {...register('phone', { required: true })}
-                // error={!!errors.phone}
-                // helperText={errors.phone?.message}
+                {...register('phone', { required: true })}
+                error={!!errors.phone}
+                helperText={errors.phone?.message}
               />
 
               <div className="col-span-full">
