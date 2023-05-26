@@ -1,7 +1,6 @@
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Card from '@/components/block/card';
-// import Select from '@/components/block/select';
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack, IconButton } from '@mui/material';
+import { FormControl, MenuItem, Select, IconButton } from '@mui/material';
 import Pagination from '@/components/block/pagination';
 import { useForm, Controller } from 'react-hook-form';
 import { styled } from '@mui/material/styles';
@@ -59,9 +58,9 @@ const projectSortOption = [
 ];
 
 interface ISelectFormData {
-  projectTypeValue: string;
-  projectCategoryValue: string;
-  projectSortValue: string;
+  projectTypeValue: number;
+  projectCategoryValue: number;
+  projectSortValue: number;
 }
 
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
@@ -76,9 +75,9 @@ const Projects = () => {
   const { control, handleSubmit, setValue } = useForm<ISelectFormData>();
 
   useEffect(() => {
-    setValue('projectTypeValue', '-1');
-    setValue('projectCategoryValue', '-1');
-    setValue('projectSortValue', '-1');
+    setValue('projectTypeValue', -1);
+    setValue('projectCategoryValue', -1);
+    setValue('projectSortValue', -1);
   }, [setValue]);
 
   const onSubmit = (data: ISelectFormData) => {
@@ -86,7 +85,7 @@ const Projects = () => {
   };
 
   const handleClearSelect = (fieldName: keyof ISelectFormData) => {
-    setValue(fieldName, '-1');
+    setValue(fieldName, -1);
   };
 
   return (
@@ -96,7 +95,7 @@ const Projects = () => {
           className={clsxm(
             'w-full flex justify-center items-center ',
             'flex-col gap-5 my-5',
-            ' md:gap-10 md:flex-row md:my-10',
+            'md:gap-10 md:flex-row md:my-10',
           )}
         >
           <Controller
