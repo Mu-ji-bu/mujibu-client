@@ -14,6 +14,7 @@ import tabsReducer from './slices/tabsSlice';
 import { authApiService } from './services/authApi';
 import { postApiService } from './services/postApi';
 import { userApiService } from './services/userApi';
+import { projectApiService } from './services/projectApi';
 
 const reducers = combineReducers({
   projectReducer,
@@ -23,6 +24,7 @@ const reducers = combineReducers({
   [authApiService.reducerPath]: authApiService.reducer,
   [userApiService.reducerPath]: userApiService.reducer,
   [postApiService.reducerPath]: postApiService.reducer,
+  [projectApiService.reducerPath]: projectApiService.reducer,
 });
 
 export const makeStore = wrapMakeStore(() =>
@@ -32,7 +34,8 @@ export const makeStore = wrapMakeStore(() =>
       return getCurrentMiddleware()
         .concat(authApiService.middleware)
         .concat(userApiService.middleware)
-        .concat(postApiService.middleware);
+        .concat(postApiService.middleware)
+        .concat(projectApiService.middleware);
     },
   }),
 );
