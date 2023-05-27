@@ -10,7 +10,7 @@ import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRound
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-import CircularDeterminate from '../circularDeterminate/CircularDeterminate';
+import CircularDeterminate from '../../circularDeterminate/CircularDeterminate';
 import { DeterminateSize } from '@/components/types/enum';
 import { IconButton, Tooltip, Typography } from '@mui/material';
 import clsxm from '@/libraries/utils/clsxm';
@@ -26,7 +26,6 @@ const SwiperTop = () => {
   SwiperCore.use([Autoplay]);
   const router = useRouter();
   const handleSlideClick = (slideIndex: number) => {
-    console.log('Slide clicked:', slideIndex);
     // Navigate to the desired page using Next.js router
     router.push(`/projects/${slideIndex}`);
   };
@@ -62,7 +61,7 @@ const SwiperTop = () => {
         centeredSlides={true}
         spaceBetween={24}
         loop={true}
-        autoplay={{ delay: 1000 }}
+        autoplay={{ delay: 5000 }}
         navigation={{
           prevEl: '.custom-swiper-button-prev',
           nextEl: '.custom-swiper-button-next',
@@ -110,7 +109,7 @@ const SwiperTop = () => {
       <div
         className={clsxm(
           'btn-left',
-          'absolute top-[42%] left-[2%] xl:left-[14%] z-50',
+          'absolute top-[42%] left-[2%] xl:left-[14.5%] z-50',
           'bg-white opacity-[.87]',
           'w-[60px] h-[60px] rounded-full',
           'border-solid border-green-accent border',
@@ -128,7 +127,7 @@ const SwiperTop = () => {
       <div
         className={clsxm(
           'btn-right',
-          'absolute top-[42%] right-[2%] xl:right-[14%] z-50',
+          'absolute top-[42%] right-[2%] xl:right-[14.5%] z-50',
           'bg-white opacity-[.87]',
           'w-[60px] h-[60px] rounded-full',
           'border-solid border-green-accent border',
@@ -136,7 +135,7 @@ const SwiperTop = () => {
       >
         <IconButton
           className="custom-swiper-button-next w-full h-full text-green-accent"
-          aria-label="backward"
+          aria-label="forward"
           onClick={goNext}
         >
           <ArrowForwardIosRoundedIcon />
@@ -193,7 +192,7 @@ const Slide: React.FC<ISlideOption> = ({ title, imgSrc }) => {
             <div
               className={clsxm(
                 'white-bg bg-white rounded-full',
-                'absolute bottom-[50px] left-[2.2%] -z-10',
+                'absolute bottom-[52px] left-[2.2%] -z-10',
                 is2Xl ? 'w-[144px] h-[144px]' : 'w-[96px] h-[96px]',
               )}
             ></div>
