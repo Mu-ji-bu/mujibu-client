@@ -13,12 +13,29 @@ import { IconButton } from '@mui/material';
 import clsxm from '@/libraries/utils/clsxm';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import { ReactNode, useRef } from 'react';
+import { CardWidth } from '@/components/types/enum';
 
 SwiperCore.use([Autoplay]);
 
 interface ISwiperCardProps {
   swiperInstances: SwiperCore[];
-  projectData: { id: number; projectType: number; projectName: string }[];
+  projectData: {
+    isPC: boolean;
+    cardWidth?: CardWidth;
+    projectType: number;
+    projectName: string;
+    projectTeam: string;
+    proposer: string;
+    description: string;
+    currentAmount: number;
+    targetAmount: number;
+    progress: number;
+    backers: number;
+    prize: number;
+    startTime: string;
+    endTime: string;
+    remainingTime: string;
+  }[];
   buttonClass: number;
 }
 
@@ -33,6 +50,8 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
   };
 
   const swiperBoxRef = useRef<HTMLDivElement>(null); // 用於獲取 swiper-box 元素的參考
+  
+  if (!projectData) return null;
 
   return (
     <div className="relative w-screen flex justify-center">
@@ -61,9 +80,9 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
                   const slide = (
                     <SwiperSlide key={index} className="cursor-pointer" onClick={() => handleSlideClick(index)}>
                       <div className="flex justify-center gap-6">
-                        {slideProjects.map((slideProject) => (
-                          <div key={slideProject.id} className="max-w-[416px]">
-                            <Card isPC={true} {...slideProject} />
+                        {slideProjects.map((slideProject, i) => (
+                          <div key={i} className="max-w-[416px]">
+                            <Card id={''} image={''} category={''} {...slideProject} />
                           </div>
                         ))}
                       </div>
@@ -97,9 +116,9 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
                   const slide = (
                     <SwiperSlide key={index} className="cursor-pointer" onClick={() => handleSlideClick(index)}>
                       <div className="flex justify-center gap-6">
-                        {slideProjects.map((slideProject) => (
-                          <div key={slideProject.id} className="max-w-[416px]">
-                            <Card isPC={true} {...slideProject} />
+                        {slideProjects.map((slideProject, i) => (
+                          <div key={i} className="max-w-[416px]">
+                            <Card id={''} image={''} category={''} {...slideProject} />
                           </div>
                         ))}
                       </div>
@@ -127,13 +146,14 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
               }}
               onSlideChange={() => {}}
             >
-              {projectData.map((project, i) => (
-                <SwiperSlide key={i} className="cursor-pointer" onClick={() => handleSlideClick(i)}>
-                  <div key={project.id} className="max-w-[416px]">
-                    <Card isPC={true} {...project} />
-                  </div>
-                </SwiperSlide>
-              ))}
+              {projectData &&
+                projectData.map((project, i) => (
+                  <SwiperSlide key={i} className="cursor-pointer" onClick={() => handleSlideClick(i)}>
+                    <div key={i} className="max-w-[416px]">
+                      <Card id={''} image={''} category={''} {...project} />
+                    </div>
+                  </SwiperSlide>
+                ))}
             </Swiper>
             <ArrowButtons swiperInstance={swiperInstances[2]} buttonClass={buttonClass} />
           </>

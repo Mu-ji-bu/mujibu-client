@@ -9,6 +9,8 @@ import SuccessShop from '@/components/block/home/SuccessShop';
 import clsxm from '@/libraries/utils/clsxm';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import { useRouter } from 'next/router';
+import { useGetProjectDataQuery } from '@store/services/projectApi';
+import { useEffect, useState } from 'react';
 
 let dataHot: { id: number; projectType: number; projectName: string }[] = [];
 let dataNew: { id: number; projectType: number; projectName: string }[] = [];
@@ -40,11 +42,27 @@ for (let i = 0; i < 20; i++) {
 }
 
 export default function Home() {
+  const { data, refetch } = useGetProjectDataQuery();
   const swiperInstancesHot: SwiperCore[] = []; // 創建空的 Swiper 實例陣列
   const swiperInstancesNew: SwiperCore[] = []; // 創建空的 Swiper 實例陣列
   const swiperInstancesSuccess: SwiperCore[] = []; // 創建空的 Swiper 實例陣列
   const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
   const router = useRouter();
+
+  const [isLoading, setisLoading] = useState(true);
+
+  console.log({ data });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setisLoading(true);
+      await refetch();
+      setisLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="home w-full">
       <Seo templateTitle="Home" />
@@ -90,7 +108,7 @@ export default function Home() {
               熱門精選
             </Typography>
           </div>
-          <SwiperCard swiperInstances={swiperInstancesHot} projectData={dataHot} buttonClass={2} />
+          <SwiperCard swiperInstances={swiperInstancesHot} projectData={data?.data?.projects} buttonClass={2} />
           <Button variant="outlined" color="secondary" className="mt-[40px] mb-[60px]">
             發現更多
           </Button>
@@ -104,7 +122,7 @@ export default function Home() {
               最新募資
             </Typography>
           </div>
-          <SwiperCard swiperInstances={swiperInstancesNew} projectData={dataNew} buttonClass={3} />
+          <SwiperCard swiperInstances={swiperInstancesNew} projectData={data?.data?.projects} buttonClass={3} />
           <Button variant="outlined" color="secondary" className="mt-[40px] mb-[60px]">
             發現更多
           </Button>
@@ -175,7 +193,7 @@ export default function Home() {
             </Typography>
           </div>
           <div className="shop-cards">
-            <SuccessShop projectData={dataShop} />
+            <SuccessShop projectData={data?.data?.projects} />
           </div>
           <Button variant="outlined" color="secondary" className="mt-[40px] mb-[60px]">
             發現更多
@@ -286,7 +304,7 @@ export default function Home() {
               募質部已成功幫助募資案列超過 2000 件
             </Typography>
           </div>
-          <SwiperCard swiperInstances={swiperInstancesSuccess} projectData={dataSuccess} buttonClass={4} />
+          <SwiperCard swiperInstances={swiperInstancesSuccess} projectData={data?.data?.dataSuccess} buttonClass={4} />
           <Button variant="outlined" color="secondary" className="mt-[40px] mb-[60px]">
             發現更多
           </Button>
