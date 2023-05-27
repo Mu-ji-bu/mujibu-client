@@ -12,6 +12,8 @@ const initialState: IInitialState = {
     subscribeNewsletter: false,
     isEmailVerified: false,
     category: [],
+    collects: [],
+    notifications: [],
     contactName: '',
     contactPhone: '',
     city: '',

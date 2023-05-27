@@ -26,9 +26,15 @@ const Header = () => {
   const handleGetUser = useCallback(async () => {
     try {
       const res = await login().unwrap();
+      const resUser = res.user;
+      const userDataGender = resUser.gender == 'other' ? 2 : 0;
+      const userData = {
+        ...resUser,
+        gender: userDataGender,
+      };
 
       dispatch(setUserToken(res.tokens));
-      dispatch(updateUser(res.user));
+      dispatch(updateUser(userData));
 
       // console.log(res);
 
@@ -69,7 +75,7 @@ const Header = () => {
   const accountOptions: IAccountMenuOption[] = [
     { label: '個人設定', href: routePath.userPersonalSettings, hasBorderBottom: false },
     { label: '贊助紀錄', href: routePath.userOrders, hasBorderBottom: false },
-    { label: '我的收藏', href: routePath.userFollows, hasBorderBottom: true },
+    { label: '我的收藏', href: routePath.userCollects, hasBorderBottom: true },
     { label: '團隊設定', href: routePath.userTeamSettings, hasBorderBottom: false },
     { label: '提案管理', href: routePath.userProjects, hasBorderBottom: true },
     { label: '登出', href: routePath.home, hasBorderBottom: true, handleCustomEvent: handleLogout },

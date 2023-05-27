@@ -12,8 +12,9 @@ import tabsReducer from './slices/tabsSlice';
 // Middleware
 // import { loggerMiddleware } from './middleware';
 import { authApiService } from './services/authApi';
-import { postApiService } from './services/postApi';
 import { userApiService } from './services/userApi';
+import { uploadPhotoApiService } from './services/uploadPhotoApi';
+import { postApiService } from './services/postApi';
 
 const reducers = combineReducers({
   projectReducer,
@@ -22,6 +23,7 @@ const reducers = combineReducers({
   tabsReducer,
   [authApiService.reducerPath]: authApiService.reducer,
   [userApiService.reducerPath]: userApiService.reducer,
+  [uploadPhotoApiService.reducerPath]: uploadPhotoApiService.reducer,
   [postApiService.reducerPath]: postApiService.reducer,
 });
 
@@ -32,6 +34,7 @@ export const makeStore = wrapMakeStore(() =>
       return getCurrentMiddleware()
         .concat(authApiService.middleware)
         .concat(userApiService.middleware)
+        .concat(uploadPhotoApiService.middleware)
         .concat(postApiService.middleware);
     },
   }),

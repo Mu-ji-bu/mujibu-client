@@ -15,7 +15,7 @@ const withAuth = <P extends object>(Component: React.ComponentType<P>) => {
       const protectedRoutes = [
         routePath.forgetPassword,
         routePath.user,
-        routePath.userFollows,
+        routePath.userCollects,
         routePath.userOrders,
         routePath.userPersonalSettings,
         routePath.userProjects,

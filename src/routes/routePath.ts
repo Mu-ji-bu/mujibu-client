@@ -5,7 +5,7 @@ const routePath = {
   forgetPassword: '/forget-password',
   login: '/login',
   user: '/user/:id',
-  userFollows: '/user/follows',
+  userCollects: '/user/collects',
   userOrders: '/user/orders',
   userPersonalSettings: '/user/personal-settings',
   userProjects: '/user/projects',

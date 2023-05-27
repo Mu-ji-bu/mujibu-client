@@ -5,11 +5,12 @@ export declare interface IUserState {
   name?: string;
   nickname?: string;
   birthDate?: string;
-  gender?: string;
+  gender?: number | string | undefined;
   phone?: string;
   subscribeNewsletter?: boolean;
   isEmailVerified?: boolean;
   category?: string[];
+  collects?: string[];
   notifications?: string[];
   contactName?: string;
   contactPhone?: string;
