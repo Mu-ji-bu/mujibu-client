@@ -40,7 +40,7 @@ interface IProject {
   startTime: string;
   endTime: string;
   remainingTime: string;
-  projectType: string; // 修改這裡的類型為字串
+  projectType: number;
   plans: IProjectPlan[];
 }
 
@@ -106,7 +106,7 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
 
 const Projects = () => {
   const { data, refetch } = useGetProjectDataQuery();
-  const { data1, setData1 } = useState(data);
+
   const [isLoading, setisLoading] = useState(true);
   const { isMd } = useBreakpoints();
 
@@ -261,7 +261,7 @@ const Projects = () => {
             </div>
           </form>
           <div className="flex flex-wrap justify-between gap-4 px-4">
-            {data?.data.projects.map((project: IProject) => (
+            {data?.data?.projects.map((project: IProject) => (
               <div key={project.id} className="md:-mx-4 w-full md:w-1/2 lg:w-1/3">
                 <Card isPC={isMd} {...project} />
               </div>

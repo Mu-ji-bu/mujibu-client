@@ -29,22 +29,35 @@ interface IProject {
   startTime: string;
   endTime: string;
   remainingTime: string;
-  projectType: string; // 修改這裡的類型為字串
+  projectType: number;
   plans: IProjectPlan[];
 }
 
 interface ProjectData {
   status: string;
-  data: {
-    projects: IProject[];
-  };
+  projects: IProject[];
+}
+
+interface CurrentData<T> {
+  status: string;
+  data?: T;
+  endpointName: string;
+  fulfilledTimeStamp: number;
+  isError: boolean;
+  isFetching: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  isUninitialized: boolean;
+  refetch: () => void;
+  requestId: string;
+  startedTimeStamp: number;
 }
 
 export const projectApiService = createApi({
   reducerPath: 'projectApi',
   baseQuery: fetchBaseQuery({ baseUrl: baseURL }),
   endpoints: (builder) => ({
-    getProjectData: builder.query<ProjectData[], void>({
+    getProjectData: builder.query<CurrentData<ProjectData>, void>({
       query: () => `${apiRoutes.projectsURL}`,
     }),
   }),
