@@ -3,8 +3,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import UserLayout from '../../../components/layout/UserLayout';
 import { useAppDispatch, useAppSelector } from '@libraries/hooks/reduxHooks';
 import { setUserTabsPage } from '../../../store/slices/tabsSlice';
-import CollectsCard from '@/components/block/user/CollectsCard';
-import ToggleButtons from '@/components/block/user/ToggleButtons';
+import CollectsCard from '@/components/pages/user/CollectsCard';
+import ToggleButtons from '@/components/pages/user/ToggleButtons';
 
 interface Team {
   teamId: string;

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import UserLayout from '../../../components/layout/UserLayout';
 import { useAppDispatch, useAppSelector } from '@libraries/hooks/reduxHooks';
 import { setUserTabsPage } from '../../../store/slices/tabsSlice';
-import OrderCard from '@/components/block/user/OrderCard';
+import OrderCard from '@/components/pages/user/OrderCard';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Typography } from '@mui/material';
 
