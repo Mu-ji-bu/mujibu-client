@@ -8,6 +8,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useEffect } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
 import clsxm from '@/libraries/utils/clsxm';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 
 //TODO: 把 { id: number; projectType: number; projectName: string, ... } 拉出來共用
 let projectData: { id: number; projectType: number; projectName: string }[] = [];
@@ -70,15 +71,9 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
 }));
 
 const Projects = () => {
-  const isPC = useMediaQuery('(min-width:768px)'); //tailwind breakpoint md
+  const { isMd } = useBreakpoints();
 
   const { control, handleSubmit, setValue } = useForm<ISelectFormData>();
-
-  useEffect(() => {
-    setValue('projectTypeValue', -1);
-    setValue('projectCategoryValue', -1);
-    setValue('projectSortValue', -1);
-  }, [setValue]);
 
   const onSubmit = (data: ISelectFormData) => {
     console.log(data);
@@ -101,6 +96,7 @@ const Projects = () => {
           <Controller
             name="projectTypeValue"
             control={control}
+            defaultValue={-1}
             render={({ field }) => (
               <StyledFormControl className="flex-row">
                 <Select
@@ -138,7 +134,7 @@ const Projects = () => {
           <Controller
             name="projectCategoryValue"
             control={control}
-            defaultValue=""
+            defaultValue={-1}
             render={({ field }) => (
               <StyledFormControl className="flex-row">
                 <Select
@@ -176,7 +172,7 @@ const Projects = () => {
           <Controller
             name="projectSortValue"
             control={control}
-            defaultValue=""
+            defaultValue={-1}
             render={({ field }) => (
               <StyledFormControl className="flex-row">
                 <Select
@@ -216,7 +212,7 @@ const Projects = () => {
       <div className="flex flex-wrap justify-between gap-4 px-4">
         {projectData.map((project) => (
           <div key={project.id} className="md:-mx-4 w-full md:w-1/2 lg:w-1/3">
-            <Card isPC={isPC} {...project} />
+            <Card isMd={isMd} {...project} />
           </div>
         ))}
       </div>
