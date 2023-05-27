@@ -35,7 +35,7 @@ interface IProject {
 
 interface ProjectData {
   status: string;
-  projects: IProject[];
+  projects: IProject[] | undefined;
 }
 
 interface CurrentData<T> {
