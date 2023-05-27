@@ -50,7 +50,7 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
   };
 
   const swiperBoxRef = useRef<HTMLDivElement>(null); // 用於獲取 swiper-box 元素的參考
-  
+
   if (!projectData) return null;
 
   return (
