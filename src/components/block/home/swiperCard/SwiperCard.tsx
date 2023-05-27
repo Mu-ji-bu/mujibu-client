@@ -19,23 +19,25 @@ SwiperCore.use([Autoplay]);
 
 interface ISwiperCardProps {
   swiperInstances: SwiperCore[];
-  projectData: {
-    isPC: boolean;
-    cardWidth?: CardWidth;
-    projectType: number;
-    projectName: string;
-    projectTeam: string;
-    proposer: string;
-    description: string;
-    currentAmount: number;
-    targetAmount: number;
-    progress: number;
-    backers: number;
-    prize: number;
-    startTime: string;
-    endTime: string;
-    remainingTime: string;
-  }[];
+  projectData:
+    | {
+        isPC: boolean;
+        cardWidth?: CardWidth;
+        projectType: number;
+        projectName: string;
+        projectTeam: string;
+        proposer: string;
+        description: string;
+        currentAmount: number;
+        targetAmount: number;
+        progress: number;
+        backers: number;
+        prize: number;
+        startTime: string;
+        endTime: string;
+        remainingTime: string;
+      }[]
+    | undefined;
   buttonClass: number;
 }
 

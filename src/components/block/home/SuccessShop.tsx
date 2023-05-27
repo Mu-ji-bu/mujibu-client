@@ -5,23 +5,25 @@ import clsxm from '@/libraries/utils/clsxm';
 import { ReactNode } from 'react';
 
 interface ISuccessShopProps {
-  projectData: {
-    isPC: boolean;
-    cardWidth?: CardWidth;
-    projectType: number;
-    projectName: string;
-    projectTeam: string;
-    proposer: string;
-    description: string;
-    currentAmount: number;
-    targetAmount: number;
-    progress: number;
-    backers: number;
-    prize: number;
-    startTime: string;
-    endTime: string;
-    remainingTime: string;
-  }[];
+  projectData:
+    | {
+        isPC: boolean;
+        cardWidth?: CardWidth;
+        projectType: number;
+        projectName: string;
+        projectTeam: string;
+        proposer: string;
+        description: string;
+        currentAmount: number;
+        targetAmount: number;
+        progress: number;
+        backers: number;
+        prize: number;
+        startTime: string;
+        endTime: string;
+        remainingTime: string;
+      }[]
+    | undefined;
 }
 
 const SuccessShop: React.FC<ISuccessShopProps> = ({ ...props }) => {
