@@ -27,26 +27,33 @@ const Header = () => {
     try {
       const res = await login().unwrap();
       const resUser = res.user;
-      console.log(res);
+      const userDataGender = resUser.gender == 'other' ? 2 : 0;
+      const userData = {
+        ...resUser,
+        gender: userDataGender,
+      };
 
       dispatch(setUserToken(res.tokens));
+      dispatch(updateUser(userData));
 
-      onAuthStateChanged(authentication, (user: any) => {
-        if (user) {
-          const userData = {
-            name: resUser.name,
-            email: resUser.email,
-            avatar: user.photoURL,
-            uid: user.uid,
-            createdAt: user.metadata.creationTime,
-            id: resUser.id,
-          };
+      // console.log(res);
 
-          dispatch(updateUser(userData));
-        } else {
-          console.log('無使用者資料，使用者已登出');
-        }
-      });
+      // onAuthStateChanged(authentication, (user: any) => {
+      //   if (user) {
+      //     const userData = {
+      //       name: resUser.name,
+      //       email: resUser.email,
+      //       avatar: user.photoURL,
+      //       uid: user.uid,
+      //       createdAt: user.metadata.creationTime,
+      //       id: resUser.id,
+      //     };
+
+      //     dispatch(updateUser(userData));
+      //   } else {
+      //     console.log('無使用者資料，使用者已登出');
+      //   }
+      // });
     } catch (err) {
       console.log(err);
     }
@@ -68,7 +75,7 @@ const Header = () => {
   const accountOptions: IAccountMenuOption[] = [
     { label: '個人設定', href: routePath.userPersonalSettings, hasBorderBottom: false },
     { label: '贊助紀錄', href: routePath.userOrders, hasBorderBottom: false },
-    { label: '我的收藏', href: routePath.userFollows, hasBorderBottom: true },
+    { label: '我的收藏', href: routePath.userCollects, hasBorderBottom: true },
     { label: '團隊設定', href: routePath.userTeamSettings, hasBorderBottom: false },
     { label: '提案管理', href: routePath.userProjects, hasBorderBottom: true },
     { label: '登出', href: routePath.home, hasBorderBottom: true, handleCustomEvent: handleLogout },
