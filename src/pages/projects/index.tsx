@@ -74,12 +74,6 @@ const Projects = () => {
 
   const { control, handleSubmit, setValue } = useForm<ISelectFormData>();
 
-  useEffect(() => {
-    setValue('projectTypeValue', -1);
-    setValue('projectCategoryValue', -1);
-    setValue('projectSortValue', -1);
-  }, [setValue]);
-
   const onSubmit = (data: ISelectFormData) => {
     console.log(data);
   };
@@ -101,6 +95,7 @@ const Projects = () => {
           <Controller
             name="projectTypeValue"
             control={control}
+            defaultValue={-1}
             render={({ field }) => (
               <StyledFormControl className="flex-row">
                 <Select
@@ -138,7 +133,7 @@ const Projects = () => {
           <Controller
             name="projectCategoryValue"
             control={control}
-            defaultValue=""
+            defaultValue={-1}
             render={({ field }) => (
               <StyledFormControl className="flex-row">
                 <Select
@@ -176,7 +171,7 @@ const Projects = () => {
           <Controller
             name="projectSortValue"
             control={control}
-            defaultValue=""
+            defaultValue={-1}
             render={({ field }) => (
               <StyledFormControl className="flex-row">
                 <Select
