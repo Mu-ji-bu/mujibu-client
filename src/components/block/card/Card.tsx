@@ -10,40 +10,42 @@ import Link from 'next/link';
 import CircleCheckIcon from '@/components/block/circleCheckIcon';
 import clsxm from '@/libraries/utils/clsxm';
 import { DeterminateSize } from '@/components/types/enum';
+import { CardWidth } from '@/components/types/enum';
 
 interface ImgMediaCardProps {
   isPC: boolean;
-  projectType: string;
+  cardWidth?: CardWidth;
+  projectType: number;
   projectName: string;
 }
 
-const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
+const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, cardWidth = CardWidth.Normal, ...props }) => {
   const { projectType, projectName } = props;
 
-  const renderIndicator = (projectType: string) => {
+  const renderIndicator = (projectType: number) => {
     switch (projectType) {
-      case 'InProgress':
+      case 0:
         return <CircularDeterminate value={30} size={'4em'} textSize={DeterminateSize.Small} />;
-      case 'Success':
+      case 2:
         return <CircleCheckIcon />;
       default:
         return null;
     }
   };
 
-  const renderLinearProgress = (projectType: string) => {
+  const renderLinearProgress = (projectType: number) => {
     switch (projectType) {
-      case 'InProgress':
+      case 0:
         return <LinearDeterminate value={30} haslabel={true} />;
-      case 'Success':
+      case 2:
         return <LinearDeterminate value={100} haslabel={false} />;
       default:
         return null;
     }
   };
 
-  const renderCardBottom = (projectType: string) => {
-    if (projectType === 'InProgress' || projectType === 'Success') {
+  const renderCardBottom = (projectType: number) => {
+    if (projectType === 0 || projectType === 2) {
       return (
         <>
           <div className="h-px bg-secondary/[.12] my-5"></div>
@@ -97,8 +99,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
   return (
     <Card
       className={clsxm(
-        { 'max-w-[351px]': projectType !== 'Success' },
-        { 'max-w-[257px]': projectType === 'Success' },
+        `max-w-[${cardWidth}]`,
         'm-auto p-4',
         'md:max-w-[416px] md:p-6',
         'rounded-lg border-secondary shadow-none border border-solid border-opacity-[.12]',
@@ -114,7 +115,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
       <CardContent className="mt-5 p-0">
         <div className="flex justify-between items-center">
           <Chip className="text-green-accent border-green-accent" label="設計" variant="outlined" />
-          {projectType === 'LongTerm' && (
+          {projectType === 1 && (
             <Typography className="opacity-60" component="span" variant="caption" color="secondary">
               長期販售
             </Typography>

@@ -86,6 +86,13 @@ const lightTheme = createTheme({
       fontSize: '0.875rem',
     },
   },
+  components: {
+    MuiList: {
+      defaultProps: {
+        disablePadding: true,
+      },
+    },
+  },
 });
 
 export default lightTheme;

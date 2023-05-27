@@ -22,7 +22,7 @@ const withAuth = <P extends object>(Component: React.ComponentType<P>) => {
         routePath.userTeamSettings,
         routePath.newPassword,
         routePath.notifications,
-        routePath.proposal,
+        routePath.proposalId,
       ];
 
       const protectedLoginRoutes = [routePath.login, routePath.signup];

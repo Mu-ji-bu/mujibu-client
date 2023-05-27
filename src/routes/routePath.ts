@@ -1,6 +1,6 @@
 const routePath = {
   home: '/',
-  aboutus: '/aboutus',
+  aboutUs: '/about-us',
   faq: '/faq',
   forgetPassword: '/forget-password',
   login: '/login',
@@ -13,6 +13,7 @@ const routePath = {
   newPassword: '/new-password',
   notifications: '/notifications',
   proposal: '/proposal',
+  proposalId: '/proposal/[id]',
   projects: '/projects',
   signup: '/signup',
   userPrivacy: '/user-privacy',
