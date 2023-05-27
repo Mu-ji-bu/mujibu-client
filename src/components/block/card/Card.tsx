@@ -10,20 +10,56 @@ import Link from 'next/link';
 import CircleCheckIcon from '@/components/block/circleCheckIcon';
 import clsxm from '@/libraries/utils/clsxm';
 import { DeterminateSize } from '@/components/types/enum';
+import { getRemainingDays } from '@libraries/utils/index';
+import { CardWidth } from '@/components/types/enum';
 
 interface ImgMediaCardProps {
   isPC: boolean;
-  projectType: number;
-  projectName: string;
+  id: string;
+  image: string;
+  category: string;
 }
 
-const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
-  const { projectType, projectName } = props;
+interface ImgMediaCardProps {
+  isPC: boolean;
+  cardWidth?: CardWidth;
+  projectType: number;
+  projectName: string;
+  projectTeam: string;
+  proposer: string;
+  description: string;
+  currentAmount: number;
+  targetAmount: number;
+  progress: number;
+  backers: number;
+  prize: number;
+  startTime: string;
+  endTime: string;
+  remainingTime: string;
+}
+
+const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
+  const {
+    isPC,
+    cardWidth = CardWidth.Normal,
+    projectType,
+    projectName,
+    currentAmount,
+    targetAmount,
+    backers,
+    startTime,
+    endTime,
+    progress,
+    image,
+    category,
+    proposer,
+  } = props;
+  const remainingDays = getRemainingDays(startTime, endTime);
 
   const renderIndicator = (projectType: number) => {
     switch (projectType) {
       case 0:
-        return <CircularDeterminate value={30} size={'4em'} textSize={DeterminateSize.Small} />;
+        return <CircularDeterminate value={progress} size={'4em'} textSize={DeterminateSize.Small} />;
       case 2:
         return <CircleCheckIcon />;
       default:
@@ -34,7 +70,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
   const renderLinearProgress = (projectType: number) => {
     switch (projectType) {
       case 0:
-        return <LinearDeterminate value={30} haslabel={true} />;
+        return <LinearDeterminate value={progress} haslabel={true} />;
       case 2:
         return <LinearDeterminate value={100} haslabel={false} />;
       default:
@@ -56,7 +92,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
                   達成
                 </Typography>
                 <Typography component="span" variant="h6" color="primary">
-                  NT$25k
+                  NT${currentAmount}k
                 </Typography>
               </div>
               <div>
@@ -64,14 +100,14 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
                   目標
                 </Typography>
                 <Typography className="opacity-[.87]" component="span" variant="h6" color="secondary">
-                  NT$100k
+                  NT${targetAmount}k
                 </Typography>
               </div>
             </div>
             <div className="text-right ml-auto">
               <div>
                 <Typography className="mr-1" component="span" variant="caption" color="primary">
-                  999
+                  {backers}
                 </Typography>
                 <Typography className="opacity-60" component="span" variant="caption" color="secondary">
                   人支持
@@ -82,7 +118,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
                   剩餘時間
                 </Typography>
                 <Typography className="opacity-60" component="span" variant="caption" color="secondary">
-                  14天
+                  {remainingDays}天
                 </Typography>
               </div>
             </div>
@@ -97,23 +133,16 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
   return (
     <Card
       className={clsxm(
-        { 'max-w-[351px]': projectType !== 2 },
-        { 'max-w-[257px]': projectType === 2 }, //TODO: 探索頁寬度
+        `max-w-[${cardWidth}]`,
         'm-auto p-4',
         'md:max-w-[416px] md:p-6',
         'rounded-lg border-secondary shadow-none border border-solid border-opacity-[.12]',
       )}
     >
-      <CardMedia
-        className="rounded-lg object-cover"
-        component="img"
-        alt="project img"
-        height="276"
-        image="/slides/Mobile_slides_3@2x.png"
-      />
+      <CardMedia className="rounded-lg object-cover" component="img" alt={projectName} height="276" image={image} />
       <CardContent className="mt-5 p-0">
         <div className="flex justify-between items-center">
-          <Chip className="text-green-accent border-green-accent" label="設計" variant="outlined" />
+          <Chip className="text-green-accent border-green-accent" label={category} variant="outlined" />
           {projectType === 1 && (
             <Typography className="opacity-60" component="span" variant="caption" color="secondary">
               長期販售
@@ -131,7 +160,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
             href="#"
             className="no-underline  text-primary  hover:text-secondary visited:text-primary font-normal md:font-medium text-sm md:text-base"
           >
-            財團法人高雄市私立慈暉關懷學園
+            {proposer}
           </Link>
         </div>
         {renderCardBottom(projectType)}

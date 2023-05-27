@@ -44,7 +44,6 @@ const BasicSelect: React.FC<IBasicSelect> = (props) => {
             </MenuItem>
           ))}
         </Select>
-        test
       </StyledFormControl>
     </Box>
   );

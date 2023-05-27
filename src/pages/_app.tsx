@@ -16,6 +16,17 @@ import 'dayjs/locale/zh-tw';
 const App = ({ Component, ...rest }: AppProps) => {
   const { store, props } = wrapper.useWrappedStore(rest);
 
+  // start mock api
+  // if (process.env.NODE_ENV === 'development') {
+  //   const { serverWorker } = require('../mocks/browser');
+  //   const startServer = async () => {
+  //     await serverWorker.listen();
+  //   };
+  //   startServer().catch((error) => {
+  //     console.error('Error starting server work:', error);
+  //   });
+  // }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

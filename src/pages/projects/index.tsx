@@ -1,9 +1,48 @@
+import { useEffect, useState } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Card from '@/components/block/card';
-import Select from '@/components/block/select';
-import { Button, FormControl, InputLabel, MenuItem, Stack } from '@mui/material';
+import Loading from '@/components/Loading';
+import { useGetProjectDataQuery } from '@store/services/projectApi';
+import { FormControl, MenuItem, Select, IconButton } from '@mui/material';
 import Pagination from '@/components/block/pagination';
 import { useForm, Controller } from 'react-hook-form';
+import { styled } from '@mui/material/styles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ClearIcon from '@mui/icons-material/Clear';
+import clsxm from '@/libraries/utils/clsxm';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+
+interface IProjectPlan {
+  id: string;
+  name: string;
+  description: string;
+  minimumAmount: number;
+  maximumAmount: number;
+  remaining: number;
+  estimatedDelivery: string;
+  discount?: number;
+  earlyBirdEndDate?: string;
+}
+
+interface IProject {
+  id: string;
+  image: string;
+  category: string;
+  projectName: string;
+  projectTeam: string;
+  proposer: string;
+  description: string;
+  currentAmount: number;
+  targetAmount: number;
+  progress: number;
+  backers: number;
+  prize: number;
+  startTime: string;
+  endTime: string;
+  remainingTime: string;
+  projectType: number;
+  plans: IProjectPlan[];
+}
 
 //TODO: 把 { id: number; projectType: number; projectName: string, ... } 拉出來共用
 let projectData: { id: number; projectType: number; projectName: string }[] = [];
@@ -50,17 +89,26 @@ const projectCategoryOption = [
 const projectSortOption = [
   { label: '最新募資', value: 0 },
   { label: '最後倒數', value: 1 },
-  { label: '募資王', value: 2 },
+  { label: '募資金額', value: 2 },
 ];
 
 interface ISelectFormData {
-  projectTypeValue: string;
-  projectCategoryValue: string;
-  projectSortValue: string;
+  projectTypeValue: number;
+  projectCategoryValue: number;
+  projectSortValue: number;
 }
 
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'rgb(72,72,72,0.12)',
+  },
+}));
+
 const Projects = () => {
-  const isPC = useMediaQuery('(min-width:768px)'); //tailwind breakpoint md
+  const { data, refetch } = useGetProjectDataQuery();
+
+  const [isLoading, setisLoading] = useState(true);
+  const { isMd } = useBreakpoints();
 
   const { control, handleSubmit, setValue } = useForm<ISelectFormData>();
 
@@ -69,96 +117,161 @@ const Projects = () => {
   };
 
   const handleClearSelect = (fieldName: keyof ISelectFormData) => {
-    setValue(fieldName, '');
+    setValue(fieldName, -1);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setisLoading(true);
+      await refetch();
+      setisLoading(false);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <main className="max-w-screen-xl mx-auto p-5">
-      <div className="w-full flex justify-center gap-10 my-10">
-        <Select placeholder="專案性質" option={projectTypeOption} />
-        <Select placeholder="分類" option={projectCategoryOption} />
-        <Select placeholder="排序方式" option={projectSortOption} />
-      </div>
-      {/* <div className="w-full flex justify-center gap-10 my-10">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Controller
-            name="projectTypeValue"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <FormControl>
-                <InputLabel id="select1-label">Select 1</InputLabel>
-                <Select
-                  labelId="select1-label"
-                  id="projectTypeValue"
-                  value={field.value}
-                  onChange={(e) => {
-                    field.onChange(e);
-                    handleSubmit(onSubmit)();
-                  }}
-                >
-                  <MenuItem value="">None</MenuItem>
-                  <MenuItem value="option1">Option 1</MenuItem>
-                  <MenuItem value="option2">Option 2</MenuItem>
-                  <MenuItem value="option3">Option 3</MenuItem>
-                </Select>
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    handleClearSelect('projectTypeValue');
-                    handleSubmit(onSubmit)();
-                  }}
-                >
-                  Clear
-                </Button>
-              </FormControl>
-            )}
-          />
-          <Controller
-            name="projectCategoryValue"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <FormControl>
-                <InputLabel id="select2-label">Select 2</InputLabel>
-                <Select
-                  labelId="select2-label"
-                  id="projectCategoryValue"
-                  value={field.value}
-                  onChange={(e) => {
-                    field.onChange(e);
-                    handleSubmit(onSubmit)();
-                  }}
-                >
-                  <MenuItem value="">None</MenuItem>
-                  <MenuItem value="option1">Option 1</MenuItem>
-                  <MenuItem value="option2">Option 2</MenuItem>
-                  <MenuItem value="option3">Option 3</MenuItem>
-                </Select>
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    handleClearSelect('projectCategoryValue');
-                    handleSubmit(onSubmit)();
-                  }}
-                >
-                  Clear
-                </Button>
-              </FormControl>
-            )}
-          />
-        </form>
-      </div> */}
-      <div className="flex flex-wrap justify-between gap-4 px-4">
-        {projectData.map((project) => (
-          <div key={project.id} className="-mx-4 w-full md:w-1/2 lg:w-1/3">
-            <Card isPC={isPC} {...project} />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div
+              className={clsxm(
+                'w-full flex justify-center items-center ',
+                'flex-col gap-5 my-5',
+                'md:gap-10 md:flex-row md:my-10',
+              )}
+            >
+              <Controller
+                name="projectTypeValue"
+                control={control}
+                defaultValue={-1}
+                render={({ field }) => (
+                  <StyledFormControl className="flex-row">
+                    <Select
+                      id="projectTypeValue"
+                      value={field.value}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleSubmit(onSubmit)();
+                      }}
+                      size="small"
+                      IconComponent={ExpandMoreIcon}
+                      sx={{ minWidth: 180 }}
+                    >
+                      <MenuItem sx={{ paddingBlock: '12px' }} value={-1} disabled>
+                        專案性質
+                      </MenuItem>
+                      {projectTypeOption.map(({ label, value }, index) => (
+                        <MenuItem key={index} sx={{ paddingBlock: '12px' }} value={value}>
+                          {label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        handleClearSelect('projectTypeValue');
+                        handleSubmit(onSubmit)();
+                      }}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </StyledFormControl>
+                )}
+              />
+              <Controller
+                name="projectCategoryValue"
+                control={control}
+                defaultValue={-1}
+                render={({ field }) => (
+                  <StyledFormControl className="flex-row">
+                    <Select
+                      id="projectCategoryValue"
+                      value={field.value}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleSubmit(onSubmit)();
+                      }}
+                      size="small"
+                      IconComponent={ExpandMoreIcon}
+                      sx={{ minWidth: 180 }}
+                    >
+                      <MenuItem sx={{ paddingBlock: '12px' }} value={-1} disabled>
+                        分類
+                      </MenuItem>
+                      {projectCategoryOption.map(({ label, value }, index) => (
+                        <MenuItem key={index} sx={{ paddingBlock: '12px' }} value={value}>
+                          {label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        handleClearSelect('projectCategoryValue');
+                        handleSubmit(onSubmit)();
+                      }}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </StyledFormControl>
+                )}
+              />
+              <Controller
+                name="projectSortValue"
+                control={control}
+                defaultValue={-1}
+                render={({ field }) => (
+                  <StyledFormControl className="flex-row">
+                    <Select
+                      id="projectSortValue"
+                      value={field.value}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleSubmit(onSubmit)();
+                      }}
+                      size="small"
+                      IconComponent={ExpandMoreIcon}
+                      sx={{ minWidth: 180 }}
+                    >
+                      <MenuItem sx={{ paddingBlock: '12px' }} value={-1} disabled>
+                        排序方式
+                      </MenuItem>
+                      {projectSortOption.map(({ label, value }, index) => (
+                        <MenuItem key={index} sx={{ paddingBlock: '12px' }} value={value}>
+                          {label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        handleClearSelect('projectSortValue');
+                        handleSubmit(onSubmit)();
+                      }}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </StyledFormControl>
+                )}
+              />
+            </div>
+          </form>
+          <div className="flex flex-wrap justify-between gap-4 px-4">
+            {data?.data?.projects.map((project: IProject) => (
+              <div key={project.id} className="md:-mx-4 w-full md:w-1/2 lg:w-1/3">
+                <Card isPC={isMd} {...project} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="w-full flex justify-center my-10">
-        <Pagination />
-      </div>
+          <div className="w-full flex justify-center my-10">
+            <Pagination />
+          </div>
+        </>
+      )}
     </main>
   );
 };
