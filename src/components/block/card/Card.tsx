@@ -11,12 +11,19 @@ import CircleCheckIcon from '@/components/block/circleCheckIcon';
 import clsxm from '@/libraries/utils/clsxm';
 import { DeterminateSize } from '@/components/types/enum';
 import { getRemainingDays } from '@libraries/utils/index';
+import { CardWidth } from '@/components/types/enum';
 
 interface ImgMediaCardProps {
   isPC: boolean;
   id: string;
   image: string;
   category: string;
+}
+
+interface ImgMediaCardProps {
+  isPC: boolean;
+  cardWidth?: CardWidth;
+  projectType: number;
   projectName: string;
   projectTeam: string;
   proposer: string;
@@ -29,11 +36,12 @@ interface ImgMediaCardProps {
   startTime: string;
   endTime: string;
   remainingTime: string;
-  projectType: string; // 修改這裡的類型為字串
 }
 
-const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
+const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
   const {
+    isPC,
+    cardWidth = CardWidth.Normal,
     projectType,
     projectName,
     currentAmount,
@@ -48,30 +56,30 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
   } = props;
   const remainingDays = getRemainingDays(startTime, endTime);
 
-  const renderIndicator = (projectType: string) => {
+  const renderIndicator = (projectType: number) => {
     switch (projectType) {
-      case 'InProgress':
+      case 0:
         return <CircularDeterminate value={progress} size={'4em'} textSize={DeterminateSize.Small} />;
-      case 'Success':
+      case 2:
         return <CircleCheckIcon />;
       default:
         return null;
     }
   };
 
-  const renderLinearProgress = (projectType: string) => {
+  const renderLinearProgress = (projectType: number) => {
     switch (projectType) {
-      case 'InProgress':
+      case 0:
         return <LinearDeterminate value={progress} haslabel={true} />;
-      case 'Success':
+      case 2:
         return <LinearDeterminate value={100} haslabel={false} />;
       default:
         return null;
     }
   };
 
-  const renderCardBottom = (projectType: string) => {
-    if (projectType === 'InProgress' || projectType === 'Success') {
+  const renderCardBottom = (projectType: number) => {
+    if (projectType === 0 || projectType === 2) {
       return (
         <>
           <div className="h-px bg-secondary/[.12] my-5"></div>
@@ -125,8 +133,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
   return (
     <Card
       className={clsxm(
-        { 'max-w-[351px]': projectType !== 'Success' },
-        { 'max-w-[257px]': projectType === 'Success' },
+        `max-w-[${cardWidth}]`,
         'm-auto p-4',
         'md:max-w-[416px] md:p-6',
         'rounded-lg border-secondary shadow-none border border-solid border-opacity-[.12]',
@@ -136,7 +143,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = ({ isPC, ...props }) => {
       <CardContent className="mt-5 p-0">
         <div className="flex justify-between items-center">
           <Chip className="text-green-accent border-green-accent" label={category} variant="outlined" />
-          {projectType === 'LongTerm' && (
+          {projectType === 1 && (
             <Typography className="opacity-60" component="span" variant="caption" color="secondary">
               長期販售
             </Typography>

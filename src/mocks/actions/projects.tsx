@@ -25,7 +25,7 @@ const getProjectData = rest.get(`${baseURL}${apiRoutes.projectsURL}`, (req, res,
           startTime: '2023-05-01T00:00:00Z',
           endTime: '2023-06-30T23:59:59Z',
           remainingTime: '58 days',
-          projectType: 'InProgress', // "long-term"
+          projectType: 0, // "long-term"
           plans: [
             {
               id: '1',

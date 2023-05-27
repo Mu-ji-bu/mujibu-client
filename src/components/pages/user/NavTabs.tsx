@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Tab, Tabs } from '@mui/material';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@libraries/hooks/reduxHooks';
@@ -24,11 +23,8 @@ const NavTabs: React.FC = () => {
       >
         <Tab label="個人設定" href="/user/personal-settings" LinkComponent={Link} />
         <Tab label="贊助紀錄" href="/user/orders" LinkComponent={Link} />
-        <Tab label="我的收藏" href="/user/follows" LinkComponent={Link} />
-        {/* <div className="flex items-center">
-          <span className="w-[1px] h-6 bg-secondary-30 mx-6"></span>
-        </div> */}
-
+        <Tab label="我的收藏" href="/user/collects" LinkComponent={Link} />
+        <Tab disabled href="#" className="min-w-0 w-[1px] bg-secondary-30 p-0 mx-6 min-h-0 h-6 mt-3" />
         <Tab label="團隊設定" href="/user/team-settings" LinkComponent={Link} />
         <Tab label="提案管理" href="/user/projects" LinkComponent={Link} />
       </Tabs>

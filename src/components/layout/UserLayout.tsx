@@ -1,5 +1,5 @@
-import UserAvatar from '../block/user/UserAvatar';
-import NavTabs from '../block/user/NavTabs';
+import UserAvatar from '../pages/user/UserAvatar';
+import NavTabs from '../pages/user/NavTabs';
 import { ReactNode } from 'react';
 
 const UserLayout = ({ children }: { children: ReactNode }) => {
