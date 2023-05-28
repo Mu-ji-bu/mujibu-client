@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import clsxm from '@/libraries/utils/clsxm';
@@ -7,6 +8,8 @@ import UserLayout from '../../../components/layout/UserLayout';
 import { useAppDispatch, useAppSelector } from '@libraries/hooks/reduxHooks';
 import { usePatchUserMutation } from '../../../store/services/userApi';
 import { selectUser, updateUser } from '../../../store/slices/userSlice';
+import { setUserTabsPage } from '../../../store/slices/tabsSlice';
+import type { IUserState } from '@/types/user';
 
 import {
   Button,
@@ -20,7 +23,8 @@ import {
   FormLabel,
   FormControl,
 } from '@mui/material';
-
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import KeyIcon from '@mui/icons-material/Key';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -32,43 +36,51 @@ import routePath from '@routes/routePath';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-const categoryOptions = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
-
-type FormValues = {
-  name: string;
-  nickname: string;
-  birthDate: string;
-  gender: number | '';
-  phone: string;
-  subscribeNewsletter: boolean;
-  category: string[];
-  contactName: string;
-  contactPhone: string;
-  address: string;
-};
+import PhotoUpload from '@/components/block/photoUpload/PhotoUpload';
 
 const schema = Yup.object().shape({
   name: Yup.string().required('姓名為必填欄位'),
-  nickname: Yup.string(),
-  birthDate: Yup.string(),
-  gender: Yup.string(),
+  nickname: Yup.string().required('暱稱為必填欄位'),
+  birthDate: Yup.string().required('生日為必填欄位'),
+  gender: Yup.number(),
   phone: Yup.string(),
   subscribeNewsletter: Yup.boolean(),
-  category: Yup.array(),
+  category: Yup.array().of(Yup.string()),
   contactName: Yup.string(),
   contactPhone: Yup.string(),
   address: Yup.string(),
 });
 
+const categoryOptions = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
+
 const PersonalSettings = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [patchUser] = usePatchUserMutation();
-  const userData = useAppSelector(selectUser);
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
+  const userData = useAppSelector(selectUser);
+
+  const [imageUploaded, setImageUploaded] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs(userData.birthDate) ?? null);
+  const [selectedGender, setSelectedGender] = useState<number | string>(userData.gender ?? '');
+  const [selectedNewspaper, setSelectedNewspaper] = useState<boolean>(userData.subscribeNewsletter ?? false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [sameAbove, setSameAbove] = useState(false);
+
+  const handleDateSelect = (newValue: Dayjs | null) => {
+    const value = dayjs(newValue).format('YYYY-MM-DD');
+    setSelectedDate(dayjs(value));
+    setValue('birthDate', value);
+  };
+
+  const handleGenderSelect = (e: ChangeEvent<HTMLInputElement>) => {
+    setSelectedGender(e.target.value);
+  };
+
+  const handleNewspaperChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSelectedNewspaper(e.target.checked);
+  };
+
   const handleCategoryChange = (category: string) => {
     if (selectedCategories.includes(category)) {
       setSelectedCategories(selectedCategories.filter((item) => item !== category));
@@ -77,64 +89,80 @@ const PersonalSettings = () => {
     }
   };
 
+  const handleSameAboveChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSameAbove(e.target.checked);
+
+    if (e.target.checked) {
+      setValue('contactName', getValues('name'));
+      setValue('contactPhone', getValues('phone'));
+    } else {
+      setValue('contactName', '');
+      setValue('contactPhone', '');
+    }
+  };
+
   const {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<IUserState>({
     resolver: yupResolver(schema),
     defaultValues: {
+      // avatar: userData.avatar,
       name: userData.name,
-      // nickname: userData.nickname,
-      // birthDate: userData.birthDate,
-      // gender: userData.gender,
-      // phone: userData.phone,
-      // subscribeNewsletter: userData.subscribeNewsletter,
+      nickname: userData.nickname,
+      birthDate: userData.birthDate,
+      // gender: ['', 0, 1, 2].includes(userData.gender as string | number) ? (userData.gender as string | number) : '',
+      phone: userData.phone,
+      subscribeNewsletter: userData.subscribeNewsletter,
       // category: userData.category,
-      // contactName: '',
-      // contactPhone: '',
-      // address: '',
+      contactName: userData.contactName,
+      contactPhone: userData.contactPhone,
+      address: userData.address,
     },
   });
 
-  const handleDateSelect = (newValue: Dayjs | null) => {
-    const value = dayjs(newValue).format('YYYY-MM-DD');
-    setSelectedDate(dayjs(value));
-    // setValue('birthDate', value);
-  };
-
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    // console.log('form data : ', data);
+  const onSubmit: SubmitHandler<IUserState> = async (data) => {
+    console.log('form data : ', data);
     try {
       const res = await patchUser({ id: userData.id, body: data }).unwrap();
-      // console.log(res);
-
       const updateData = {
-        name: res.name,
+        ...res,
       };
-
       dispatch(updateUser(updateData));
+      console.log(updateData);
     } catch (err) {
       console.log(err);
     }
   };
 
+  useEffect(() => {
+    if (imageUploaded) {
+      setValue('avatar', imageUploaded);
+    }
+  }, [imageUploaded, setValue]);
+
+  useEffect(() => {
+    dispatch(setUserTabsPage(0));
+  }, [dispatch]);
+
   return (
     <UserLayout>
-      <div className="flex justify-end px-0 md:px-10">
+      <div className="flex justify-end px-0 lg:px-10">
         <Button onClick={() => router.push('/new-password')} className="" variant="outlined" startIcon={<KeyIcon />}>
           修改密碼
         </Button>
       </div>
 
-      <form className="flex md:flex-row flex-col md:space-x-5 px-0 md:px-10 py-5" onSubmit={handleSubmit(onSubmit)}>
+      <form className="flex md:flex-row flex-col md:space-x-5 px-0 lg:px-10 py-5" onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full md:w-1/3 shrink-0 flex flex-col items-center mb-5 md:mb-0">
-          <Avatar className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] mb-5" alt="個人大頭貼" src=""></Avatar>
-          <Button className="" variant="outlined" component="label" startIcon={<AddPhotoAlternateIcon />}>
-            選擇上傳圖片
-            <input type="file" hidden />
-          </Button>
+          <PhotoUpload
+            originalName={userData.name ?? ''}
+            originalAvatar={userData.avatar ?? ''}
+            setImageUploaded={setImageUploaded}
+          />
         </div>
         <div className={clsxm('w-full md:w-2/3 flex flex-col ')}>
           <div className="mb-10 w-full">
@@ -162,9 +190,9 @@ const PersonalSettings = () => {
                 autoComplete="nickname"
                 autoFocus
                 size="small"
-                // {...register('nickname', { required: true })}
-                // error={!!errors.nickname}
-                // helperText={errors.nickname?.message}
+                {...register('nickname', { required: true })}
+                error={!!errors.nickname}
+                helperText={errors.nickname?.message}
               />
 
               <DatePicker
@@ -174,11 +202,10 @@ const PersonalSettings = () => {
                 slotProps={{
                   textField: {
                     id: 'birthDate',
-                    name: 'birthDate',
                     size: 'small',
-                    // error: !!errors.birthDate,
-                    // helperText: errors.birthDate?.message,
-                    // ...register('birthDate', { required: true }),
+                    error: !!errors.birthDate,
+                    helperText: errors.birthDate?.message,
+                    ...register('birthDate', { required: true }),
                   },
                 }}
                 value={selectedDate}
@@ -195,7 +222,8 @@ const PersonalSettings = () => {
                 // error={!!errors.gender}
                 // helperText={errors.gender?.message}
                 select
-                defaultValue={''}
+                value={selectedGender}
+                onChange={handleGenderSelect}
               >
                 <MenuItem value="" disabled>
                   請選擇
@@ -222,16 +250,16 @@ const PersonalSettings = () => {
                 autoComplete="phone"
                 autoFocus
                 size="small"
-                // {...register('phone', { required: true })}
-                // error={!!errors.phone}
-                // helperText={errors.phone?.message}
+                {...register('phone')}
+                error={!!errors.phone}
+                helperText={errors.phone?.message}
               />
 
               <div className="col-span-full">
                 <FormControlLabel
                   className="text-secondary"
-                  control={<Checkbox defaultChecked />}
-                  name="subscribeNewsletter"
+                  control={<Checkbox checked={selectedNewspaper} onChange={handleNewspaperChange} />}
+                  {...register('subscribeNewsletter', { required: true })}
                   label="接收電子報"
                 />
               </div>
@@ -240,7 +268,9 @@ const PersonalSettings = () => {
                 <FormGroup className="flex-row">
                   {categoryOptions.map((category) => (
                     <FormControlLabel
+                      // {...register('category')}
                       className="text-secondary"
+                      value={category}
                       key={category}
                       control={
                         <Checkbox
@@ -265,30 +295,30 @@ const PersonalSettings = () => {
                 fullWidth
                 className=""
                 id="contactName"
-                label="收件者姓名 *"
+                label="收件者姓名"
                 autoComplete="contactName"
                 autoFocus
                 size="small"
-                // {...register('contactName', { required: true })}
-                // error={!!errors.contactName}
-                // helperText={errors.contactName?.message}
+                {...register('contactName')}
+                error={!!errors.contactName}
+                helperText={errors.contactName?.message}
               />
               <TextField
                 fullWidth
                 id="contactPhone"
-                label="收件者電話 *"
+                label="收件者電話"
                 autoComplete="contactPhone"
                 autoFocus
                 size="small"
-                // {...register('contactPhone', { required: true })}
-                // error={!!errors.contactPhone}
-                // helperText={errors.contactPhone?.message}
+                {...register('contactPhone')}
+                error={!!errors.contactPhone}
+                helperText={errors.contactPhone?.message}
               />
 
               <div className="col-span-full">
                 <FormControlLabel
                   className="text-secondary"
-                  control={<Checkbox />}
+                  control={<Checkbox checked={sameAbove} onChange={handleSameAboveChange} />}
                   name="sameAbove"
                   label="與贊助人資料相同"
                 />
@@ -298,11 +328,13 @@ const PersonalSettings = () => {
                 fullWidth
                 className="col-span-full"
                 id="address"
-                name="address"
-                label="地址 *"
+                label="地址"
                 autoComplete="收件地址"
                 autoFocus
                 size="small"
+                {...register('address')}
+                error={!!errors.address}
+                helperText={errors.address?.message}
               />
             </div>
           </div>
@@ -315,24 +347,3 @@ const PersonalSettings = () => {
   );
 };
 export default PersonalSettings;
-
-{
-  /* id?: string;
-  uid: string;
-  avatar?: string | undefined;
-  name: string;
-  email: string;
-  nickname?: string;
-  birthDate?: string;
-  gender?: number;
-  phone?: string;
-  subscribeNewsletter?: boolean;
-  category?: string[];
-  contactName?: string;
-  contactPhone?: string;
-  city?: string;
-  district?: string;
-  postalCode?: string;
-  address?: string;
-  createdAt?: Date | null; */
-}
