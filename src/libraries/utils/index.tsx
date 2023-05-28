@@ -10,3 +10,7 @@ export const getRemainingDays = (startTime: string, endTime: string) => {
 
   return remainingDays;
 };
+
+export const getRandomNumber = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};

@@ -13,7 +13,7 @@ interface IProjectPlan {
   earlyBirdEndDate?: string;
 }
 
-interface IProject {
+export interface IProject {
   id: string;
   image: string;
   category: string;
@@ -35,7 +35,7 @@ interface IProject {
 
 interface ProjectData {
   status: string;
-  projects: IProject[];
+  projects: IProject[] | undefined;
 }
 
 interface CurrentData<T> {

@@ -13,15 +13,18 @@ import { DeterminateSize } from '@/components/types/enum';
 import { getRemainingDays } from '@libraries/utils/index';
 import { CardWidth } from '@/components/types/enum';
 
+// interface ImgMediaCardProps {
+//   isPC: boolean;
+//   id: string;
+//   image: string;
+//   category: string;
+// }
+
 interface ImgMediaCardProps {
   isPC: boolean;
   id: string;
   image: string;
   category: string;
-}
-
-interface ImgMediaCardProps {
-  isPC: boolean;
   cardWidth?: CardWidth;
   projectType: number;
   projectName: string;
