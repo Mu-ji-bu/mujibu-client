@@ -2,6 +2,7 @@ import { RootState } from '@/store/store';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
 import type { IUserState } from '../../types/user';
+import apiRoutes, { baseURL } from '@routes/apiRoutes';
 
 export interface UserToken {
   access: { token: string; expires: Date | null };
@@ -16,7 +17,7 @@ export interface UserResponse {
 export const authApiService = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://mujibu-server-fau1.onrender.com/api',
+    baseUrl: baseURL,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).authReducer.token;
       if (token) {
@@ -33,7 +34,7 @@ export const authApiService = createApi({
   endpoints: (builder) => ({
     login: builder.mutation<UserResponse, void>({
       query: () => ({
-        url: '/auth/firebase-google',
+        url: apiRoutes.firebaseGoogleloginURL,
         method: 'POST',
       }),
     }),

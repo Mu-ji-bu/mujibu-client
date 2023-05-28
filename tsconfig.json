@@ -19,6 +19,7 @@
       "@libraries/hocs/*": ["./src/libraries/hocs/*"],
       "@libraries/hooks/*": ["./src/libraries/hooks/*"],
       "@libraries/utils/*": ["./src/libraries/utils/*"],
+      "@store*": ["./src/store/*"],
       "@routes*": ["./src/routes/*"],
       "@firebaseConfig": ["./firebaseConfig.ts"]
     }
