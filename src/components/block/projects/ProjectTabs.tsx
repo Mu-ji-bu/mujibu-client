@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@libraries/hooks/reduxHooks';
 import { setProjectTabsPage, selectTabs } from '../../../store/slices/tabsSlice';
 import ProjectProgress from './ProjectProgress';
+import clsxm from '@/libraries/utils/clsxm';
 
 interface ICusmtomTabProps {
   label: string;
@@ -10,12 +11,6 @@ interface ICusmtomTabProps {
   href: string;
   LinkComponent: any;
 }
-
-const StyledTab = styled(Tabs)(({ theme }) => ({
-  '& .MuiTabs-flexContainer': {
-    justifyContent: 'space-between',
-  },
-}));
 
 const CustomTab: React.FC<ICusmtomTabProps> = ({ label, count, ...props }) => (
   <Tab
@@ -31,7 +26,7 @@ const CustomTab: React.FC<ICusmtomTabProps> = ({ label, count, ...props }) => (
               vertical: 'top',
               horizontal: 'right',
             }}
-            className="absolute -top-1 -right-1"
+            className="absolute -top-0.5 -right-1"
           />
         )}
       </div>
@@ -49,8 +44,10 @@ const ProjectTabs: React.FC = () => {
   };
 
   return (
-    <div className="mb-5 border-0 border-b border-solid border-secondary-10 pb-[0.2px]">
-      <StyledTab
+    <div
+      className={clsxm('flex justify-between', 'border-0 border-b border-solid border-secondary-10', 'mb-5 pb-[0.2px]')}
+    >
+      <Tabs
         value={projectTabs}
         onChange={handleChange}
         aria-label="nav projects tabs"
@@ -58,17 +55,12 @@ const ProjectTabs: React.FC = () => {
         scrollButtons
         allowScrollButtonsMobile
       >
-        <div className="tabs">
-          <Tab label="專案介紹" href="/projects/introduction" LinkComponent={Link} />
-          <CustomTab label="消息更新" href="/projects/news" LinkComponent={Link} count={3} />
-          <CustomTab label="常見問題" href="/projects/questions" LinkComponent={Link} count={7} />
-          <CustomTab label="留言" href="/projects/msg-board" LinkComponent={Link} count={1} />
-        </div>
-
-        <div className="project-progress abosulte flex items-center right-0">
-          <ProjectProgress />
-        </div>
-      </StyledTab>
+        <Tab label="專案介紹" href="/projects/introduction" LinkComponent={Link} />
+        <CustomTab label="消息更新" href="/projects/news" LinkComponent={Link} count={3} />
+        <CustomTab label="常見問題" href="/projects/questions" LinkComponent={Link} count={7} />
+        <CustomTab label="留言" href="/projects/msg-board" LinkComponent={Link} count={1} />
+      </Tabs>
+      <ProjectProgress />
     </div>
   );
 };
