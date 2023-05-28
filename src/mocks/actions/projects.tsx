@@ -15,9 +15,9 @@ const getProjectData = rest.get(`${baseURL}${apiRoutes.projectsURL}`, (req, res,
   return res(ctx.status(200), ctx.delay(1600), ctx.json(mockData));
 });
 
-const projectData = [getProjectData];
+const getProjectDataAPI = [getProjectData];
 
-export default projectData;
+export default getProjectDataAPI;
 
 function generateData() {
   const projects = [];

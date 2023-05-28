@@ -33,4 +33,6 @@ const patchUserInfo = rest.patch(`${baseURL}${apiRoutes.usersURL}/:id`, async (r
   return res(ctx.status(200), ctx.delay(600), ctx.json(data));
 });
 
-export default [patchUserInfo];
+let patchUserInfoAPI = [patchUserInfo];
+
+export default patchUserInfoAPI;

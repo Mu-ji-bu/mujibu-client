@@ -29,4 +29,6 @@ const loginWithFirebaseGoogle = rest.post(`${baseURL}${apiRoutes.firebaseGooglel
   return res(ctx.status(200), ctx.delay(600), ctx.json(data));
 });
 
-export default [loginWithFirebaseGoogle];
+let loginWithFirebaseGoogleAPI = [loginWithFirebaseGoogle];
+
+export default loginWithFirebaseGoogleAPI;

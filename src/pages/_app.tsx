@@ -16,11 +16,17 @@ import 'dayjs/locale/zh-tw';
 const App = ({ Component, ...rest }: AppProps) => {
   const { store, props } = wrapper.useWrappedStore(rest);
 
+  /** 
+    為了讓首頁和探索頁有資料，目前 mock api 先開著，但這樣會員中心的呈現資料會是專用測試。
+    如果要接 server 的 api，需要把全部註解掉。
+    serverWorkder 先用 ?. 來跳過 undefined 的 error。
+   */
+
   // start mock api
   // if (process.env.NODE_ENV === 'development') {
   const { serverWorker } = require('../mocks/browser');
   const startServer = async () => {
-    await serverWorker.listen();
+    await serverWorker?.listen();
   };
   startServer().catch((error) => {
     console.error('Error starting server work:', error);
