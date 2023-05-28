@@ -10,7 +10,7 @@ import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRound
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-import CircularDeterminate from '../../circularDeterminate/CircularDeterminate';
+import CircularDeterminate from '../../../block/circularDeterminate/CircularDeterminate';
 import { DeterminateSize } from '@/components/types/enum';
 import { IconButton, Tooltip, Typography } from '@mui/material';
 import clsxm from '@/libraries/utils/clsxm';

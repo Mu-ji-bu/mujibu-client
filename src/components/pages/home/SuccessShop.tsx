@@ -5,25 +5,25 @@ import clsxm from '@/libraries/utils/clsxm';
 import { ReactNode } from 'react';
 
 interface ISuccessShopProps {
-  projectData:
-    | {
-        isPC: boolean;
-        cardWidth?: CardWidth;
-        projectType: number;
-        projectName: string;
-        projectTeam: string;
-        proposer: string;
-        description: string;
-        currentAmount: number;
-        targetAmount: number;
-        progress: number;
-        backers: number;
-        prize: number;
-        startTime: string;
-        endTime: string;
-        remainingTime: string;
-      }[]
-    | undefined;
+  projectData: {
+    id: string;
+    image: string;
+    category: string;
+    cardWidth?: CardWidth;
+    projectType: number;
+    projectName: string;
+    projectTeam: string;
+    proposer: string;
+    description: string;
+    currentAmount: number;
+    targetAmount: number;
+    progress: number;
+    backers: number;
+    prize: number;
+    startTime: string;
+    endTime: string;
+    remainingTime: string;
+  }[];
 }
 
 const SuccessShop: React.FC<ISuccessShopProps> = ({ ...props }) => {
@@ -40,14 +40,14 @@ const SuccessShop: React.FC<ISuccessShopProps> = ({ ...props }) => {
           <div className="flex justify-center gap-6">
             {projectData.slice(0, 3).map((project, i) => (
               <div key={i}>
-                <Card id={''} image={''} category={''} {...project} />
+                <Card isPC={true} {...project} />
               </div>
             ))}
           </div>
           <div className="flex justify-center gap-6 mt-6">
             {projectData.slice(3, 7).map((project, i) => (
               <div key={i}>
-                <Card id={''} image={''} category={''} {...project} />
+                <Card isPC={true} {...project} />
               </div>
             ))}
           </div>
@@ -59,14 +59,14 @@ const SuccessShop: React.FC<ISuccessShopProps> = ({ ...props }) => {
             <div className="flex justify-center gap-6">
               {projectData.slice(0, 2).map((project, i) => (
                 <div key={i}>
-                  <Card id={''} image={''} category={''} {...project} />
+                  <Card isPC={true} {...project} />
                 </div>
               ))}
             </div>
             <div className="flex justify-center gap-6 mt-6">
               {projectData.slice(2, 4).map((project, i) => (
                 <div key={i}>
-                  <Card id={''} image={''} category={''} {...project} />
+                  <Card isPC={true} {...project} />
                 </div>
               ))}
             </div>
@@ -79,7 +79,7 @@ const SuccessShop: React.FC<ISuccessShopProps> = ({ ...props }) => {
               {projectData &&
                 projectData.slice(0, 3).map((project, i) => (
                   <div key={i} className={clsxm(i > 0 ? 'mt-6' : null)}>
-                    <Card id={''} image={''} category={''} {...project} />
+                    <Card isPC={true} {...project} />
                   </div>
                 ))}
             </div>

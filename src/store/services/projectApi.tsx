@@ -13,7 +13,7 @@ interface IProjectPlan {
   earlyBirdEndDate?: string;
 }
 
-interface IProject {
+export interface IProject {
   id: string;
   image: string;
   category: string;

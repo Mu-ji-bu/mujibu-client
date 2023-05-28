@@ -19,25 +19,25 @@ SwiperCore.use([Autoplay]);
 
 interface ISwiperCardProps {
   swiperInstances: SwiperCore[];
-  projectData:
-    | {
-        isPC: boolean;
-        cardWidth?: CardWidth;
-        projectType: number;
-        projectName: string;
-        projectTeam: string;
-        proposer: string;
-        description: string;
-        currentAmount: number;
-        targetAmount: number;
-        progress: number;
-        backers: number;
-        prize: number;
-        startTime: string;
-        endTime: string;
-        remainingTime: string;
-      }[]
-    | undefined;
+  projectData: {
+    id: string;
+    image: string;
+    category: string;
+    cardWidth?: CardWidth;
+    projectType: number;
+    projectName: string;
+    projectTeam: string;
+    proposer: string;
+    description: string;
+    currentAmount: number;
+    targetAmount: number;
+    progress: number;
+    backers: number;
+    prize: number;
+    startTime: string;
+    endTime: string;
+    remainingTime: string;
+  }[];
   buttonClass: number;
 }
 
@@ -46,9 +46,9 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
 
   const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
   const router = useRouter();
-  const handleSlideClick = (slideIndex: number) => {
+  const handleSlideClick = (projectId: number) => {
     // Navigate to the desired page using Next.js router
-    router.push(`/projects/${slideIndex}`);
+    router.push(`/projects/${projectId}`);
   };
 
   const swiperBoxRef = useRef<HTMLDivElement>(null); // 用於獲取 swiper-box 元素的參考
@@ -76,15 +76,15 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
               }}
               onSlideChange={() => {}}
             >
-              {projectData.reduce((accumulator: ReactNode[], project, index) => {
+              {projectData.reduce((accumulator: ReactNode[], p, index) => {
                 if (index % 3 === 0) {
                   const slideProjects = projectData.slice(index, index + 3);
                   const slide = (
                     <SwiperSlide key={index} className="cursor-pointer" onClick={() => handleSlideClick(index)}>
                       <div className="flex justify-center gap-6">
-                        {slideProjects.map((slideProject, i) => (
-                          <div key={i} className="max-w-[416px]">
-                            <Card id={''} image={''} category={''} {...slideProject} />
+                        {slideProjects.map((slideProject) => (
+                          <div key={slideProject.id} className="max-w-[416px]">
+                            <Card isPC={true} {...slideProject} />
                           </div>
                         ))}
                       </div>
@@ -112,15 +112,15 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
               }}
               onSlideChange={() => {}}
             >
-              {projectData.reduce((accumulator: ReactNode[], project, index) => {
+              {projectData.reduce((accumulator: ReactNode[], p, index) => {
                 if (index % 2 === 0) {
                   const slideProjects = projectData.slice(index, index + 2);
                   const slide = (
                     <SwiperSlide key={index} className="cursor-pointer" onClick={() => handleSlideClick(index)}>
                       <div className="flex justify-center gap-6">
-                        {slideProjects.map((slideProject, i) => (
-                          <div key={i} className="max-w-[416px]">
-                            <Card id={''} image={''} category={''} {...slideProject} />
+                        {slideProjects.map((slideProject) => (
+                          <div key={slideProject.id} className="max-w-[416px]">
+                            <Card isPC={true} {...slideProject} />
                           </div>
                         ))}
                       </div>
@@ -149,10 +149,14 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
               onSlideChange={() => {}}
             >
               {projectData &&
-                projectData.map((project, i) => (
-                  <SwiperSlide key={i} className="cursor-pointer" onClick={() => handleSlideClick(i)}>
-                    <div key={i} className="max-w-[416px]">
-                      <Card id={''} image={''} category={''} {...project} />
+                projectData.map((project) => (
+                  <SwiperSlide
+                    key={project.id}
+                    className="cursor-pointer"
+                    onClick={() => handleSlideClick(Number(project.id))}
+                  >
+                    <div className="max-w-[416px]">
+                      <Card isPC={true} {...project} />
                     </div>
                   </SwiperSlide>
                 ))}

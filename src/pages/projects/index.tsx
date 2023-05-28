@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Card from '@/components/block/card';
 import Loading from '@/components/Loading';
-import { useGetProjectDataQuery } from '@store/services/projectApi';
 import { FormControl, MenuItem, Select, IconButton } from '@mui/material';
 import Pagination from '@/components/block/pagination';
 import { useForm, Controller } from 'react-hook-form';
@@ -11,6 +10,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ClearIcon from '@mui/icons-material/Clear';
 import clsxm from '@/libraries/utils/clsxm';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+import { useGetProjectDataQuery } from '@/store/services/projectApi';
 
 interface IProjectPlan {
   id: string;
@@ -261,7 +261,7 @@ const Projects = () => {
             </div>
           </form>
           <div className="flex flex-wrap justify-between gap-4 px-4">
-            {data?.data?.projects.map((project: IProject) => (
+            {(data?.data?.projects as IProject[]).map((project: IProject) => (
               <div key={project.id} className="md:-mx-4 w-full md:w-1/2 lg:w-1/3">
                 <Card isPC={isMd} {...project} />
               </div>
