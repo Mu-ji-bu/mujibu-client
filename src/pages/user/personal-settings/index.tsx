@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { ChangeEvent } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import { usePatchUserMutation } from '../../../store/services/userApi';
 import { selectUser, updateUser } from '../../../store/slices/userSlice';
 import { setUserTabsPage } from '../../../store/slices/tabsSlice';
 import type { IUserState } from '@/types/user';
-
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
   Button,
   Typography,
@@ -33,7 +33,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
 
 import routePath from '@routes/routePath';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import PhotoUpload from '@/components/block/photoUpload/PhotoUpload';
@@ -42,13 +42,13 @@ const schema = Yup.object().shape({
   name: Yup.string().required('姓名為必填欄位'),
   nickname: Yup.string().required('暱稱為必填欄位'),
   birthDate: Yup.string().required('生日為必填欄位'),
-  gender: Yup.number(),
-  phone: Yup.string(),
+  gender: Yup.number().required('性別為必填欄位'),
+  phone: Yup.string().required('聯絡電話為必填欄位'),
   subscribeNewsletter: Yup.boolean(),
   category: Yup.array().of(Yup.string()),
-  contactName: Yup.string(),
-  contactPhone: Yup.string(),
-  address: Yup.string(),
+  contactName: Yup.string().required('收件者姓名為必填欄位'),
+  contactPhone: Yup.string().required('收件者電話為必填欄位'),
+  address: Yup.string().required('收件地址為必填欄位'),
 });
 
 const categoryOptions = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
@@ -56,7 +56,7 @@ const categoryOptions = ['藝術', '設計', '電影', '音樂', '科技', '出�
 const PersonalSettings = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [patchUser] = usePatchUserMutation();
+  const [patchUser, { isLoading: patchUserLoading }] = usePatchUserMutation();
 
   const userData = useAppSelector(selectUser);
 
@@ -64,7 +64,7 @@ const PersonalSettings = () => {
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs(userData.birthDate) ?? null);
   const [selectedGender, setSelectedGender] = useState<number | string>(userData.gender ?? '');
   const [selectedNewspaper, setSelectedNewspaper] = useState<boolean>(userData.subscribeNewsletter ?? false);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(userData.category ?? []);
   const [sameAbove, setSameAbove] = useState(false);
 
   const handleDateSelect = (newValue: Dayjs | null) => {
@@ -106,22 +106,26 @@ const PersonalSettings = () => {
     handleSubmit,
     setValue,
     getValues,
+    reset,
+    control,
     formState: { errors },
   } = useForm<IUserState>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      // avatar: userData.avatar,
-      name: userData.name,
-      nickname: userData.nickname,
-      birthDate: userData.birthDate,
-      // gender: ['', 0, 1, 2].includes(userData.gender as string | number) ? (userData.gender as string | number) : '',
-      phone: userData.phone,
-      subscribeNewsletter: userData.subscribeNewsletter,
-      // category: userData.category,
-      contactName: userData.contactName,
-      contactPhone: userData.contactPhone,
-      address: userData.address,
-    },
+    defaultValues: useMemo(() => {
+      return {
+        avatar: userData.avatar,
+        name: userData.name,
+        nickname: userData.nickname,
+        birthDate: userData.birthDate,
+        gender: userData.gender,
+        phone: userData.phone,
+        subscribeNewsletter: userData.subscribeNewsletter,
+        category: userData.category,
+        contactName: userData.contactName,
+        contactPhone: userData.contactPhone,
+        address: userData.address,
+      };
+    }, [userData]),
   });
 
   const onSubmit: SubmitHandler<IUserState> = async (data) => {
@@ -148,6 +152,22 @@ const PersonalSettings = () => {
     dispatch(setUserTabsPage(0));
   }, [dispatch]);
 
+  useEffect(() => {
+    reset({
+      avatar: userData.avatar,
+      name: userData.name,
+      nickname: userData.nickname,
+      birthDate: userData.birthDate,
+      gender: userData.gender,
+      phone: userData.phone,
+      subscribeNewsletter: userData.subscribeNewsletter,
+      category: userData.category,
+      contactName: userData.contactName,
+      contactPhone: userData.contactPhone,
+      address: userData.address,
+    });
+  }, [userData, reset]);
+
   return (
     <UserLayout>
       <div className="flex justify-end px-0 lg:px-10">
@@ -170,18 +190,26 @@ const PersonalSettings = () => {
               修改個人資料
             </Typography>
             <div className="grid grid-cols-2 gap-3">
-              <TextField
-                fullWidth
-                className=""
-                id="name"
-                label="姓名 *"
-                autoComplete="name"
-                autoFocus
-                size="small"
-                {...register('name', { required: true })}
-                error={!!errors.name}
-                helperText={errors.name?.message}
+              <Controller
+                render={({ field }) => (
+                  <TextField
+                    fullWidth
+                    className=""
+                    id="name"
+                    label="姓名 *"
+                    autoComplete="name"
+                    autoFocus
+                    size="small"
+                    {...register('name', { required: true })}
+                    error={!!errors.name}
+                    helperText={errors.name?.message}
+                  />
+                )}
+                control={control}
+                name="name"
+                defaultValue={userData.name}
               />
+
               <TextField
                 fullWidth
                 className=""
@@ -218,9 +246,9 @@ const PersonalSettings = () => {
                 autoComplete="gender"
                 autoFocus
                 size="small"
-                // {...register('gender', { required: true })}
-                // error={!!errors.gender}
-                // helperText={errors.gender?.message}
+                {...register('gender', { required: true })}
+                error={!!errors.gender}
+                helperText={errors.gender?.message}
                 select
                 value={selectedGender}
                 onChange={handleGenderSelect}
@@ -268,7 +296,7 @@ const PersonalSettings = () => {
                 <FormGroup className="flex-row">
                   {categoryOptions.map((category) => (
                     <FormControlLabel
-                      // {...register('category')}
+                      {...register('category')}
                       className="text-secondary"
                       value={category}
                       key={category}
@@ -295,7 +323,7 @@ const PersonalSettings = () => {
                 fullWidth
                 className=""
                 id="contactName"
-                label="收件者姓名"
+                label="收件者姓名 *"
                 autoComplete="contactName"
                 autoFocus
                 size="small"
@@ -306,7 +334,7 @@ const PersonalSettings = () => {
               <TextField
                 fullWidth
                 id="contactPhone"
-                label="收件者電話"
+                label="收件者電話 *"
                 autoComplete="contactPhone"
                 autoFocus
                 size="small"
@@ -328,7 +356,7 @@ const PersonalSettings = () => {
                 fullWidth
                 className="col-span-full"
                 id="address"
-                label="地址"
+                label="收件地址 *"
                 autoComplete="收件地址"
                 autoFocus
                 size="small"
@@ -338,9 +366,13 @@ const PersonalSettings = () => {
               />
             </div>
           </div>
-          <Button type="submit" fullWidth variant="contained">
+          {/* <Button type="submit" fullWidth variant="contained">
             儲存
-          </Button>
+          </Button> */}
+
+          <LoadingButton loading={patchUserLoading} loadingPosition="start" type="submit" fullWidth variant="contained">
+            <span>{patchUserLoading ? '儲存中' : '儲存'}</span>
+          </LoadingButton>
         </div>
       </form>
     </UserLayout>
