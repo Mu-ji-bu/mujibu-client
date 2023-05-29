@@ -2,11 +2,12 @@ import { RootState } from '@/store/store';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
 import type { IUserState } from '../../types/user';
+import apiRoutes, { baseURL } from '@routes/apiRoutes';
 
 export const userApiService = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://mujibu-server-fau1.onrender.com/api',
+    baseUrl: baseURL,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).authReducer.userToken.access.token;
       if (token) {
@@ -23,7 +24,7 @@ export const userApiService = createApi({
   endpoints: (builder) => ({
     patchUser: builder.mutation<IUserState, { id: string | undefined; body: Object }>({
       query: ({ id, body }) => ({
-        url: `users/${id}`,
+        url: `${apiRoutes.usersURL}/${id}`,
         method: 'PATCH',
         body: body,
       }),
