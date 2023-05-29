@@ -370,7 +370,7 @@ const PersonalSettings = () => {
             儲存
           </Button> */}
 
-          <LoadingButton loading={patchUserLoading} loadingPosition="start" type="submit" fullWidth variant="contained">
+          <LoadingButton loading={patchUserLoading} type="submit" fullWidth variant="contained">
             <span>{patchUserLoading ? '儲存中' : '儲存'}</span>
           </LoadingButton>
         </div>
