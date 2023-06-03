@@ -97,7 +97,7 @@ const Collects = () => {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(setUserTabsPage(2));
+    dispatch(setUserTabsPage(3));
   }, [dispatch]);
 
   return (
