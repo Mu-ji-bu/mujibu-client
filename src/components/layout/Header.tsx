@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import AccountMenu, { IAccountMenuOption } from '../block/accountMenu/AccountMenu';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import NotificationsMenu, { INotificationsMenuOption } from '../block/notificationsMenu/NotificationsMenu';
 import SearchButton from '../block/searchButton';
 import { Menu } from '@mui/icons-material';
@@ -15,6 +16,7 @@ import { useAppDispatch, useAppSelector } from '@libraries/hooks/reduxHooks';
 import { useLoginMutation } from '../../store/services/authApi';
 import { updateUser } from '../../store/slices/userSlice';
 import { clearToken, selectAuth, setToken, setUserToken } from '../../store/slices/authSlice';
+import clsxm from '@/libraries/utils/clsxm';
 
 const Header = () => {
   const loginToken: string | undefined = Cookies.get('googleToken');
@@ -22,6 +24,7 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const { isLogin } = useAppSelector(selectAuth);
   const [login] = useLoginMutation();
+  const headerRef = useRef(null);
 
   const handleGetUser = useCallback(async () => {
     try {
@@ -93,69 +96,125 @@ const Header = () => {
     }
   }, [loginToken, dispatch, handleGetUser]);
 
-  return (
-    <header className="border-0 border-b border-solid border-secondary-10">
-      <div className="max-w-screen-xl mx-auto px-5 py-2 flex justify-between items-center">
-        <div className="flex items-center">
-          <Link href={'/'} className="flex items-center mr-4">
-            <Image src={'/logo@2x.png'} alt={'募質部 Mujibu logo'} width={128} height={48} priority={true} />
-          </Link>
-          <Typography component="span" variant="h6" className="md:block hidden text-primary">
-            讓創意萌芽
-          </Typography>
-          <div className="division w-[1px] h-6 bg-secondary-30 mx-6 md:block hidden"></div>
-          <Link
-            className="mr-6 text-secondary-66 hover:text-secondary visited:text-secondary-66 no-underline md:block hidden"
-            href={'/projects'}
-          >
-            <Typography component="p" variant="h6">
-              探索
-            </Typography>
-          </Link>
-          <Link
-            className="mr-2 text-secondary-66 hover:text-secondary visited:text-secondary-66 no-underline md:block hidden"
-            href={'/proposal'}
-          >
-            <Typography component="p" variant="h6">
-              提案
-            </Typography>
-          </Link>
-        </div>
-        <div className="flex items-center">
-          {isLogin ? (
-            <>
-              <div className="hidden md:block">
-                <SearchButton />
-              </div>
-              <div className="w-[1px] h-6 bg-secondary-30 mx-6 hidden md:block"></div>
-              <NotificationsMenu options={notificationOptions} />
-              <AccountMenu options={accountOptions} />
-            </>
-          ) : (
-            <>
-              {' '}
-              <div className="hidden md:flex items-center">
-                <SearchButton />
-                <div className="w-[1px] h-6 bg-secondary-30 mx-6"></div>
-                <Button variant="contained" onClick={() => router.push('/signup')}>
-                  註冊
-                </Button>
-                <Button variant="outlined" color="secondary" className="ml-5" onClick={() => router.push('/login')}>
-                  登入
-                </Button>
-              </div>
-              <div className="md:hidden">
-                <SearchButton />
-              </div>
-            </>
-          )}
+  useEffect(() => {
+    const fixNav = () => {
+      if (window.scrollY > 0 && headerRef.current) {
+        document.body.style.paddingTop = (headerRef.current as HTMLElement).offsetHeight + 'px';
+        document.body.classList.add('fixed-nav');
+      } else {
+        document.body.classList.remove('fixed-nav');
+        document.body.style.paddingTop = '0px';
+      }
+    };
 
-          <Button variant="outlined" color="secondary" className="p-[6px] min-w-0 md:hidden ml-5" aria-label="search">
-            <Menu />
-          </Button>
+    window.addEventListener('scroll', fixNav);
+
+    return () => {
+      window.removeEventListener('scroll', fixNav);
+    };
+  }, []);
+
+  return (
+    <>
+      <header ref={headerRef} className="border-0 border-b border-solid border-secondary-10">
+        <div className="max-w-screen-xl mx-auto px-5 py-2 flex justify-between items-center">
+          <div className="flex items-center">
+            <Link href={'/'} className="flex items-center mr-4">
+              <Image src={'/logo@2x.png'} alt={'募質部 Mujibu logo'} width={128} height={48} priority={true} />
+            </Link>
+            <Typography component="span" variant="h6" className="md:block hidden text-primary">
+              讓創意萌芽
+            </Typography>
+            <div className="division w-[1px] h-6 bg-secondary-30 mx-6 md:block hidden"></div>
+            <Link
+              className="mr-6 text-secondary-66 hover:text-secondary visited:text-secondary-66 no-underline md:block hidden"
+              href={'/projects'}
+            >
+              <Typography component="p" variant="h6">
+                探索
+              </Typography>
+            </Link>
+            <Link
+              className="mr-2 text-secondary-66 hover:text-secondary visited:text-secondary-66 no-underline md:block hidden"
+              href={'/proposal'}
+            >
+              <Typography component="p" variant="h6">
+                提案
+              </Typography>
+            </Link>
+          </div>
+          <div className="flex items-center">
+            {isLogin ? (
+              <>
+                <div className="hidden md:block">
+                  <SearchButton />
+                </div>
+                <div className="w-[1px] h-6 bg-secondary-30 mx-6 hidden md:block"></div>
+                <NotificationsMenu options={notificationOptions} />
+                <AccountMenu options={accountOptions} />
+              </>
+            ) : (
+              <>
+                {' '}
+                <div className="hidden md:flex items-center">
+                  <SearchButton />
+                  <div className="w-[1px] h-6 bg-secondary-30 mx-6"></div>
+                  <Button variant="contained" onClick={() => router.push('/signup')}>
+                    註冊
+                  </Button>
+                  <Button variant="outlined" color="secondary" className="ml-5" onClick={() => router.push('/login')}>
+                    登入
+                  </Button>
+                </div>
+                <div className="md:hidden">
+                  <SearchButton />
+                </div>
+              </>
+            )}
+
+            <Button variant="outlined" color="secondary" className="p-[6px] min-w-0 md:hidden ml-5" aria-label="search">
+              <Menu />
+            </Button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      <ScrollUpButton />
+    </>
+  );
+};
+
+const ScrollUpButton = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      setIsVisible(scrollTop > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleScrollUp = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <Button
+      className={clsxm(
+        'fixed right-10 bottom-10 z-50',
+        'bg-primary text-white',
+        'rounded-md',
+        isVisible ? 'opacity-80' : 'opacity-0',
+        'transition-opacity duration-300',
+      )}
+      onClick={handleScrollUp}
+    >
+      <ArrowUpwardIcon className="h-6 w-6" />
+    </Button>
   );
 };
 
