@@ -10,7 +10,7 @@
     "lint": "next lint",
     "commit": "cz",
     "format": "prettier --write \"./src/**/*.{js,jsx,ts,tsx}\"",
-    "prepare": "husky install && chmod ug+x .husky/*"
+    "prepare": "husky install && bash -c 'chmod ug+x .husky/*'"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
