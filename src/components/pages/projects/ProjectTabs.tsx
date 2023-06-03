@@ -19,14 +19,16 @@ const CustomTab: React.FC<ICusmtomTabProps> = ({ label, count, ...props }) => (
         {label}
         {count > 0 && (
           <Badge
-            color="primary"
             badgeContent={count}
             overlap="circular"
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'right',
             }}
-            className="absolute -top-0.5 -right-1"
+            sx={{
+              color: '#1CA69A',
+            }}
+            className="absolute -top-1 -right-2"
           />
         )}
       </div>
@@ -45,7 +47,11 @@ const ProjectTabs: React.FC = () => {
 
   return (
     <div
-      className={clsxm('flex justify-between', 'border-0 border-b border-solid border-secondary-10', 'mb-5 pb-[0.2px]')}
+      className={clsxm(
+        'flex justify-between',
+        'border-0 border-b border-solid border-secondary-10',
+        'mb-10 pb-[0.2px]',
+      )}
     >
       <Tabs
         value={projectTabs}
