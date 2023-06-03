@@ -19,6 +19,7 @@ import { clearToken, selectAuth, setToken, setUserToken } from '../../store/slic
 import clsxm from '@/libraries/utils/clsxm';
 
 const Header = () => {
+  const [isFixed, setIsFixed] = useState<boolean>(true);
   const loginToken: string | undefined = Cookies.get('googleToken');
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -95,15 +96,17 @@ const Header = () => {
       }
     };
 
-    window.addEventListener('scroll', fixNav);
+    router.pathname === '/proposal/form' ? setIsFixed(false) : setIsFixed(true);
+    isFixed && window.addEventListener('scroll', fixNav);
 
     return () => {
-      window.removeEventListener('scroll', fixNav);
+      isFixed && window.removeEventListener('scroll', fixNav);
     };
-  }, []);
+  }, [isFixed, router]);
 
   return (
     <>
+      {console.log(router.pathname)}
       <header ref={headerRef} className="border-0 border-b border-solid border-secondary-10">
         <div className="max-w-screen-xl mx-auto px-5 py-2 flex justify-between items-center">
           <div className="flex items-center">
@@ -166,12 +169,12 @@ const Header = () => {
           </div>
         </div>
       </header>
-      <ScrollUpButton />
+      <ScrollUpButton isFixed={isFixed} />
     </>
   );
 };
 
-const ScrollUpButton = () => {
+const ScrollUpButton: React.FC<{ isFixed: boolean }> = ({ isFixed }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -193,15 +196,15 @@ const ScrollUpButton = () => {
   return (
     <Button
       className={clsxm(
-        'fixed right-10 bottom-10 z-50',
-        'bg-primary text-white',
-        'rounded-md',
+        !isFixed ? 'bottom-[85px]' : 'bottom-10',
+        'fixed right-5 z-50 p-[10px] min-w-0 shadow-none',
         isVisible ? 'opacity-80' : 'opacity-0',
         'transition-opacity duration-300',
       )}
+      variant="contained"
       onClick={handleScrollUp}
     >
-      <ArrowUpwardIcon className="h-6 w-6" />
+      <ArrowUpwardIcon />
     </Button>
   );
 };
