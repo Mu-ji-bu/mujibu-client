@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { ChangeEvent } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import clsxm from '@/libraries/utils/clsxm';
 import UserLayout from '../../../components/layout/UserLayout';
 
@@ -10,12 +9,11 @@ import { usePatchUserMutation } from '../../../store/services/userApi';
 import { selectUser, updateUser } from '../../../store/slices/userSlice';
 import { setUserTabsPage } from '../../../store/slices/tabsSlice';
 import type { IUserState } from '@/types/user';
-import LoadingButton from '@mui/lab/LoadingButton';
+
 import {
   Button,
   Typography,
   TextField,
-  Avatar,
   MenuItem,
   Checkbox,
   FormControlLabel,
@@ -23,20 +21,17 @@ import {
   FormLabel,
   FormControl,
 } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import LoadingButton from '@mui/lab/LoadingButton';
 import KeyIcon from '@mui/icons-material/Key';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
-
-import routePath from '@routes/routePath';
+import dayjs from 'dayjs';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import PhotoUpload from '@/components/block/photoUpload/PhotoUpload';
+
+const categoryOptions = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
 
 const schema = Yup.object().shape({
   name: Yup.string().required('姓名為必填欄位'),
@@ -46,60 +41,20 @@ const schema = Yup.object().shape({
   phone: Yup.string().required('聯絡電話為必填欄位'),
   subscribeNewsletter: Yup.boolean(),
   category: Yup.array().of(Yup.string()),
-  contactName: Yup.string().required('收件者姓名為必填欄位'),
-  contactPhone: Yup.string().required('收件者電話為必填欄位'),
-  address: Yup.string().required('收件地址為必填欄位'),
+  contactName: Yup.string(),
+  contactPhone: Yup.string(),
+  address: Yup.string(),
 });
-
-const categoryOptions = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
 
 const PersonalSettings = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [patchUser, { isLoading: patchUserLoading }] = usePatchUserMutation();
-
   const userData = useAppSelector(selectUser);
 
   const [imageUploaded, setImageUploaded] = useState<string>('');
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs(userData.birthDate) ?? null);
-  const [selectedGender, setSelectedGender] = useState<number | string>(userData.gender ?? '');
-  const [selectedNewspaper, setSelectedNewspaper] = useState<boolean>(userData.subscribeNewsletter ?? false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>(userData.category ?? []);
   const [sameAbove, setSameAbove] = useState(false);
-
-  const handleDateSelect = (newValue: Dayjs | null) => {
-    const value = dayjs(newValue).format('YYYY-MM-DD');
-    setSelectedDate(dayjs(value));
-    setValue('birthDate', value);
-  };
-
-  const handleGenderSelect = (e: ChangeEvent<HTMLInputElement>) => {
-    setSelectedGender(e.target.value);
-  };
-
-  const handleNewspaperChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSelectedNewspaper(e.target.checked);
-  };
-
-  const handleCategoryChange = (category: string) => {
-    if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter((item) => item !== category));
-    } else {
-      setSelectedCategories([...selectedCategories, category]);
-    }
-  };
-
-  const handleSameAboveChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSameAbove(e.target.checked);
-
-    if (e.target.checked) {
-      setValue('contactName', getValues('name'));
-      setValue('contactPhone', getValues('phone'));
-    } else {
-      setValue('contactName', '');
-      setValue('contactPhone', '');
-    }
-  };
 
   const {
     register,
@@ -110,6 +65,7 @@ const PersonalSettings = () => {
     control,
     formState: { errors },
   } = useForm<IUserState>({
+    mode: 'onChange',
     resolver: yupResolver(schema),
     defaultValues: useMemo(() => {
       return {
@@ -127,6 +83,26 @@ const PersonalSettings = () => {
       };
     }, [userData]),
   });
+
+  const handleCategoryChange = (value: string[], category: string) => {
+    setSelectedCategories(value);
+    const newCategories = selectedCategories?.includes(category)
+      ? selectedCategories.filter((item) => item !== category)
+      : [...(selectedCategories ?? []), category];
+    setSelectedCategories(newCategories);
+    return newCategories;
+  };
+
+  const handleSameAboveChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSameAbove(e.target.checked);
+    if (e.target.checked) {
+      setValue('contactName', getValues('name'));
+      setValue('contactPhone', getValues('phone'));
+    } else {
+      setValue('contactName', '');
+      setValue('contactPhone', '');
+    }
+  };
 
   const onSubmit: SubmitHandler<IUserState> = async (data) => {
     console.log('form data : ', data);
@@ -179,6 +155,7 @@ const PersonalSettings = () => {
       <form className="flex md:flex-row flex-col md:space-x-5 px-0 lg:px-10 py-5" onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full md:w-1/3 shrink-0 flex flex-col items-center mb-5 md:mb-0">
           <PhotoUpload
+            isProposal={false}
             originalName={userData.name ?? ''}
             originalAvatar={userData.avatar ?? ''}
             setImageUploaded={setImageUploaded}
@@ -191,7 +168,10 @@ const PersonalSettings = () => {
             </Typography>
             <div className="grid grid-cols-2 gap-3">
               <Controller
-                render={({ field }) => (
+                control={control}
+                name="name"
+                defaultValue=""
+                render={({ field: { onChange, value } }) => (
                   <TextField
                     fullWidth
                     className=""
@@ -200,67 +180,81 @@ const PersonalSettings = () => {
                     autoComplete="name"
                     autoFocus
                     size="small"
-                    {...register('name', { required: true })}
+                    value={value}
+                    onChange={onChange}
                     error={!!errors.name}
                     helperText={errors.name?.message}
                   />
                 )}
+              />
+              <Controller
                 control={control}
-                name="name"
-                defaultValue={userData.name}
+                name="nickname"
+                defaultValue=""
+                render={({ field: { onChange, value } }) => (
+                  <TextField
+                    fullWidth
+                    className=""
+                    id="nickname"
+                    label="暱稱 *"
+                    autoComplete="nickname"
+                    autoFocus
+                    size="small"
+                    value={value}
+                    onChange={onChange}
+                    error={!!errors.nickname}
+                    helperText={errors.nickname?.message}
+                  />
+                )}
               />
 
-              <TextField
-                fullWidth
-                className=""
-                id="nickname"
-                label="暱稱 *"
-                autoComplete="nickname"
-                autoFocus
-                size="small"
-                {...register('nickname', { required: true })}
-                error={!!errors.nickname}
-                helperText={errors.nickname?.message}
+              <Controller
+                name="birthDate"
+                control={control}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <DatePicker
+                    className="w-full"
+                    label="生日 *"
+                    disableFuture
+                    value={dayjs(value)}
+                    onChange={(newValue) => onChange(newValue)}
+                    slotProps={{
+                      textField: {
+                        size: 'small',
+                        error: !!error,
+                        helperText: error?.message,
+                      },
+                    }}
+                  />
+                )}
               />
 
-              <DatePicker
-                className="w-full"
-                label="生日 *"
-                disableFuture
-                slotProps={{
-                  textField: {
-                    id: 'birthDate',
-                    size: 'small',
-                    error: !!errors.birthDate,
-                    helperText: errors.birthDate?.message,
-                    ...register('birthDate', { required: true }),
-                  },
-                }}
-                value={selectedDate}
-                onChange={handleDateSelect}
+              <Controller
+                name="gender"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <TextField
+                    fullWidth
+                    id="gender"
+                    label="性別 *"
+                    autoComplete="gender"
+                    autoFocus
+                    size="small"
+                    error={!!errors.gender}
+                    helperText={errors.gender?.message}
+                    select
+                    value={value}
+                    onChange={onChange}
+                  >
+                    <MenuItem value="" disabled>
+                      請選擇
+                    </MenuItem>
+                    <MenuItem value={0}>男</MenuItem>
+                    <MenuItem value={1}>女</MenuItem>
+                    <MenuItem value={2}>不方便透露</MenuItem>
+                  </TextField>
+                )}
               />
-              <TextField
-                fullWidth
-                id="gender"
-                label="性別 *"
-                autoComplete="gender"
-                autoFocus
-                size="small"
-                {...register('gender', { required: true })}
-                error={!!errors.gender}
-                helperText={errors.gender?.message}
-                select
-                value={selectedGender}
-                onChange={handleGenderSelect}
-              >
-                <MenuItem value="" disabled>
-                  請選擇
-                </MenuItem>
-                <MenuItem value={0}>男</MenuItem>
-                <MenuItem value={1}>女</MenuItem>
-                <MenuItem value={2}>不方便透露</MenuItem>
-              </TextField>
-
               <TextField
                 fullWidth
                 id="email"
@@ -270,47 +264,64 @@ const PersonalSettings = () => {
                 disabled
                 value={userData.email}
               />
-
-              <TextField
-                fullWidth
-                id="phone"
-                label="聯絡電話 *"
-                autoComplete="phone"
-                autoFocus
-                size="small"
-                {...register('phone')}
-                error={!!errors.phone}
-                helperText={errors.phone?.message}
+              <Controller
+                control={control}
+                name="phone"
+                defaultValue=""
+                render={({ field: { onChange, value } }) => (
+                  <TextField
+                    fullWidth
+                    id="phone"
+                    label="聯絡電話 *"
+                    autoComplete="phone"
+                    autoFocus
+                    size="small"
+                    value={value}
+                    onChange={onChange}
+                    error={!!errors.phone}
+                    helperText={errors.phone?.message}
+                  />
+                )}
               />
-
               <div className="col-span-full">
-                <FormControlLabel
-                  className="text-secondary"
-                  control={<Checkbox checked={selectedNewspaper} onChange={handleNewspaperChange} />}
-                  {...register('subscribeNewsletter', { required: true })}
-                  label="接收電子報"
+                <Controller
+                  control={control}
+                  name="subscribeNewsletter"
+                  defaultValue={false}
+                  render={({ field: { onChange, value } }) => (
+                    <FormControlLabel
+                      className="text-secondary"
+                      control={<Checkbox checked={value} onChange={onChange} />}
+                      label="接收電子報"
+                    />
+                  )}
                 />
               </div>
-              <FormControl component="fieldset" className="col-span-full">
-                <FormLabel component="legend">請選擇感興趣的類別</FormLabel>
-                <FormGroup className="flex-row">
-                  {categoryOptions.map((category) => (
-                    <FormControlLabel
-                      {...register('category')}
-                      className="text-secondary"
-                      value={category}
-                      key={category}
-                      control={
-                        <Checkbox
-                          checked={selectedCategories.includes(category)}
-                          onChange={() => handleCategoryChange(category)}
+              <Controller
+                name="category"
+                control={control}
+                render={({ field: { onChange: onCheckBoxChange, value } }) => (
+                  <FormControl component="fieldset" className="col-span-full">
+                    <FormLabel component="legend">請選擇感興趣的類別</FormLabel>
+                    <FormGroup className="flex-row">
+                      {categoryOptions.map((category) => (
+                        <FormControlLabel
+                          className="text-secondary"
+                          value={category}
+                          key={category}
+                          label={category}
+                          control={
+                            <Checkbox
+                              checked={value?.includes(category)}
+                              onChange={() => value && onCheckBoxChange(handleCategoryChange(value, category))}
+                            />
+                          }
                         />
-                      }
-                      label={category}
-                    />
-                  ))}
-                </FormGroup>
-              </FormControl>
+                      ))}
+                    </FormGroup>
+                  </FormControl>
+                )}
+              />
             </div>
           </div>
 
@@ -319,28 +330,45 @@ const PersonalSettings = () => {
               修改收件資料
             </Typography>
             <div className="grid grid-cols-2 gap-3">
-              <TextField
-                fullWidth
-                className=""
-                id="contactName"
-                label="收件者姓名 *"
-                autoComplete="contactName"
-                autoFocus
-                size="small"
-                {...register('contactName')}
-                error={!!errors.contactName}
-                helperText={errors.contactName?.message}
+              <Controller
+                control={control}
+                name="contactName"
+                defaultValue=""
+                render={({ field: { onChange, value } }) => (
+                  <TextField
+                    fullWidth
+                    className=""
+                    id="contactName"
+                    label="收件者姓名 *"
+                    autoComplete="contactName"
+                    autoFocus
+                    size="small"
+                    value={value}
+                    onChange={onChange}
+                    error={!!errors.contactName}
+                    helperText={errors.contactName?.message}
+                  />
+                )}
               />
-              <TextField
-                fullWidth
-                id="contactPhone"
-                label="收件者電話 *"
-                autoComplete="contactPhone"
-                autoFocus
-                size="small"
-                {...register('contactPhone')}
-                error={!!errors.contactPhone}
-                helperText={errors.contactPhone?.message}
+
+              <Controller
+                control={control}
+                name="contactPhone"
+                defaultValue=""
+                render={({ field: { onChange, value } }) => (
+                  <TextField
+                    fullWidth
+                    id="contactPhone"
+                    label="收件者電話 *"
+                    autoComplete="contactPhone"
+                    autoFocus
+                    size="small"
+                    value={value}
+                    onChange={onChange}
+                    error={!!errors.contactPhone}
+                    helperText={errors.contactPhone?.message}
+                  />
+                )}
               />
 
               <div className="col-span-full">
@@ -351,24 +379,28 @@ const PersonalSettings = () => {
                   label="與贊助人資料相同"
                 />
               </div>
-
-              <TextField
-                fullWidth
-                className="col-span-full"
-                id="address"
-                label="收件地址 *"
-                autoComplete="收件地址"
-                autoFocus
-                size="small"
-                {...register('address')}
-                error={!!errors.address}
-                helperText={errors.address?.message}
+              <Controller
+                control={control}
+                name="address"
+                defaultValue=""
+                render={({ field: { onChange, value } }) => (
+                  <TextField
+                    fullWidth
+                    className="col-span-full"
+                    id="address"
+                    label="收件地址 *"
+                    autoComplete="收件地址"
+                    autoFocus
+                    size="small"
+                    value={value}
+                    onChange={onChange}
+                    error={!!errors.address}
+                    helperText={errors.address?.message}
+                  />
+                )}
               />
             </div>
           </div>
-          {/* <Button type="submit" fullWidth variant="contained">
-            儲存
-          </Button> */}
 
           <LoadingButton loading={patchUserLoading} type="submit" fullWidth variant="contained">
             <span>{patchUserLoading ? '儲存中' : '儲存'}</span>

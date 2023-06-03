@@ -27,33 +27,14 @@ const Header = () => {
     try {
       const res = await login().unwrap();
       const resUser = res.user;
-      const userDataGender = resUser.gender == 'other' ? 2 : 0;
       const userData = {
         ...resUser,
-        gender: userDataGender,
       };
 
       dispatch(setUserToken(res.tokens));
       dispatch(updateUser(userData));
 
       // console.log(res);
-
-      // onAuthStateChanged(authentication, (user: any) => {
-      //   if (user) {
-      //     const userData = {
-      //       name: resUser.name,
-      //       email: resUser.email,
-      //       avatar: user.photoURL,
-      //       uid: user.uid,
-      //       createdAt: user.metadata.creationTime,
-      //       id: resUser.id,
-      //     };
-
-      //     dispatch(updateUser(userData));
-      //   } else {
-      //     console.log('無使用者資料，使用者已登出');
-      //   }
-      // });
     } catch (err) {
       console.log(err);
     }
@@ -90,8 +71,25 @@ const Header = () => {
     if (loginToken) {
       dispatch(setToken(loginToken));
       handleGetUser();
+      // onAuthStateChanged(authentication, (user: any) => {
+      //   if (user) {
+      //     handleGetUser();
+      //   } else {
+      //     console.log('無使用者資料，使用者已登出');
+      //   }
+      // });
     }
   }, [loginToken, dispatch, handleGetUser]);
+
+  // useEffect(() => {
+  //   onAuthStateChanged(authentication, (user: any) => {
+  //     if (user) {
+  //       handleGetUser();
+  //     } else {
+  //       console.log('無使用者資料，使用者已登出');
+  //     }
+  //   });
+  // }, [handleGetUser]);
 
   return (
     <header className="border-0 border-b border-solid border-secondary-10">
