@@ -40,33 +40,48 @@ export default function Home() {
       ) : (
         <>
           <Seo templateTitle="Home" />
-          <div className="linkText flex flex-wrap justify-center mt-11 mb-8">
-            <Link href={'/projects'} className="no-underline text-secondary visited:text-secondary mr-8">
+          <div className="linkText flex flex-wrap justify-center py-5">
+            <Link
+              href={'/projects'}
+              className="no-underline text-secondary  hover:text-primary visited:text-secondary mr-8"
+            >
               <Typography component="h6" variant="h6">
                 藝術
               </Typography>
             </Link>
-            <Link href={'/projects'} className="no-underline text-secondary visited:text-secondary mr-8">
+            <Link
+              href={'/projects'}
+              className="no-underline text-secondary hover:text-primary visited:text-secondary mr-8"
+            >
               <Typography component="h6" variant="h6">
                 設計
               </Typography>
             </Link>
-            <Link href={'/projects'} className="no-underline text-secondary visited:text-secondary mr-8">
+            <Link
+              href={'/projects'}
+              className="no-underline text-secondary hover:text-primary visited:text-secondary mr-8"
+            >
               <Typography component="h6" variant="h6">
                 電影
               </Typography>
             </Link>
-            <Link href={'/projects'} className="no-underline text-secondary visited:text-secondary mr-8">
+            <Link
+              href={'/projects'}
+              className="no-underline text-secondary hover:text-primary visited:text-secondary mr-8"
+            >
               <Typography component="h6" variant="h6">
                 音樂
               </Typography>
             </Link>
-            <Link href={'/projects'} className="no-underline text-secondary visited:text-secondary mr-8">
+            <Link
+              href={'/projects'}
+              className="no-underline text-secondary hover:text-primary visited:text-secondary mr-8"
+            >
               <Typography component="h6" variant="h6">
                 科技
               </Typography>
             </Link>
-            <Link href={'/projects'} className="no-underline text-secondary visited:text-secondary">
+            <Link href={'/projects'} className="no-underline text-secondary hover:text-primary visited:text-secondary">
               <Typography component="h6" variant="h6">
                 出版
               </Typography>
@@ -75,10 +90,15 @@ export default function Home() {
 
           <SwiperTop />
 
-          <div className="hot w-full flex justify-center">
+          <div className="hot w-full flex justify-center mt-10 md:mt-0">
             <div className="flex flex-col items-center">
-              <div className="title mb-10">
+              <div className="title mb-10 md:block hidden">
                 <Typography component="h2" variant="h2">
+                  熱門精選
+                </Typography>
+              </div>
+              <div className="title mb-5 block md:hidden">
+                <Typography component="h2" variant="h4">
                   熱門精選
                 </Typography>
               </div>
@@ -95,8 +115,13 @@ export default function Home() {
 
           <div className="new w-full flex justify-center">
             <div className="flex flex-col items-center">
-              <div className="title mb-10">
+              <div className="title mb-10 md:block hidden">
                 <Typography component="h2" variant="h2">
+                  最新募資
+                </Typography>
+              </div>
+              <div className="title mb-5 block md:hidden">
+                <Typography component="h2" variant="h4">
                   最新募資
                 </Typography>
               </div>
@@ -111,66 +136,79 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="promise w-full flex-wrap md:flex-nowrap flex justify-center  bg-gray-light">
-            <div className="flex flex-col w-2/3 md:w-1/3 items-center p-6">
-              <Image
-                src={'/feature/icon_feature_1@2x.png'}
-                alt="promise1"
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-              />
-              <Typography component="h4" variant="h4" className="mt-5">
-                最透明
-              </Typography>
-              <Typography component="p" variant="body16" className="mt-[10px]">
-                所有募資專案皆提供豐富資訊給贊助者，以了解該募資項目的所有細節，包括用途、目標金額、計畫時間、募資團隊、風險因素等。
-              </Typography>
-            </div>
-            <div className="flex flex-col w-2/3 md:w-1/3 items-center p-6">
-              <Image
-                src={'/feature/icon_feature_2@2x.png'}
-                alt="promise1"
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-              />
-              <Typography component="h4" variant="h4" className="mt-5">
-                最安心
-              </Typography>
-              <Typography component="p" variant="body16" className="mt-[10px]">
-                募質部保證會員們的個人資料和金融資訊的安全。致力給會員們最安心的保障！
-              </Typography>
-            </div>
-            <div className="flex flex-col w-2/3 md:w-1/3 items-center p-6">
-              <Image
-                src={'/feature/icon_feature_3@2x.png'}
-                alt="promise1"
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-              />
-              <Typography component="h4" variant="h4" className="mt-5">
-                最負責
-              </Typography>
-              <Typography component="p" variant="body16" className="mt-[10px]">
-                確保資金用於指定用途，並且在募資達成後及時支付。如果募資項目未能實現，募質部會負責退款或提供其他解決方案。
-              </Typography>
+          <div className="promise w-full bg-gray-light mb-10">
+            <div className="max-w-screen-xl mx-auto p-5 flex flex-wrap md:flex-nowrap justify-center">
+              <div className="flex flex-col  w-2/3 md:w-1/3 items-center p-6">
+                <div className="aspect-square w-1/2">
+                  <Image
+                    src={'/feature/icon_feature_1@2x.png'}
+                    alt="promise1"
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                  />
+                </div>
+                <Typography component="h4" variant="h4" className="mt-5">
+                  最透明
+                </Typography>
+                <Typography component="p" variant="body16" className="mt-[10px]">
+                  所有募資專案皆提供豐富資訊給贊助者，以了解該募資項目的所有細節，包括用途、目標金額、計畫時間、募資團隊、風險因素等。
+                </Typography>
+              </div>
+              <div className="flex flex-col  w-2/3 md:w-1/3 items-center p-6">
+                <div className="aspect-square w-1/2">
+                  <Image
+                    src={'/feature/icon_feature_2@2x.png'}
+                    alt="promise1"
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                  />
+                </div>
+                <Typography component="h4" variant="h4" className="mt-5">
+                  最安心
+                </Typography>
+                <Typography component="p" variant="body16" className="mt-[10px]">
+                  募質部保證會員們的個人資料和金融資訊的安全。致力給會員們最安心的保障！
+                </Typography>
+              </div>
+              <div className="flex flex-col w-2/3 md:w-1/3 items-center p-6">
+                <div className="aspect-square w-1/2">
+                  <Image
+                    src={'/feature/icon_feature_3@2x.png'}
+                    alt="promise1"
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                  />
+                </div>
+                <Typography component="h4" variant="h4" className="mt-5">
+                  最負責
+                </Typography>
+                <Typography component="p" variant="body16" className="mt-[10px]">
+                  確保資金用於指定用途，並且在募資達成後及時支付。如果募資項目未能實現，募質部會負責退款或提供其他解決方案。
+                </Typography>
+              </div>
             </div>
           </div>
 
           <div className="shop w-full flex justify-center">
             <div className="flex flex-col items-center">
-              <div className="title mt-[60px] mb-5">
+              <div className="title mb-5 md:block hidden">
                 <Typography component="h2" variant="h2">
                   募資選物
                 </Typography>
               </div>
+              <div className="title mb-5 block md:hidden">
+                <Typography component="h2" variant="h4">
+                  募資選物
+                </Typography>
+              </div>
               <div className="subtitle mb-10 text-center">
-                <Typography component="h5" variant="h5" className="text-primary">
+                <Typography component="h5" variant="h6" className="text-primary">
                   隨時隨地就能夠購買到精選的集資成功產品
                 </Typography>
               </div>
@@ -276,13 +314,18 @@ export default function Home() {
 
           <div className="success w-full flex justify-center mt-10">
             <div className="flex flex-col items-center">
-              <div className="title mb-5">
+              <div className="title mb-5 md:block hidden">
                 <Typography component="h2" variant="h2">
                   經典成功案例
                 </Typography>
               </div>
+              <div className="title mb-5 block md:hidden">
+                <Typography component="h2" variant="h4">
+                  經典成功案例
+                </Typography>
+              </div>
               <div className="subtitle mb-10 text-center">
-                <Typography component="h5" variant="h5" className="text-primary">
+                <Typography component="h5" variant="h6" className="text-primary">
                   募質部已成功幫助募資案列超過 2000 件
                 </Typography>
               </div>
