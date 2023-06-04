@@ -12,9 +12,12 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Loading from '@/components/Loading';
 import { IProject, useGetProjectDataQuery } from '@/store/services/projectApi';
+import { generateData } from '@/mocks/actions/projects';
 
 export default function Home() {
-  const { data, refetch } = useGetProjectDataQuery();
+  // const { data, refetch } = useGetProjectDataQuery();
+  const [data, setData] = useState({ data: { projects: [] as IProject[] } });
+
   const swiperInstancesHot: SwiperCore[] = []; // 創建空的 Swiper 實例陣列
   const swiperInstancesNew: SwiperCore[] = []; // 創建空的 Swiper 實例陣列
   const swiperInstancesSuccess: SwiperCore[] = []; // 創建空的 Swiper 實例陣列
@@ -23,14 +26,37 @@ export default function Home() {
 
   const [isLoading, setisLoading] = useState(true);
 
+  // mock API
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setisLoading(true);
+  //     await refetch();
+  //     setisLoading(false);
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   useEffect(() => {
+    setisLoading(true);
+
     const fetchData = async () => {
-      setisLoading(true);
-      await refetch();
+      const generatedData = await generateData();
+      setData((prevData) => ({
+        ...prevData,
+        data: {
+          ...prevData.data,
+          projects: generatedData,
+        },
+      }));
       setisLoading(false);
     };
 
-    fetchData();
+    const dataTimeOut = setTimeout(fetchData, 1000);
+
+    return () => {
+      clearTimeout(dataTimeOut);
+    };
   }, []);
 
   return (
