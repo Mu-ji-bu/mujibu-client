@@ -27,7 +27,8 @@ const SwiperTop = () => {
   const router = useRouter();
   const handleSlideClick = (slideIndex: number) => {
     // Navigate to the desired page using Next.js router
-    router.push(`/projects/${slideIndex}`);
+    // router.push(`/projects/introduction/${slideIndex}`);
+    router.push(`/projects/introduction`);
   };
 
   const goPrev = () => {
