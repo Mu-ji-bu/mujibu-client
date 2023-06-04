@@ -27,6 +27,18 @@ const Header = () => {
   const [login] = useLoginMutation();
   const headerRef = useRef(null);
 
+  const handleLogout = useCallback(() => {
+    signOut(authentication)
+      .then(() => {
+        Cookies.remove('googleToken');
+        dispatch(clearToken());
+        router.push(routePath.home);
+        console.log('Signed out successfully');
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
+  }, [dispatch, router]);
   const handleGetUser = useCallback(async () => {
     try {
       const res = await login().unwrap();
@@ -40,22 +52,10 @@ const Header = () => {
 
       // console.log(res);
     } catch (err) {
+      handleLogout();
       console.log(err);
     }
-  }, [login, dispatch]);
-
-  const handleLogout = () => {
-    signOut(authentication)
-      .then(() => {
-        Cookies.remove('googleToken');
-        dispatch(clearToken());
-        router.push(routePath.home);
-        console.log('Signed out successfully');
-      })
-      .catch((error) => {
-        console.log('error', error);
-      });
-  };
+  }, [login, dispatch, handleLogout]);
 
   const accountOptions: IAccountMenuOption[] = [
     { label: '個人設定', href: routePath.userPersonalSettings, hasBorderBottom: false },
@@ -97,16 +97,15 @@ const Header = () => {
     };
 
     router.pathname === '/proposal/form' ? setIsFixed(false) : setIsFixed(true);
-    isFixed && window.addEventListener('scroll', fixNav);
+    window.addEventListener('scroll', fixNav);
 
     return () => {
-      isFixed && window.removeEventListener('scroll', fixNav);
+      window.removeEventListener('scroll', fixNav);
     };
   }, [isFixed, router]);
 
   return (
     <>
-      {console.log(router.pathname)}
       <header ref={headerRef} className="border-0 border-b border-solid border-secondary-10">
         <div className="max-w-screen-xl mx-auto px-5 py-2 flex justify-between items-center">
           <div className="flex items-center">
