@@ -5,15 +5,25 @@ export const projectTypeOption = [
   { label: '成功案例', value: 3 },
 ];
 
-export const projectTypeEnum = {
+export const projectTypeEnum: {
+  PROJECT_TYPE: string;
+  [key: number]: string;
+  ALL: number;
+  GENERAL: number;
+  LONG_TERM: number;
+  SUCCESS: number;
+  FAILED: number;
+} = {
   PROJECT_TYPE: 'projectType',
   1: '一般專案',
   2: '長期販售',
   3: '成功案例',
+  4: '失敗案例',
   ALL: 0,
   GENERAL: 1,
   LONG_TERM: 2,
   SUCCESS: 3,
+  FAILED: 4,
 };
 
 export const projectCategoryOption = [

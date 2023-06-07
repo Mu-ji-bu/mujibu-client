@@ -27,7 +27,8 @@ const SwiperTop = () => {
   const router = useRouter();
   const handleSlideClick = (slideIndex: number) => {
     // Navigate to the desired page using Next.js router
-    router.push(`/projects/${slideIndex}`);
+    // router.push(`/projects/introduction/${slideIndex}`);
+    router.push(`/projects/introduction`);
   };
 
   const goPrev = () => {
@@ -55,6 +56,7 @@ const SwiperTop = () => {
   return (
     <div className="swiper-box relative w-screen flex justify-center">
       <Swiper
+        initialSlide={1}
         breakpoints={breakpoints}
         onSwiper={(swiperInstance) => (swiper = swiperInstance)}
         modules={[Navigation]}
@@ -176,6 +178,8 @@ const Slide: React.FC<ISlideOption> = ({ title, imgSrc }) => {
       {isMd || isLg || isXl || is2Xl ? (
         <div className="relative h-[580px] w-full flex justify-center">
           <Image
+            className="rounded-md overflow-hidden"
+            priority={true}
             src={imgSrc}
             alt="slide1"
             width={0}
@@ -185,6 +189,7 @@ const Slide: React.FC<ISlideOption> = ({ title, imgSrc }) => {
             // 之前測試過的屬性
             // fill
           />
+
           <div className="cover absolute bottom-0 left-0 right-0 h-[100px] flex justify-center items-center bg-white bg-opacity-90 z-10">
             <div className="absolute bottom-11 left-[2%]">
               <CircularDeterminate value={30} size={size} textSize={textSize} />
@@ -200,7 +205,7 @@ const Slide: React.FC<ISlideOption> = ({ title, imgSrc }) => {
               <Typography
                 component="p"
                 variant="body16"
-                className="overflow-hidden text-ellipsis whitespace-normal max-w-full"
+                className="overflow-hidden text-secondary hover:text-black text-ellipsis whitespace-normal max-w-full"
                 style={{
                   // 文字最多 3 行，超過會以 tooltips 顯示
                   display: '-webkit-box',
@@ -220,6 +225,7 @@ const Slide: React.FC<ISlideOption> = ({ title, imgSrc }) => {
       ) : (
         <div className="relative h-[282px] w-full flex justify-center">
           <Image
+            priority={true}
             src={imgSrc}
             alt="slide1"
             width={0}
@@ -254,7 +260,7 @@ const Slide: React.FC<ISlideOption> = ({ title, imgSrc }) => {
               <Typography
                 component="p"
                 variant="body16"
-                className="overflow-hidden text-ellipsis whitespace-normal max-w-full"
+                className="overflow-hidden hover:text-primary text-ellipsis whitespace-normal max-w-full"
                 style={{
                   display: '-webkit-box',
                   WebkitLineClamp: 3,

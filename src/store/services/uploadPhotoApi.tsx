@@ -8,7 +8,7 @@ export interface PhotoUploadResponse {
 export const uploadPhotoApiService = createApi({
   reducerPath: 'uploadPhotoApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3010',
+    baseUrl: 'http://localhost:8080/api',
     // prepareHeaders: (headers, { getState }) => {
     //   const token = (getState() as RootState).authReducer.token;
     //   if (token) {

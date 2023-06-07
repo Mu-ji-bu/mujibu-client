@@ -13,6 +13,7 @@ const routePath = {
   newPassword: '/new-password',
   notifications: '/notifications',
   proposal: '/proposal',
+  proposalForm: '/proposal/form',
   proposalId: '/proposal/[id]',
   projects: '/projects',
   projectsIntroduction: '/projects/introduction',

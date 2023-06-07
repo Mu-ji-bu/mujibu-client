@@ -137,9 +137,9 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
             label={projectCategoryEnum[category as keyof typeof projectCategoryEnum]}
             variant="outlined"
           />
-          {projectType === projectTypeEnum.GENERAL && (
+          {projectType !== projectTypeEnum.FAILED && (
             <Typography className="opacity-60" component="span" variant="caption" color="secondary">
-              長期販售
+              {projectTypeEnum[projectType]}
             </Typography>
           )}
         </div>

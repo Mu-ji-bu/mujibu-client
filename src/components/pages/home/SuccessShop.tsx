@@ -34,7 +34,7 @@ const SuccessShop: React.FC<ISuccessShopProps> = ({ ...props }) => {
   if (!projectData) return null;
 
   return (
-    <div className="w-screen flex-col items-center">
+    <div className="w-screen flex-col items-center px-5">
       {is2Xl ? (
         <>
           <div className="flex justify-center gap-6">

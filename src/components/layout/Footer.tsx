@@ -24,7 +24,7 @@ const Footer = () => {
           >
             <div className="shrink-0 mb-5 md:mb-0">
               <Link href={'/'}>
-                <Image src={'/logo@2x.png'} alt={'募質部 Mujibu logo'} width={128} height={48} />
+                <Image src={'/logo@2x.png'} alt={'募質部 Mujibu logo'} width={128} height={48} priority={true} />
               </Link>
             </div>
             <div className="mb-5 md:mb-0">

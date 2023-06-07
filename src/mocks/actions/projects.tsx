@@ -21,7 +21,7 @@ const getProjectDataAPI = [getProjectData];
 
 export default getProjectDataAPI;
 
-function generateData(total: number) {
+export function generateData(total: number = 10) {
   const projects = [];
 
   for (let i = 0; i < total; i++) {
@@ -42,8 +42,8 @@ function generateData(total: number) {
       category: 'Technology',
       projectTeam: 'Team 1',
       description: 'Project 1 is a revolutionary new app that will change the way you think about...',
-      currentAmount: (currentAmount / 1000).toFixed(1),
-      targetAmount: (targetAmount / 1000).toFixed(1),
+      currentAmount: Number((currentAmount / 1000).toFixed(1)),
+      targetAmount: Number((targetAmount / 1000).toFixed(1)),
       progress,
       backers: getRandomNumber(0, 100),
       prize: 500,
