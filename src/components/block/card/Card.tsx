@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -12,33 +12,13 @@ import clsxm from '@/libraries/utils/clsxm';
 import { DeterminateSize } from '@/components/types/enum';
 import { getRemainingDays } from '@libraries/utils/index';
 import { CardWidth } from '@/components/types/enum';
+import { IProject } from 'types/project';
+import { projectCategoryEnum, projectTypeEnum } from '@/libraries/enum';
+import { calculatePercentage } from '@/libraries/utils';
 
-// interface ImgMediaCardProps {
-//   isPC: boolean;
-//   id: string;
-//   image: string;
-//   category: string;
-// }
-
-interface ImgMediaCardProps {
+interface ImgMediaCardProps extends IProject {
   isPC: boolean;
-  id: string;
-  image: string;
-  category: string;
   cardWidth?: CardWidth;
-  projectType: number;
-  projectName: string;
-  projectTeam: string;
-  proposer: string;
-  description: string;
-  currentAmount: number;
-  targetAmount: number;
-  progress: number;
-  backers: number;
-  prize: number;
-  startTime: string;
-  endTime: string;
-  remainingTime: string;
 }
 
 const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
@@ -50,45 +30,46 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
     currentAmount,
     targetAmount,
     backers,
-    startTime,
-    endTime,
-    progress,
-    image,
+    projectVisual,
     category,
     proposer,
+    endTime,
   } = props;
-  const remainingDays = getRemainingDays(startTime, endTime);
+  const progressBar = calculatePercentage(currentAmount, targetAmount);
 
-  const renderIndicator = (projectType: number) => {
+  const renderIndicator = useCallback(() => {
     switch (projectType) {
-      case 0:
-        return <CircularDeterminate value={progress} size={'4em'} textSize={DeterminateSize.Small} />;
-      case 2:
+      case projectTypeEnum.GENERAL:
+        return <CircularDeterminate value={progressBar} size={'4em'} textSize={DeterminateSize.Small} />;
+      case projectTypeEnum.SUCCESS:
         return <CircleCheckIcon />;
       default:
         return null;
     }
-  };
+  }, [projectType, progressBar]);
 
-  const renderLinearProgress = (projectType: number) => {
+  const renderLinearProgress = useCallback(() => {
     switch (projectType) {
-      case 0:
-        return <LinearDeterminate value={progress} haslabel={true} />;
-      case 2:
+      case projectTypeEnum.GENERAL:
+        return <LinearDeterminate value={progressBar} haslabel={true} />;
+      case projectTypeEnum.SUCCESS:
         return <LinearDeterminate value={100} haslabel={false} />;
       default:
         return null;
     }
-  };
+  }, [projectType, progressBar]);
 
-  const renderCardBottom = (projectType: number) => {
-    if (projectType === 0 || projectType === 2) {
+  const renderCardBottom = () => {
+    const currentDate = new Date().toString();
+    const remainingDays = getRemainingDays(currentDate, endTime.toString());
+
+    if (projectType === projectTypeEnum.GENERAL || projectType === projectTypeEnum.SUCCESS) {
       return (
         <>
           <div className="h-px bg-secondary/[.12] my-5"></div>
-          {!isPC && <div className="mb-3">{renderLinearProgress(projectType)}</div>}
+          {!isPC && <div className="mb-3">{renderLinearProgress()}</div>}
           <div className="flex items-center gap-5">
-            {isPC && renderIndicator(projectType)}
+            {isPC && renderIndicator()}
             <div>
               <div>
                 <Typography className="opacity-60 mr-2" component="span" variant="caption" color="secondary">
@@ -142,11 +123,21 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
         'rounded-lg border-secondary shadow-none border border-solid border-opacity-[.12]',
       )}
     >
-      <CardMedia className="rounded-lg object-cover" component="img" alt={projectName} height="276" image={image} />
+      <CardMedia
+        className="rounded-lg object-cover"
+        component="img"
+        alt={projectName}
+        height="276"
+        image={projectVisual}
+      />
       <CardContent className="mt-5 p-0">
         <div className="flex justify-between items-center">
-          <Chip className="text-green-accent border-green-accent" label={category} variant="outlined" />
-          {projectType === 1 && (
+          <Chip
+            className="text-green-accent border-green-accent"
+            label={projectCategoryEnum[category as keyof typeof projectCategoryEnum]}
+            variant="outlined"
+          />
+          {projectType === projectTypeEnum.GENERAL && (
             <Typography className="opacity-60" component="span" variant="caption" color="secondary">
               長期販售
             </Typography>
@@ -166,7 +157,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
             {proposer}
           </Link>
         </div>
-        {renderCardBottom(projectType)}
+        {renderCardBottom()}
       </CardContent>
     </Card>
   );
