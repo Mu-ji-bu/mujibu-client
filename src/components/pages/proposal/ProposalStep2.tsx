@@ -122,7 +122,7 @@ const ProposalStep2: React.FC<ProposalStep2Props> = ({ setValue, control }) => {
 
           <Controller
             control={control}
-            name="fundraisingGoal"
+            name="goalAmount"
             defaultValue=""
             render={({ field: { onChange, value } }) => (
               <FormControl className="col-span-full flex flex-row items-center justify-start space-x-2">
@@ -171,21 +171,21 @@ const ProposalStep2: React.FC<ProposalStep2Props> = ({ setValue, control }) => {
 
           <Controller
             control={control}
-            name="fundraisingGoal"
+            name="goalAmount"
             defaultValue=""
             render={({ field: { onChange, value } }) => (
               <FormControl>
-                <InputLabel htmlFor="fundraisingGoal">目標金額 *</InputLabel>
+                <InputLabel htmlFor="goalAmount">目標金額 *</InputLabel>
                 <OutlinedInput
                   fullWidth
-                  id="fundraisingGoal"
+                  id="goalAmount"
                   size="small"
                   startAdornment={<InputAdornment position="start">NT$</InputAdornment>}
                   label="目標金額 *"
                   value={value}
                   onChange={onChange}
-                  // error={!!errors.fundraisingGoal}
-                  // helperText={errors.fundraisingGoal?.message}
+                  // error={!!errors.goalAmount}
+                  // helperText={errors.goalAmount?.message}
                 />
               </FormControl>
             )}
@@ -235,20 +235,20 @@ const ProposalStep2: React.FC<ProposalStep2Props> = ({ setValue, control }) => {
 
           <Controller
             control={control}
-            name="officialWebsite"
+            name="officialPage"
             defaultValue=""
             render={({ field: { onChange, value } }) => (
               <TextField
                 className="col-span-full"
                 fullWidth
-                id="officialWebsite"
+                id="officialPage"
                 label="品牌、組織或專案官方網站"
-                autoComplete="officialWebsite"
+                autoComplete="officialPage"
                 size="small"
                 value={value}
                 onChange={onChange}
-                // error={!!errors.officialWebsite}
-                // helperText={errors.officialWebsite?.message}
+                // error={!!errors.officialPage}
+                // helperText={errors.officialPage?.message}
               />
             )}
           />

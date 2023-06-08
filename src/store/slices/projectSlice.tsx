@@ -11,7 +11,7 @@ export const projectSlice = createSlice({
     // 1. state -> 當下的狀態
     // 2. action -> 對應的動作
     setIsFollow: (state) => {
-      state.isFollow = !state.isFollow;
+      state.carousel = !state.carousel;
     },
   },
 });
