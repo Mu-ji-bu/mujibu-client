@@ -47,7 +47,13 @@ const LogIn = () => {
 
   useEffect(() => {
     if (googleToken) {
-      Cookies.set('googleToken', googleToken);
+      // 過期時間120分鐘
+      const expirationTime = 120;
+      const currentDate = new Date();
+      currentDate.setTime(currentDate.getTime() + expirationTime * 60 * 1000);
+      Cookies.set('googleToken', googleToken, { expires: currentDate });
+
+      // Cookies.set('googleToken', googleToken, { expires: 1 });
       router.push(routePath.home);
     }
   }, [googleToken, router]);

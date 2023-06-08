@@ -4,6 +4,7 @@ const apiRoutes = {
   firebaseGoogleloginURL: '/api/auth/firebase-google',
   usersURL: '/api/users',
   projectsURL: '/api/projects',
+  uploadPhotoURL: '/api/upload/file',
 };
 
 export default apiRoutes;

@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
+import apiRoutes, { baseURL } from '@routes/apiRoutes';
 
 export interface PhotoUploadResponse {
   fileUrl: string;
@@ -8,7 +9,7 @@ export interface PhotoUploadResponse {
 export const uploadPhotoApiService = createApi({
   reducerPath: 'uploadPhotoApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8080/api',
+    baseUrl: baseURL,
     // prepareHeaders: (headers, { getState }) => {
     //   const token = (getState() as RootState).authReducer.token;
     //   if (token) {
@@ -26,7 +27,7 @@ export const uploadPhotoApiService = createApi({
     uploadPhoto: builder.mutation<PhotoUploadResponse, FormData>({
       query: (imageFile) => {
         return {
-          url: '/upload/file',
+          url: `${apiRoutes.uploadPhotoURL}`,
           method: 'POST',
           body: imageFile,
         };
