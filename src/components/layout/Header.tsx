@@ -97,10 +97,10 @@ const Header = () => {
     };
 
     router.pathname === '/proposal/form' ? setIsFixed(false) : setIsFixed(true);
-    isFixed && window.addEventListener('scroll', fixNav);
+    window.addEventListener('scroll', fixNav);
 
     return () => {
-      isFixed && window.removeEventListener('scroll', fixNav);
+      window.removeEventListener('scroll', fixNav);
     };
   }, [isFixed, router]);
 

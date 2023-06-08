@@ -134,7 +134,7 @@ const Introduction = () => {
               <Typography component="span" variant="h6" className="text-secondary-66">
                 對計畫還有其他疑問嗎？請見
               </Typography>
-              <Link href={'/'} className="no-underline visited:text-primary text-primary font-medium">
+              <Link href={'/faq'} className="no-underline visited:text-primary text-primary font-medium">
                 常見問答
               </Link>
               <Typography component="span" variant="h6" className="text-secondary-66">
@@ -145,7 +145,7 @@ const Introduction = () => {
               <Typography component="span" variant="h6" className="text-secondary-66">
                 認為此專案有違規或不適合募質部使用者的地方嗎？請
               </Typography>
-              <Link href={'/'} className="no-underline visited:text-primary text-primary font-medium">
+              <Link href={'/about-us'} className="no-underline visited:text-primary text-primary font-medium">
                 聯繫我們
               </Link>
               <Typography component="span" variant="h6" className="text-secondary-66">
