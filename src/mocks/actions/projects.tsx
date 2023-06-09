@@ -2,6 +2,7 @@
 import { rest } from 'msw';
 import apiRoutes, { baseURL } from '@routes/apiRoutes';
 import { getRandomNumber } from '@/libraries/utils';
+import { projectFormEnum, projectStatusEnum } from '@/libraries/enum';
 
 const getProjectData = rest.get(`${baseURL}${apiRoutes.projectsURL}`, (req, res, ctx) => {
   const mockData = {
@@ -24,8 +25,8 @@ export function generateData() {
 
   for (let i = 0; i < 6; i++) {
     const currentAmount = getRandomNumber(0, 10000);
-    const targetAmount = 10000;
-    const progress = (currentAmount / targetAmount) * 100;
+    const goalAmount = 10000;
+    const progress = (currentAmount / goalAmount) * 100;
     const project = {
       id: String(i),
       image: `/${i < 3 ? 'slides' : 'shop'}/Desktop_${i < 3 ? 'slides' : 'shop'}_${(i % 3) + 1}@2x.png`,
@@ -35,9 +36,9 @@ export function generateData() {
       proposer: 'John Doe',
       description: 'Project 1 is a revolutionary new app that will change the way you think about...',
       currentAmount: Number((currentAmount / 1000).toFixed(1)),
-      targetAmount: Number((targetAmount / 1000).toFixed(1)),
+      goalAmount: Number((goalAmount / 1000).toFixed(1)),
       progress,
-      backers: getRandomNumber(0, 100),
+      projectBackers: getRandomNumber(0, 100),
       prize: 500,
       startTime: '2023-05-01T00:00:00Z',
       endTime: '2023-06-30T23:59:59Z',
