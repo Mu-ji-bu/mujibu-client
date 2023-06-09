@@ -1,50 +1,74 @@
 import { projectFormEnum } from '@/libraries/enum';
+import type { IUserState } from './user';
+import type { IPlanState } from './plan';
+import type { ITeamState } from './team';
+
+export declare interface DeliveryInfo {
+  deliverySwitch?: boolean;
+  deliveryFee?: number;
+  multiProductCheckout?: number;
+  freeShippingConditions?: number;
+  freeShippingPrice?: number;
+  senderName?: string;
+  senderPhone?: string;
+  senderAddress?: string;
+}
+
+export declare interface CvsInfo {
+  cvsSwitch?: boolean;
+  deliveryFee?: number;
+  multiProductCheckout?: number;
+  freeShippingConditions?: number;
+  freeShippingPrice?: number;
+  cvsName?: number;
+}
+
+export declare interface ShippingSettings {
+  shippingSwitch?: boolean;
+  deliveryInfo?: DeliveryInfo;
+  cvsInfo?: CvsInfo;
+}
+
+export declare interface WithdrawalSettings {
+  WithdrawalBank?: string;
+  bankAccount?: string;
+}
 
 export declare interface IProjectState {
-  projectName: string;
-  isFollow: boolean;
-}
-
-interface IPlanState {
-  isRealProduct?: boolean;
-  otherNotes?: string[];
-  planDescription?: string;
-  planDiscountPrice?: string;
-  planEndTime?: string;
-  planImage?: string;
-  planName?: string;
-  planOriginalPrice?: string;
-  planQuantity?: number;
-  planStartTime?: string;
-  planType?: string;
   _id?: string;
+  projectType?: number;
+  projectForm?: number;
+  projectStatus?: number;
+  projectCategory?: number;
+  projectName?: string;
+  projectImage?: string;
+  projectDescription?: string;
+  goalAmount?: number;
+  currentAmount?: number;
+  currentAmountPercentage?: number;
+  startTime?: Date | null;
+  endTime?: Date | null;
+  officialPage?: string;
+  fanPage?: string;
+  attachmentLink?: string;
+  projectContent?: string;
+  projectPlans?: IPlanState[];
+  projectTeam?: ITeamState;
+  projectProposer?: IUserState;
+  projectOrders?: any[]; // 還未建立先放any[]替代
+  projectRefunds?: any[]; // 還未建立先放any[]替代
+  latestNews?: any[]; // 還未建立先放any[]替代
+  faqs?: any[]; // 還未建立先放any[]替代
+  comments?: any[]; // 還未建立先放any[]替代
+  projectFollowers: IUserState[];
+  projectScore?: number;
+  projectBackers?: number;
+  carousel?: boolean;
+  withdrawalSettings?: WithdrawalSettings;
+  shippingSettings?: ShippingSettings;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
 }
-
-interface ITeamState {
-  companyAddress?: string;
-  companyName?: string;
-  companyPhone?: string;
-  companyRegistrationNumber?: string;
-  representativeEmail?: string;
-  representativeMobile?: string;
-  representativeName?: string;
-  representativePhone?: string;
-  socialEmail?: string;
-  socialFb?: string;
-  socialIg?: string;
-  socialLine?: string;
-  socialWebsite?: string;
-  socialYoutube?: string;
-  teamAvatar?: string;
-  teamIntroduction?: string;
-  teamName?: string;
-}
-
-interface IUserState {
-  id?: string;
-  name?: string;
-}
-
 interface IWithdrawalSettings {
   bankAccount?: string;
   bankName?: string;

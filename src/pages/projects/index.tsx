@@ -30,7 +30,7 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
 
 const Projects = () => {
   const [searchQuery, setSearchQuery] = useState({});
-  const { data, refetch } = useGetProjectDataQuery(searchQuery);
+  const { data, isLoading } = useGetProjectDataQuery(searchQuery);
   const dataTotal = useMemo((): number => data?.total || 1, [data?.total]);
   const dataList = useMemo((): IProject | never[] => data?.data || [], [data?.data]);
 
@@ -38,7 +38,6 @@ const Projects = () => {
     dataTotal,
   });
 
-  const [isLoading, setisLoading] = useState(true);
   const { isMd } = useBreakpoints();
 
   const { control, handleSubmit, setValue } = useForm<IProjectSelectFormData>();
@@ -56,17 +55,6 @@ const Projects = () => {
         break;
     }
   };
-
-  useEffect(() => {
-    // mount data
-    const fetchData = async () => {
-      setisLoading(true);
-      await refetch();
-      setisLoading(false);
-    };
-
-    fetchData();
-  }, []);
 
   useEffect(() => {
     // update data
