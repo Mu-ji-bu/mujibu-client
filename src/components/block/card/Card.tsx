@@ -13,7 +13,7 @@ import { DeterminateSize } from '@/components/types/enum';
 import { getRemainingDays } from '@libraries/utils/index';
 import { CardWidth } from '@/components/types/enum';
 import { IProject } from 'types/project';
-import { projectCategoryEnum, projectTypeEnum } from '@/libraries/enum';
+import { projectCategoryEnum, projectFormEnum } from '@/libraries/enum';
 import { calculatePercentage } from '@/libraries/utils';
 
 interface ImgMediaCardProps extends IProject {
@@ -25,45 +25,48 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
   const {
     isPC,
     cardWidth = CardWidth.Normal,
-    projectType,
+    projectForm,
     projectName,
     currentAmount,
-    targetAmount,
-    backers,
-    projectVisual,
-    category,
-    proposer,
+    goalAmount,
+    projectBackers,
+    projectImage,
+    projectCategory,
+    projectProposer,
     endTime,
   } = props;
-  const progressBar = calculatePercentage(currentAmount, targetAmount);
+
+  const progressBar = useMemo(() => {
+    return currentAmount && goalAmount ? calculatePercentage(currentAmount, goalAmount) : 0;
+  }, [currentAmount, goalAmount]);
 
   const renderIndicator = useCallback(() => {
-    switch (projectType) {
-      case projectTypeEnum.GENERAL:
+    switch (projectForm) {
+      case projectFormEnum.GENERAL:
         return <CircularDeterminate value={progressBar} size={'4em'} textSize={DeterminateSize.Small} />;
-      case projectTypeEnum.SUCCESS:
+      case projectFormEnum.SUCCESS:
         return <CircleCheckIcon />;
       default:
         return null;
     }
-  }, [projectType, progressBar]);
+  }, [projectForm, progressBar]);
 
   const renderLinearProgress = useCallback(() => {
-    switch (projectType) {
-      case projectTypeEnum.GENERAL:
+    switch (projectForm) {
+      case projectFormEnum.GENERAL:
         return <LinearDeterminate value={progressBar} haslabel={true} />;
-      case projectTypeEnum.SUCCESS:
+      case projectFormEnum.SUCCESS:
         return <LinearDeterminate value={100} haslabel={false} />;
       default:
         return null;
     }
-  }, [projectType, progressBar]);
+  }, [projectForm, progressBar]);
 
   const renderCardBottom = () => {
     const currentDate = new Date().toString();
-    const remainingDays = getRemainingDays(currentDate, endTime.toString());
+    const remainingDays = endTime ? getRemainingDays(currentDate, endTime.toString()) : 0;
 
-    if (projectType === projectTypeEnum.GENERAL || projectType === projectTypeEnum.SUCCESS) {
+    if (projectForm === projectFormEnum.GENERAL || projectForm === projectFormEnum.SUCCESS) {
       return (
         <>
           <div className="h-px bg-secondary/[.12] my-5"></div>
@@ -84,14 +87,14 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
                   目標
                 </Typography>
                 <Typography className="opacity-[.87]" component="span" variant="h6" color="secondary">
-                  NT${targetAmount}k
+                  NT${goalAmount}k
                 </Typography>
               </div>
             </div>
             <div className="text-right ml-auto">
               <div>
                 <Typography className="mr-1" component="span" variant="caption" color="primary">
-                  {backers}
+                  {projectBackers}
                 </Typography>
                 <Typography className="opacity-60" component="span" variant="caption" color="secondary">
                   人支持
@@ -128,18 +131,18 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
         component="img"
         alt={projectName}
         height="276"
-        image={projectVisual}
+        image={projectImage}
       />
       <CardContent className="mt-5 p-0">
         <div className="flex justify-between items-center">
           <Chip
             className="text-green-accent border-green-accent"
-            label={projectCategoryEnum[category as keyof typeof projectCategoryEnum]}
+            label={projectCategoryEnum[projectCategory as keyof typeof projectCategoryEnum]}
             variant="outlined"
           />
-          {projectType !== projectTypeEnum.FAILED && (
+          {projectForm !== projectFormEnum.FAILED && (
             <Typography className="opacity-60" component="span" variant="caption" color="secondary">
-              {projectTypeEnum[projectType]}
+              {projectForm?.toString() && projectFormEnum[projectForm]}
             </Typography>
           )}
         </div>
@@ -154,7 +157,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
             href="#"
             className="no-underline  text-primary  hover:text-secondary visited:text-primary font-normal md:font-medium text-sm md:text-base"
           >
-            {proposer}
+            {projectProposer?.name}
           </Link>
         </div>
         {renderCardBottom()}

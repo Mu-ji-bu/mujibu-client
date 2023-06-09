@@ -13,10 +13,10 @@ import { useGetProjectDataQuery } from '@/store/services/projectApi';
 import useSearchDataQuery from '@/libraries/hooks/useSearchDataQuery';
 import { IProject, IProjectSelectFormData } from 'types/project';
 import {
-  projectTypeOption,
+  projectFormOption,
   projectCategoryOption,
   projectSortOption,
-  projectTypeEnum,
+  projectFormEnum,
   projectCategoryEnum,
   projectSortEnum,
   searchQueryEnum,
@@ -45,13 +45,13 @@ const Projects = () => {
 
   const handleClearSelect = (fieldName: keyof IProjectSelectFormData) => {
     switch (fieldName) {
-      case projectTypeEnum.PROJECT_TYPE:
-        setValue(fieldName, projectTypeEnum.ALL);
+      case projectFormEnum.TYPE:
+        setValue(fieldName, projectFormEnum.ALL);
         break;
-      case projectCategoryEnum.CATEGORY:
+      case projectCategoryEnum.TYPE:
         setValue(fieldName, projectCategoryEnum.ALL);
         break;
-      case projectSortEnum.SORT_BY:
+      case projectSortEnum.TYPE:
         setValue(fieldName, searchQueryEnum.SORT_START);
         break;
     }
@@ -91,14 +91,13 @@ const Projects = () => {
             )}
           >
             <Controller
-              // name={projectTypeEnum.PROJECT_TYPE as 'projectType' | 'category' | 'sortBy'}
-              name="projectType"
+              name="projectForm"
               control={control}
-              defaultValue={projectTypeEnum.ALL}
+              defaultValue={projectFormEnum.ALL}
               render={({ field }) => (
                 <StyledFormControl className="flex-row">
                   <Select
-                    id="projectType"
+                    id="projectForm"
                     value={field.value}
                     onChange={(e) => {
                       field.onChange(e);
@@ -108,10 +107,10 @@ const Projects = () => {
                     IconComponent={ExpandMoreIcon}
                     sx={{ minWidth: 180 }}
                   >
-                    <MenuItem sx={{ paddingBlock: '12px' }} value={projectTypeEnum.ALL} disabled>
+                    <MenuItem sx={{ paddingBlock: '12px' }} value={projectFormEnum.ALL} disabled>
                       專案性質
                     </MenuItem>
-                    {projectTypeOption.map(({ label, value }, index) => (
+                    {projectFormOption.map(({ label, value }, index) => (
                       <MenuItem key={index} sx={{ paddingBlock: '12px' }} value={value}>
                         {label}
                       </MenuItem>
@@ -120,7 +119,7 @@ const Projects = () => {
                   <IconButton
                     size="small"
                     onClick={() => {
-                      handleClearSelect('projectType');
+                      handleClearSelect('projectForm');
                       handleSubmit(onSelectChange)();
                     }}
                   >
@@ -130,14 +129,13 @@ const Projects = () => {
               )}
             />
             <Controller
-              // name={projectCategoryEnum.CATEGORY}
-              name="category"
+              name="projectCategory"
               control={control}
               defaultValue={projectCategoryEnum.ALL}
               render={({ field }) => (
                 <StyledFormControl className="flex-row">
                   <Select
-                    id="category"
+                    id="projectCategory"
                     value={field.value}
                     onChange={(e) => {
                       field.onChange(e);
@@ -159,7 +157,7 @@ const Projects = () => {
                   <IconButton
                     size="small"
                     onClick={() => {
-                      handleClearSelect('category');
+                      handleClearSelect('projectCategory');
                       handleSubmit(onSelectChange)();
                     }}
                   >
@@ -169,7 +167,6 @@ const Projects = () => {
               )}
             />
             <Controller
-              // name={projectSortEnum.SORT_BY}
               name="sortBy"
               control={control}
               defaultValue={searchQueryEnum.SORT_START}

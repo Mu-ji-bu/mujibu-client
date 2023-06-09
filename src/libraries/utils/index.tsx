@@ -16,10 +16,6 @@ export const getRandomNumber = (min: number, max: number) => {
 };
 
 export function calculatePercentage(currentValue: number, totalValue: number) {
-  if (totalValue === 0) {
-    return 0;
-  }
-
   const percentage = (currentValue / totalValue) * 100;
   return Math.ceil(percentage);
 }
