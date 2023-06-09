@@ -68,3 +68,9 @@ export declare interface IProjectState {
   createdAt?: Date | null;
   updatedAt?: Date | null;
 }
+
+export interface IProjectSelectFormData {
+  projectForm: number;
+  projectCategory: number;
+  sortBy: string;
+}
