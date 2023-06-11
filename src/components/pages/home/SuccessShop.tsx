@@ -2,28 +2,10 @@ import Card from '@/components/block/card';
 import { CardWidth } from '@/components/types/enum';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import clsxm from '@/libraries/utils/clsxm';
-import { ReactNode } from 'react';
+import { IProjectState } from '@/types/project';
 
 interface ISuccessShopProps {
-  projectData: {
-    id: string;
-    image: string;
-    category: string;
-    cardWidth?: CardWidth;
-    projectType: number;
-    projectName: string;
-    projectTeam: string;
-    proposer: string;
-    description: string;
-    currentAmount: number;
-    targetAmount: number;
-    progress: number;
-    backers: number;
-    prize: number;
-    startTime: string;
-    endTime: string;
-    remainingTime: string;
-  }[];
+  projectData: IProjectState[];
 }
 
 const SuccessShop: React.FC<ISuccessShopProps> = ({ ...props }) => {
@@ -34,7 +16,7 @@ const SuccessShop: React.FC<ISuccessShopProps> = ({ ...props }) => {
   if (!projectData) return null;
 
   return (
-    <div className="w-screen flex-col items-center">
+    <div className="w-screen flex-col items-center px-5">
       {is2Xl ? (
         <>
           <div className="flex justify-center gap-6">

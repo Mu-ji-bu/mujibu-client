@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useMemo, useCallback } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -12,6 +12,9 @@ import clsxm from '@/libraries/utils/clsxm';
 import { DeterminateSize } from '@/components/types/enum';
 import { getRemainingDays } from '@libraries/utils/index';
 import { CardWidth } from '@/components/types/enum';
+import { IProjectState } from 'types/project';
+import { projectCategoryEnum, projectFormEnum } from '@/libraries/enum';
+import { calculatePercentage } from '@/libraries/utils';
 
 // interface ImgMediaCardProps {
 //   isPC: boolean;
@@ -20,75 +23,63 @@ import { CardWidth } from '@/components/types/enum';
 //   category: string;
 // }
 
-interface ImgMediaCardProps {
+interface ImgMediaCardProps extends IProjectState {
   isPC: boolean;
-  id: string;
-  image: string;
-  category: string;
   cardWidth?: CardWidth;
-  projectType: number;
-  projectName: string;
-  projectTeam: string;
-  proposer: string;
-  description: string;
-  currentAmount: number;
-  targetAmount: number;
-  progress: number;
-  backers: number;
-  prize: number;
-  startTime: string;
-  endTime: string;
-  remainingTime: string;
 }
 
 const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
   const {
     isPC,
     cardWidth = CardWidth.Normal,
-    projectType,
+    projectForm,
     projectName,
     currentAmount,
-    targetAmount,
-    backers,
-    startTime,
+    goalAmount,
+    projectBackers,
+    projectImage,
+    projectCategory,
+    projectProposer,
     endTime,
-    progress,
-    image,
-    category,
-    proposer,
   } = props;
-  const remainingDays = getRemainingDays(startTime, endTime);
 
-  const renderIndicator = (projectType: number) => {
-    switch (projectType) {
-      case 0:
-        return <CircularDeterminate value={progress} size={'4em'} textSize={DeterminateSize.Small} />;
-      case 2:
+  const progressBar = useMemo(() => {
+    return currentAmount && goalAmount ? calculatePercentage(currentAmount, goalAmount) : 0;
+  }, [currentAmount, goalAmount]);
+
+  const renderIndicator = useCallback(() => {
+    switch (projectForm) {
+      case projectFormEnum.GENERAL:
+        return <CircularDeterminate value={progressBar} size={'4em'} textSize={DeterminateSize.Small} />;
+      case projectFormEnum.SUCCESS:
         return <CircleCheckIcon />;
       default:
         return null;
     }
-  };
+  }, [projectForm, progressBar]);
 
-  const renderLinearProgress = (projectType: number) => {
-    switch (projectType) {
-      case 0:
-        return <LinearDeterminate value={progress} haslabel={true} />;
-      case 2:
+  const renderLinearProgress = useCallback(() => {
+    switch (projectForm) {
+      case projectFormEnum.GENERAL:
+        return <LinearDeterminate value={progressBar} haslabel={true} />;
+      case projectFormEnum.SUCCESS:
         return <LinearDeterminate value={100} haslabel={false} />;
       default:
         return null;
     }
-  };
+  }, [projectForm, progressBar]);
 
-  const renderCardBottom = (projectType: number) => {
-    if (projectType === 0 || projectType === 2) {
+  const renderCardBottom = () => {
+    const currentDate = new Date().toString();
+    const remainingDays = endTime ? getRemainingDays(currentDate, endTime.toString()) : 0;
+
+    if (projectForm === projectFormEnum.GENERAL || projectForm === projectFormEnum.SUCCESS) {
       return (
         <>
           <div className="h-px bg-secondary/[.12] my-5"></div>
-          {!isPC && <div className="mb-3">{renderLinearProgress(projectType)}</div>}
+          {!isPC && <div className="mb-3">{renderLinearProgress()}</div>}
           <div className="flex items-center gap-5">
-            {isPC && renderIndicator(projectType)}
+            {isPC && renderIndicator()}
             <div>
               <div>
                 <Typography className="opacity-60 mr-2" component="span" variant="caption" color="secondary">
@@ -103,14 +94,14 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
                   目標
                 </Typography>
                 <Typography className="opacity-[.87]" component="span" variant="h6" color="secondary">
-                  NT${targetAmount}k
+                  NT${goalAmount}k
                 </Typography>
               </div>
             </div>
             <div className="text-right ml-auto">
               <div>
                 <Typography className="mr-1" component="span" variant="caption" color="primary">
-                  {backers}
+                  {projectBackers}
                 </Typography>
                 <Typography className="opacity-60" component="span" variant="caption" color="secondary">
                   人支持
@@ -142,13 +133,23 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
         'rounded-lg border-secondary shadow-none border border-solid border-opacity-[.12]',
       )}
     >
-      <CardMedia className="rounded-lg object-cover" component="img" alt={projectName} height="276" image={image} />
+      <CardMedia
+        className="rounded-lg object-cover"
+        component="img"
+        alt={projectName}
+        height="276"
+        image={projectImage}
+      />
       <CardContent className="mt-5 p-0">
         <div className="flex justify-between items-center">
-          <Chip className="text-green-accent border-green-accent" label={category} variant="outlined" />
-          {projectType === 1 && (
+          <Chip
+            className="text-green-accent border-green-accent"
+            label={projectCategoryEnum[projectCategory as keyof typeof projectCategoryEnum]}
+            variant="outlined"
+          />
+          {projectForm !== projectFormEnum.FAILED && (
             <Typography className="opacity-60" component="span" variant="caption" color="secondary">
-              長期販售
+              {projectForm?.toString() && projectFormEnum[projectForm]}
             </Typography>
           )}
         </div>
@@ -163,10 +164,10 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
             href="#"
             className="no-underline  text-primary  hover:text-secondary visited:text-primary font-normal md:font-medium text-sm md:text-base"
           >
-            {proposer}
+            {projectProposer?.name}
           </Link>
         </div>
-        {renderCardBottom(projectType)}
+        {renderCardBottom()}
       </CardContent>
     </Card>
   );

@@ -9,7 +9,7 @@ body.fixed-nav header {
     position: fixed;
     box-shadow: 0 2px 0 rgba(0,0,0,0.1);
     width: 100%;
-    z-index: 999;
+    z-index: 99;
     top: 0px;
     --tw-bg-opacity: .87;
     background-color: rgb(237 237 237 / var(--tw-bg-opacity));

@@ -1,4 +1,4 @@
-import { setIsFollow, selectProject } from '../../store/slices/projectSlice';
+import { setIsCarousel, selectProject } from '../../store/slices/projectSlice';
 import { useAppSelector, useAppDispatch } from '../../libraries/hooks/reduxHooks';
 import { wrapper } from '../../store/store';
 
@@ -21,7 +21,7 @@ interface Post {
 }
 
 const Projects = ({ data }: { data: Post }) => {
-  const { projectName, isFollow } = useAppSelector(selectProject);
+  const { projectName, carousel } = useAppSelector(selectProject);
   const dispatch = useAppDispatch();
 
   const { data: postsList, error: listError, isLoading: listIsLoading } = useGetPostsListQuery();
@@ -49,11 +49,11 @@ const Projects = ({ data }: { data: Post }) => {
       <h2 className="text-green-accent">專案狀態</h2>
       <h3>專案名稱：{projectName}</h3>
       <Button
-        variant={isFollow ? 'contained' : 'outlined'}
-        endIcon={isFollow ? <BookmarkOutlinedIcon /> : <BookmarkAddOutlinedIcon />}
-        onClick={() => dispatch(setIsFollow())}
+        variant={carousel ? 'contained' : 'outlined'}
+        endIcon={carousel ? <BookmarkOutlinedIcon /> : <BookmarkAddOutlinedIcon />}
+        onClick={() => dispatch(setIsCarousel())}
       >
-        {isFollow ? '已追蹤專案' : '追蹤專案'}
+        {carousel ? '取消為大輪播專案' : '設定為大輪播專案'}
       </Button>
 
       <h2 className="text-green-accent">SSR fetch 單一文章</h2>

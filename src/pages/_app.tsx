@@ -14,7 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/zh-tw';
 
 const App = ({ Component, ...rest }: AppProps) => {
-  const { store, props } = wrapper.useWrappedStore(rest);
+  const { store, props } = wrapper?.useWrappedStore(rest);
 
   /** 
     為了讓首頁和探索頁有資料，目前 mock api 先開著，但這樣會員中心的呈現資料會是專用測試。
@@ -24,13 +24,13 @@ const App = ({ Component, ...rest }: AppProps) => {
 
   // start mock api
   // if (process.env.NODE_ENV === 'development') {
-  const { serverWorker } = require('../mocks/browser');
-  const startServer = async () => {
-    await serverWorker?.listen();
-  };
-  startServer().catch((error) => {
-    console.error('Error starting server work:', error);
-  });
+  //   const { serverWorker } = require('../mocks/browser');
+  //   const startServer = async () => {
+  //     await serverWorker?.listen();
+  //   };
+  //   startServer().catch((error) => {
+  //     console.error('Error starting server work:', error);
+  //   });
   // }
 
   return (

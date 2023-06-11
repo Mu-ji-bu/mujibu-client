@@ -3,12 +3,12 @@ import Image from 'next/image';
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import routePath from '@routes/routePath';
 import AccountMenu, { IAccountMenuOption } from '../block/accountMenu/AccountMenu';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import NotificationsMenu, { INotificationsMenuOption } from '../block/notificationsMenu/NotificationsMenu';
 import SearchButton from '../block/searchButton';
 import { Menu } from '@mui/icons-material';
-import routePath from '@routes/routePath';
 import Cookies from 'js-cookie';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { authentication } from '../../../firebaseConfig';
@@ -19,6 +19,7 @@ import { clearToken, selectAuth, setToken, setUserToken } from '../../store/slic
 import clsxm from '@/libraries/utils/clsxm';
 
 const Header = () => {
+  const [isFixed, setIsFixed] = useState<boolean>(true);
   const loginToken: string | undefined = Cookies.get('googleToken');
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -26,43 +27,7 @@ const Header = () => {
   const [login] = useLoginMutation();
   const headerRef = useRef(null);
 
-  const handleGetUser = useCallback(async () => {
-    try {
-      const res = await login().unwrap();
-      const resUser = res.user;
-      const userDataGender = resUser.gender == 'other' ? 2 : 0;
-      const userData = {
-        ...resUser,
-        gender: userDataGender,
-      };
-
-      dispatch(setUserToken(res.tokens));
-      dispatch(updateUser(userData));
-
-      // console.log(res);
-
-      // onAuthStateChanged(authentication, (user: any) => {
-      //   if (user) {
-      //     const userData = {
-      //       name: resUser.name,
-      //       email: resUser.email,
-      //       avatar: user.photoURL,
-      //       uid: user.uid,
-      //       createdAt: user.metadata.creationTime,
-      //       id: resUser.id,
-      //     };
-
-      //     dispatch(updateUser(userData));
-      //   } else {
-      //     console.log('無使用者資料，使用者已登出');
-      //   }
-      // });
-    } catch (err) {
-      console.log(err);
-    }
-  }, [login, dispatch]);
-
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     signOut(authentication)
       .then(() => {
         Cookies.remove('googleToken');
@@ -73,7 +38,24 @@ const Header = () => {
       .catch((error) => {
         console.log('error', error);
       });
-  };
+  }, [dispatch, router]);
+  const handleGetUser = useCallback(async () => {
+    try {
+      const res = await login().unwrap();
+      const resUser = res.user;
+      const userData = {
+        ...resUser,
+      };
+
+      dispatch(setUserToken(res.tokens));
+      dispatch(updateUser(userData));
+
+      // console.log(res);
+    } catch (err) {
+      handleLogout();
+      console.log(err);
+    }
+  }, [login, dispatch, handleLogout]);
 
   const accountOptions: IAccountMenuOption[] = [
     { label: '個人設定', href: routePath.userPersonalSettings, hasBorderBottom: false },
@@ -93,6 +75,13 @@ const Header = () => {
     if (loginToken) {
       dispatch(setToken(loginToken));
       handleGetUser();
+      // onAuthStateChanged(authentication, (user: any) => {
+      //   if (user) {
+      //     handleGetUser();
+      //   } else {
+      //     console.log('無使用者資料，使用者已登出');
+      //   }
+      // });
     }
   }, [loginToken, dispatch, handleGetUser]);
 
@@ -107,19 +96,20 @@ const Header = () => {
       }
     };
 
+    router.pathname === routePath.proposalForm ? setIsFixed(false) : setIsFixed(true);
     window.addEventListener('scroll', fixNav);
 
     return () => {
       window.removeEventListener('scroll', fixNav);
     };
-  }, []);
+  }, [isFixed, router]);
 
   return (
     <>
       <header ref={headerRef} className="border-0 border-b border-solid border-secondary-10">
         <div className="max-w-screen-xl mx-auto px-5 py-2 flex justify-between items-center">
           <div className="flex items-center">
-            <Link href={'/'} className="flex items-center mr-4">
+            <Link href={routePath.home} className="flex items-center mr-4">
               <Image src={'/logo@2x.png'} alt={'募質部 Mujibu logo'} width={128} height={48} priority={true} />
             </Link>
             <Typography component="span" variant="h6" className="md:block hidden text-primary">
@@ -128,7 +118,7 @@ const Header = () => {
             <div className="division w-[1px] h-6 bg-secondary-30 mx-6 md:block hidden"></div>
             <Link
               className="mr-6 text-secondary-66 hover:text-secondary visited:text-secondary-66 no-underline md:block hidden"
-              href={'/projects'}
+              href={routePath.projects}
             >
               <Typography component="p" variant="h6">
                 探索
@@ -136,7 +126,7 @@ const Header = () => {
             </Link>
             <Link
               className="mr-2 text-secondary-66 hover:text-secondary visited:text-secondary-66 no-underline md:block hidden"
-              href={'/proposal'}
+              href={routePath.proposal}
             >
               <Typography component="p" variant="h6">
                 提案
@@ -159,10 +149,15 @@ const Header = () => {
                 <div className="hidden md:flex items-center">
                   <SearchButton />
                   <div className="w-[1px] h-6 bg-secondary-30 mx-6"></div>
-                  <Button variant="contained" onClick={() => router.push('/signup')}>
+                  <Button variant="contained" onClick={() => router.push(routePath.signup)}>
                     註冊
                   </Button>
-                  <Button variant="outlined" color="secondary" className="ml-5" onClick={() => router.push('/login')}>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    className="ml-5"
+                    onClick={() => router.push(routePath.login)}
+                  >
                     登入
                   </Button>
                 </div>
@@ -178,12 +173,12 @@ const Header = () => {
           </div>
         </div>
       </header>
-      <ScrollUpButton />
+      <ScrollUpButton isFixed={isFixed} />
     </>
   );
 };
 
-const ScrollUpButton = () => {
+const ScrollUpButton: React.FC<{ isFixed: boolean }> = ({ isFixed }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -205,15 +200,15 @@ const ScrollUpButton = () => {
   return (
     <Button
       className={clsxm(
-        'fixed right-10 bottom-10 z-50',
-        'bg-primary text-white',
-        'rounded-md',
+        !isFixed ? 'bottom-[85px]' : 'bottom-10',
+        'fixed right-5 z-50 p-[10px] min-w-0 shadow-none',
         isVisible ? 'opacity-80' : 'opacity-0',
         'transition-opacity duration-300',
       )}
+      variant="contained"
       onClick={handleScrollUp}
     >
-      <ArrowUpwardIcon className="h-6 w-6" />
+      <ArrowUpwardIcon />
     </Button>
   );
 };
