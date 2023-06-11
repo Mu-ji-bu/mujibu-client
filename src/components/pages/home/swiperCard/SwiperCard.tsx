@@ -14,30 +14,13 @@ import clsxm from '@/libraries/utils/clsxm';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import { ReactNode, useRef } from 'react';
 import { CardWidth } from '@/components/types/enum';
+import { IProjectState } from '@/types/project';
 
 SwiperCore.use([Autoplay]);
 
 interface ISwiperCardProps {
   swiperInstances: SwiperCore[];
-  projectData: {
-    id: string;
-    image: string;
-    category: string;
-    cardWidth?: CardWidth;
-    projectType: number;
-    projectName: string;
-    projectTeam: string;
-    proposer: string;
-    description: string;
-    currentAmount: number;
-    targetAmount: number;
-    progress: number;
-    backers: number;
-    prize: number;
-    startTime: string;
-    endTime: string;
-    remainingTime: string;
-  }[];
+  projectData: IProjectState[];
   buttonClass: number;
 }
 
@@ -53,13 +36,16 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
 
   const swiperBoxRef = useRef<HTMLDivElement>(null); // 用於獲取 swiper-box 元素的參考
 
-  // if (!projectData.length) return null;
-
   return (
     <div className="relative w-screen flex justify-center">
       <div
         ref={swiperBoxRef}
-        className={clsxm('swiper-box flex justify-center overflow-x-auto', 'w-[80%]', !isLg && 'max-w-[416px]')}
+        className={clsxm(
+          'swiper-box flex 2xl:relative',
+          'justify-center overflow-x-auto',
+          'w-[80%]',
+          !isLg && 'max-w-[416px]',
+        )}
       >
         {is2Xl ? (
           <>
@@ -83,7 +69,7 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
                     <SwiperSlide key={index} className="cursor-pointer" onClick={() => handleSlideClick(index)}>
                       <div className="flex justify-center gap-6">
                         {slideProjects.map((slideProject) => (
-                          <div key={slideProject.id} className="max-w-[416px]">
+                          <div key={slideProject._id} className="max-w-[416px]">
                             <Card isPC={true} {...slideProject} />
                           </div>
                         ))}
@@ -119,7 +105,7 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
                     <SwiperSlide key={index} className="cursor-pointer" onClick={() => handleSlideClick(index)}>
                       <div className="flex justify-center gap-6">
                         {slideProjects.map((slideProject) => (
-                          <div key={slideProject.id} className="max-w-[416px]">
+                          <div key={slideProject._id} className="max-w-[416px]">
                             <Card isPC={true} {...slideProject} />
                           </div>
                         ))}
@@ -151,9 +137,9 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
               {projectData &&
                 projectData.map((project) => (
                   <SwiperSlide
-                    key={project.id}
+                    key={project._id}
                     className="cursor-pointer"
-                    onClick={() => handleSlideClick(Number(project.id))}
+                    onClick={() => handleSlideClick(Number(project._id))}
                   >
                     <div className="max-w-[416px]">
                       <Card isPC={true} {...project} />
@@ -186,7 +172,7 @@ const ArrowButtons: React.FC<IArrowButtonsProps> = ({ swiperInstance, buttonClas
       <div
         className={clsxm(
           'btn-left',
-          'absolute top-[42%] left-[2%] xl:left-[14.5%] z-50',
+          'absolute top-[42%] left-[2%] xl:left-[14.5%] 2xl:left-0 z-50 ',
           'bg-white opacity-[.87]',
           'w-[60px] h-[60px] rounded-full',
           'border-solid border-green-accent border',
@@ -204,7 +190,7 @@ const ArrowButtons: React.FC<IArrowButtonsProps> = ({ swiperInstance, buttonClas
       <div
         className={clsxm(
           'btn-right',
-          'absolute top-[42%] right-[2%] xl:right-[14.5%] z-50',
+          'absolute top-[42%] right-[2%] xl:right-[14.5%] 2xl:right-0 z-50',
           'bg-white opacity-[.87]',
           'w-[60px] h-[60px] rounded-full',
           'border-solid border-green-accent border',
