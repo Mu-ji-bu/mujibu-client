@@ -13,29 +13,48 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 
 import ProposalStep1 from '@/components/pages/proposal/ProposalStep1';
 import ProposalStep2 from '@/components/pages/proposal/ProposalStep2';
+import ProposalStep3 from '@/components/pages/proposal/ProposalStep3';
+import ProposalStep4 from '@/components/pages/proposal/ProposalStep4';
 
-import type { IUserState } from '@/types/user';
+import type { IProjectState } from '@/types/project';
 
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import ProposalStep6 from '@/components/pages/proposal/ProposalStep6';
 
 const schema = Yup.object().shape({
-  name: Yup.string().required('姓名為必填欄位'),
-  nickname: Yup.string().required('暱稱為必填欄位'),
-  birthDate: Yup.string().required('生日為必填欄位'),
-  category: Yup.number().required('性別為必填欄位'),
-  phone: Yup.string().required('聯絡電話為必填欄位'),
-  subscribeNewsletter: Yup.boolean(),
-  category2: Yup.array().of(Yup.string()),
-  contactName: Yup.string().required('收件者姓名為必填欄位'),
-  contactPhone: Yup.string().required('收件者電話為必填欄位'),
-  address: Yup.string().required('收件地址為必填欄位'),
+  projectType: Yup.number().required('此為必填欄位'),
+  projectName: Yup.string().required('此為必填欄位'),
+  projectDescription: Yup.string().required('此為必填欄位'),
+  projectImage: Yup.string(),
+  projectCategory: Yup.number().required('此為必填欄位'),
+  goalAmount: Yup.number()
+    .typeError('目標金額只能填寫數字')
+    .positive('目標金額必須大於零')
+    .integer('目標金額必須為整數')
+    .test('no-leading-zero', '目標金額不能以零開頭', function (value) {
+      if (value === undefined || value === null) return true;
+      return /^(?!0)\d+/.test(value.toString());
+    })
+    .required('此為必填欄位'),
+  startTime: Yup.string().test('is-after-start', '開始時間不可晚於結束時間', function (value) {
+    const { endTime } = this.parent;
+    return dayjs(value).isAfter(dayjs(endTime)) === false;
+  }),
+  endTime: Yup.string().test('is-after-start', '結束時間不可早於開始時間', function (value) {
+    const { startTime } = this.parent;
+    return dayjs(value).diff(dayjs(startTime), 'day') >= 0;
+  }),
+  officialPage: Yup.string(),
+  fanPage: Yup.string(),
+  attachmentLink: Yup.string(),
+  projectContent: Yup.string(),
 });
 
-const steps = ['提案資料', '回饋方案', '團隊資料', '物流/提領設定', '畫面預覽', '送出提案'];
+const steps = ['提案資料', '回饋方案', '團隊資料', '提領/物流設定', '畫面預覽', '送出提案'];
 
 const Form = () => {
   const dispatch = useAppDispatch();
@@ -44,13 +63,7 @@ const Form = () => {
   const userData = useAppSelector(selectUser);
 
   const [activeStep, setActiveStep] = useState(0);
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+  const today = dayjs().startOf('day').toDate();
 
   const {
     register,
@@ -58,46 +71,39 @@ const Form = () => {
     setValue,
     getValues,
     reset,
+    watch,
     control,
     formState: { errors },
-  } = useForm<IUserState>({
+  } = useForm<IProjectState>({
     resolver: yupResolver(schema),
     defaultValues: useMemo(() => {
       return {
-        avatar: userData.avatar,
-        name: userData.name,
-        nickname: userData.nickname,
-        birthDate: userData.birthDate,
-        gender: userData.gender,
-        phone: userData.phone,
-        subscribeNewsletter: userData.subscribeNewsletter,
-        category: userData.category,
-        contactName: userData.contactName,
-        contactPhone: userData.contactPhone,
-        address: userData.address,
+        projectType: 0,
+        projectName: '',
+        projectDescription: '',
+        projectImage: '',
+        projectCategory: 0,
+        goalAmount: 0,
+        startTime: dayjs().startOf('day').toDate() || null,
+        endTime: dayjs().add(1, 'day').startOf('day').toDate() || null,
+        officialPage: '',
+        fanPage: '',
+        attachmentLink: '',
+        projectContent: '',
       };
-    }, [userData]),
+    }, []),
   });
 
-  const onSubmit: SubmitHandler<IUserState> = async (data) => {
+  const onSubmit: SubmitHandler<IProjectState> = async (data) => {
     console.log('form data : ', data);
   };
 
-  // useEffect(() => {
-  //   reset({
-  //     avatar: userData.avatar,
-  //     name: userData.name,
-  //     nickname: userData.nickname,
-  //     birthDate: userData.birthDate,
-  //     gender: userData.gender,
-  //     phone: userData.phone,
-  //     subscribeNewsletter: userData.subscribeNewsletter,
-  //     category: userData.category,
-  //     contactName: userData.contactName,
-  //     contactPhone: userData.contactPhone,
-  //     address: userData.address,
-  //   });
-  // }, [userData, reset]);
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
   return (
     <div className="bg-gray-light">
@@ -143,9 +149,14 @@ const Form = () => {
         </div>
 
         <form className="flex flex-col items-center md:py-5" onSubmit={handleSubmit(onSubmit)}>
-          {activeStep === 0 && <ProposalStep1 setValue={setValue} control={control} />}
-          {activeStep === 1 && <ProposalStep2 setValue={setValue} control={control} />}
-          {activeStep !== 0 && activeStep !== 1 && <ProposalStep1 setValue={setValue} control={control} />}
+          {activeStep === 0 && <ProposalStep1 setValue={setValue} errors={errors} control={control} />}
+          {activeStep === 1 && <ProposalStep2 setValue={setValue} errors={errors} control={control} />}
+          {activeStep === 2 && <ProposalStep3 setValue={setValue} errors={errors} control={control} />}
+          {activeStep === 3 && (
+            <ProposalStep4 setValue={setValue} getValues={getValues} errors={errors} control={control} watch={watch} />
+          )}
+          {activeStep === 4 && <ProposalStep6 setValue={setValue} />}
+          {activeStep === 5 && <ProposalStep6 setValue={setValue} />}
 
           <div className="w-full border-0 border-t border-solid border-secondary-10 md:px-5 md:py-4 fixed bottom-0 left-0 bg-white z-10">
             <div className="hidden md:flex justify-between max-w-screen-xl mx-auto">
@@ -170,7 +181,7 @@ const Form = () => {
                 </LoadingButton>
 
                 {activeStep === steps.length - 2 && (
-                  <Button variant="contained" startIcon={<CheckIcon />}>
+                  <Button type="submit" variant="contained" startIcon={<CheckIcon />}>
                     送出提案
                   </Button>
                 )}
@@ -179,6 +190,10 @@ const Form = () => {
                     {`下一步：${steps[activeStep + 1]}`}
                   </Button>
                 )}
+
+                <Button type="submit" variant="contained" startIcon={<CheckIcon />}>
+                  送出提案
+                </Button>
               </div>
             </div>
 

@@ -10,28 +10,18 @@ import { selectUser, updateUser } from '../../../store/slices/userSlice';
 import { setUserTabsPage } from '../../../store/slices/tabsSlice';
 import type { IUserState } from '@/types/user';
 
-import {
-  Button,
-  Typography,
-  TextField,
-  MenuItem,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  FormControl,
-} from '@mui/material';
+import { Button, Typography, TextField, Checkbox, FormControlLabel } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import KeyIcon from '@mui/icons-material/Key';
 
-import { DatePicker } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import PhotoUpload from '@/components/block/photoUpload/PhotoUpload';
+import { InputText, InputSelect, InputCheckbox, InputCheckboxes, InputDatepicker } from '@/components/block/form';
 
-const categoryOptions = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
+const genderItems = ['男', '女', '不方便透露'];
+const categoryItems = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
 
 const schema = Yup.object().shape({
   name: Yup.string().required('姓名為必填欄位'),
@@ -57,7 +47,6 @@ const PersonalSettings = () => {
   const [sameAbove, setSameAbove] = useState(false);
 
   const {
-    register,
     handleSubmit,
     setValue,
     getValues,
@@ -83,15 +72,6 @@ const PersonalSettings = () => {
       };
     }, [userData]),
   });
-
-  const handleCategoryChange = (value: string[], category: string) => {
-    setSelectedCategories(value);
-    const newCategories = selectedCategories?.includes(category)
-      ? selectedCategories.filter((item) => item !== category)
-      : [...(selectedCategories ?? []), category];
-    setSelectedCategories(newCategories);
-    return newCategories;
-  };
 
   const handleSameAboveChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSameAbove(e.target.checked);
@@ -167,94 +147,33 @@ const PersonalSettings = () => {
               修改個人資料
             </Typography>
             <div className="grid grid-cols-2 gap-3">
-              <Controller
+              <InputText
                 control={control}
-                name="name"
-                defaultValue=""
-                render={({ field: { onChange, value } }) => (
-                  <TextField
-                    fullWidth
-                    className=""
-                    id="name"
-                    label="姓名 *"
-                    autoComplete="name"
-                    autoFocus
-                    size="small"
-                    value={value}
-                    onChange={onChange}
-                    error={!!errors.name}
-                    helperText={errors.name?.message}
-                  />
-                )}
+                error={!!errors.name}
+                helperText={errors.name?.message}
+                name={'name'}
+                label={'姓名 *'}
+                defaultValue={''}
               />
-              <Controller
+              <InputText
                 control={control}
-                name="nickname"
-                defaultValue=""
-                render={({ field: { onChange, value } }) => (
-                  <TextField
-                    fullWidth
-                    className=""
-                    id="nickname"
-                    label="暱稱 *"
-                    autoComplete="nickname"
-                    autoFocus
-                    size="small"
-                    value={value}
-                    onChange={onChange}
-                    error={!!errors.nickname}
-                    helperText={errors.nickname?.message}
-                  />
-                )}
+                error={!!errors.nickname}
+                helperText={errors.nickname?.message}
+                name={'nickname'}
+                label={'暱稱 *'}
+                defaultValue={''}
               />
 
-              <Controller
-                name="birthDate"
+              <InputSelect
                 control={control}
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                  <DatePicker
-                    className="w-full"
-                    label="生日 *"
-                    disableFuture
-                    value={dayjs(value)}
-                    onChange={(newValue) => onChange(newValue)}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
+                error={!!errors.gender}
+                helperText={errors.gender?.message}
+                name={'gender'}
+                label={'性別 *'}
+                items={genderItems}
+                isNumber={true}
               />
 
-              <Controller
-                name="gender"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <TextField
-                    fullWidth
-                    id="gender"
-                    label="性別 *"
-                    autoComplete="gender"
-                    autoFocus
-                    size="small"
-                    error={!!errors.gender}
-                    helperText={errors.gender?.message}
-                    select
-                    value={value}
-                    onChange={onChange}
-                  >
-                    <MenuItem value="" disabled>
-                      請選擇
-                    </MenuItem>
-                    <MenuItem value={0}>男</MenuItem>
-                    <MenuItem value={1}>女</MenuItem>
-                    <MenuItem value={2}>不方便透露</MenuItem>
-                  </TextField>
-                )}
-              />
               <TextField
                 fullWidth
                 id="email"
@@ -264,64 +183,44 @@ const PersonalSettings = () => {
                 disabled
                 value={userData.email}
               />
-              <Controller
+
+              <InputDatepicker
                 control={control}
-                name="phone"
-                defaultValue=""
-                render={({ field: { onChange, value } }) => (
-                  <TextField
-                    fullWidth
-                    id="phone"
-                    label="聯絡電話 *"
-                    autoComplete="phone"
-                    autoFocus
-                    size="small"
-                    value={value}
-                    onChange={onChange}
-                    error={!!errors.phone}
-                    helperText={errors.phone?.message}
-                  />
-                )}
+                error={!!errors.birthDate}
+                helperText={errors.birthDate?.message}
+                name={'birthDate'}
+                label={'生日 *'}
+                disableFuture={true}
               />
+
+              <InputText
+                control={control}
+                error={!!errors.phone}
+                helperText={errors.phone?.message}
+                name={'phone'}
+                label={'聯絡電話 *'}
+                defaultValue={''}
+              />
+
               <div className="col-span-full">
-                <Controller
+                <InputCheckbox
                   control={control}
-                  name="subscribeNewsletter"
+                  name={'subscribeNewsletter'}
+                  label={'接收電子報'}
                   defaultValue={false}
-                  render={({ field: { onChange, value } }) => (
-                    <FormControlLabel
-                      className="text-secondary"
-                      control={<Checkbox checked={value} onChange={onChange} />}
-                      label="接收電子報"
-                    />
-                  )}
+                  className="text-secondary"
                 />
               </div>
-              <Controller
-                name="category"
-                control={control}
-                render={({ field: { onChange: onCheckBoxChange, value } }) => (
-                  <FormControl component="fieldset" className="col-span-full">
-                    <FormLabel component="legend">請選擇感興趣的類別</FormLabel>
-                    <FormGroup className="flex-row">
-                      {categoryOptions.map((category) => (
-                        <FormControlLabel
-                          className="text-secondary"
-                          value={category}
-                          key={category}
-                          label={category}
-                          control={
-                            <Checkbox
-                              checked={value?.includes(category)}
-                              onChange={() => value && onCheckBoxChange(handleCategoryChange(value, category))}
-                            />
-                          }
-                        />
-                      ))}
-                    </FormGroup>
-                  </FormControl>
-                )}
-              />
+              <div className="col-span-full">
+                <InputCheckboxes
+                  control={control}
+                  name={'category'}
+                  label={'請選擇感興趣的類別'}
+                  items={categoryItems}
+                  defaultValue={userData.category ?? []}
+                  className="text-secondary"
+                />
+              </div>
             </div>
           </div>
 
@@ -330,45 +229,22 @@ const PersonalSettings = () => {
               修改收件資料
             </Typography>
             <div className="grid grid-cols-2 gap-3">
-              <Controller
+              <InputText
                 control={control}
-                name="contactName"
-                defaultValue=""
-                render={({ field: { onChange, value } }) => (
-                  <TextField
-                    fullWidth
-                    className=""
-                    id="contactName"
-                    label="收件者姓名 *"
-                    autoComplete="contactName"
-                    autoFocus
-                    size="small"
-                    value={value}
-                    onChange={onChange}
-                    error={!!errors.contactName}
-                    helperText={errors.contactName?.message}
-                  />
-                )}
+                error={!!errors.contactName}
+                helperText={errors.contactName?.message}
+                name={'contactName'}
+                label={'收件者姓名 *'}
+                defaultValue={''}
               />
 
-              <Controller
+              <InputText
                 control={control}
-                name="contactPhone"
-                defaultValue=""
-                render={({ field: { onChange, value } }) => (
-                  <TextField
-                    fullWidth
-                    id="contactPhone"
-                    label="收件者電話 *"
-                    autoComplete="contactPhone"
-                    autoFocus
-                    size="small"
-                    value={value}
-                    onChange={onChange}
-                    error={!!errors.contactPhone}
-                    helperText={errors.contactPhone?.message}
-                  />
-                )}
+                error={!!errors.contactPhone}
+                helperText={errors.contactPhone?.message}
+                name={'contactPhone'}
+                label={'收件者電話 *'}
+                defaultValue={''}
               />
 
               <div className="col-span-full">
@@ -379,25 +255,15 @@ const PersonalSettings = () => {
                   label="與贊助人資料相同"
                 />
               </div>
-              <Controller
+
+              <InputText
+                className="col-span-full"
                 control={control}
-                name="address"
-                defaultValue=""
-                render={({ field: { onChange, value } }) => (
-                  <TextField
-                    fullWidth
-                    className="col-span-full"
-                    id="address"
-                    label="收件地址 *"
-                    autoComplete="收件地址"
-                    autoFocus
-                    size="small"
-                    value={value}
-                    onChange={onChange}
-                    error={!!errors.address}
-                    helperText={errors.address?.message}
-                  />
-                )}
+                error={!!errors.address}
+                helperText={errors.address?.message}
+                name={'address'}
+                label={'收件地址 *'}
+                defaultValue={''}
               />
             </div>
           </div>

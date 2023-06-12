@@ -9,55 +9,88 @@ import SuccessShop from '@/components/pages/home/SuccessShop';
 import clsxm from '@/libraries/utils/clsxm';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Loading from '@/components/Loading';
-import { IProject, useGetProjectDataQuery } from '@/store/services/projectApi';
+// import { IProject, useGetProjectDataQuery } from '@/store/services/projectApi';
+import { IProjectState } from 'types/project';
 import { generateData } from '@/mocks/actions/projects';
+import {
+  useGetCarouselDataQuery,
+  useGetHotDataQuery,
+  useGetNewDataQuery,
+  useGetPicksDataQuery,
+  useGetSuccessDataQuery,
+} from '@/store/services/homeApi';
+import { setCarousel, setHot, setNew, setPicks, setSuccess } from '@/store/slices/homeSlice';
+import { useAppDispatch } from '@/libraries/hooks/reduxHooks';
 
 export default function Home() {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [isLoading, setisLoading] = useState(true);
   // const { data, refetch } = useGetProjectDataQuery();
-  const [data, setData] = useState({ data: { projects: [] as IProject[] } });
+  const { data: carouselDataRes } = useGetCarouselDataQuery();
+  const { data: hotDataRes } = useGetHotDataQuery();
+  const { data: newDataRes } = useGetNewDataQuery();
+  const { data: picksDataRes } = useGetPicksDataQuery();
+  const { data: successDataRes } = useGetSuccessDataQuery();
+
+  const carouselDataList = useMemo(
+    (): IProjectState[] | never[] => carouselDataRes?.data || [],
+    [carouselDataRes?.data],
+  );
+  const hotDataList = useMemo((): IProjectState[] | never[] => hotDataRes?.data || [], [hotDataRes?.data]);
+  const newDataList = useMemo((): IProjectState[] | never[] => newDataRes?.data || [], [newDataRes?.data]);
+  const picksDataList = useMemo((): IProjectState[] | never[] => picksDataRes?.data || [], [picksDataRes?.data]);
+  const successDataList = useMemo((): IProjectState[] | never[] => successDataRes?.data || [], [successDataRes?.data]);
 
   const swiperInstancesHot: SwiperCore[] = []; // 創建空的 Swiper 實例陣列
   const swiperInstancesNew: SwiperCore[] = []; // 創建空的 Swiper 實例陣列
   const swiperInstancesSuccess: SwiperCore[] = []; // 創建空的 Swiper 實例陣列
   const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
-  const router = useRouter();
-
-  const [isLoading, setisLoading] = useState(true);
-
-  // mock API
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setisLoading(true);
-  //     await refetch();
-  //     setisLoading(false);
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   useEffect(() => {
     setisLoading(true);
+    if (carouselDataRes) {
+      dispatch(setCarousel(carouselDataRes.data));
+    }
+    if (hotDataRes) {
+      dispatch(setHot(hotDataRes.data));
+    }
+    if (newDataRes) {
+      dispatch(setNew(newDataRes.data));
+    }
+    if (picksDataRes) {
+      dispatch(setPicks(picksDataRes.data));
+    }
+    if (successDataRes) {
+      dispatch(setSuccess(successDataRes.data));
+    }
+    setisLoading(false);
+  }, [carouselDataRes, hotDataRes, newDataRes, picksDataRes, successDataRes, dispatch]);
 
-    const fetchData = async () => {
-      const generatedData = await generateData();
-      setData((prevData) => ({
-        ...prevData,
-        data: {
-          ...prevData.data,
-          projects: generatedData,
-        },
-      }));
-      setisLoading(false);
-    };
+  // 假資料
+  // useEffect(() => {
+  //   setisLoading(true);
 
-    const dataTimeOut = setTimeout(fetchData, 1000);
+  //   const fetchData = async () => {
+  //     const generatedData = await generateData();
+  //     setData((prevData) => ({
+  //       ...prevData,
+  //       data: {
+  //         ...prevData.data,
+  //         projects: generatedData,
+  //       },
+  //     }));
+  //     setisLoading(false);
+  //   };
 
-    return () => {
-      clearTimeout(dataTimeOut);
-    };
-  }, []);
+  //   const dataTimeOut = setTimeout(fetchData, 1000);
+
+  //   return () => {
+  //     clearTimeout(dataTimeOut);
+  //   };
+  // }, []);
 
   return (
     <main className="home w-full">
@@ -114,7 +147,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <SwiperTop />
+          <SwiperTop projectDataArr={carouselDataList} isLoading={isLoading} />
 
           <div className="hot w-full flex justify-center mt-10 md:mt-0">
             <div className="flex flex-col items-center">
@@ -128,11 +161,7 @@ export default function Home() {
                   熱門精選
                 </Typography>
               </div>
-              <SwiperCard
-                swiperInstances={swiperInstancesHot}
-                projectData={data?.data?.projects as IProject[]}
-                buttonClass={2}
-              />
+              <SwiperCard swiperInstances={swiperInstancesHot} projectData={hotDataList} buttonClass={2} />
               <Button variant="outlined" color="secondary" className="mt-[40px] mb-[60px]">
                 發現更多
               </Button>
@@ -151,11 +180,7 @@ export default function Home() {
                   最新募資
                 </Typography>
               </div>
-              <SwiperCard
-                swiperInstances={swiperInstancesNew}
-                projectData={data?.data?.projects as IProject[]}
-                buttonClass={3}
-              />
+              <SwiperCard swiperInstances={swiperInstancesNew} projectData={newDataList} buttonClass={3} />
               <Button variant="outlined" color="secondary" className="mt-[40px] mb-[60px]">
                 發現更多
               </Button>
@@ -239,7 +264,7 @@ export default function Home() {
                 </Typography>
               </div>
               <div className="shop-cards">
-                <SuccessShop projectData={data?.data?.projects as IProject[]} />
+                <SuccessShop projectData={picksDataList} />
               </div>
               <Button variant="outlined" color="secondary" className="mt-[40px] mb-[60px]">
                 發現更多
@@ -355,11 +380,7 @@ export default function Home() {
                   募質部已成功幫助募資案列超過 2000 件
                 </Typography>
               </div>
-              <SwiperCard
-                swiperInstances={swiperInstancesSuccess}
-                projectData={data?.data?.projects as IProject[]}
-                buttonClass={4}
-              />
+              <SwiperCard swiperInstances={swiperInstancesSuccess} projectData={successDataList} buttonClass={4} />
               <Button variant="outlined" color="secondary" className="mt-[40px] mb-[60px]">
                 發現更多
               </Button>

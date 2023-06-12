@@ -32,6 +32,9 @@ const lightTheme = createTheme({
     secondary: {
       main: '#484848',
     },
+    error: {
+      main: '#E44461',
+    },
   },
   typography: {
     fontFamily: ['Noto Sans TC', 'sans-serif'].join(','),

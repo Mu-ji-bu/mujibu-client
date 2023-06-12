@@ -1,3 +1,10 @@
+import type { ITeamState } from './team';
+
+export declare interface Team {
+  defaultTeam?: ITeamState;
+  list?: ITeamState[];
+}
+
 export declare interface IUserState {
   id?: string;
   avatar?: string | undefined;
@@ -11,6 +18,8 @@ export declare interface IUserState {
   isEmailVerified?: boolean;
   category?: string[];
   collects?: string[];
+  orders?: string[];
+  teams?: Team;
   notifications?: string[];
   contactName?: string;
   contactPhone?: string;
@@ -20,4 +29,5 @@ export declare interface IUserState {
   address?: string;
   role?: string;
   createdAt?: Date | null;
+  updatedAt?: Date | null;
 }

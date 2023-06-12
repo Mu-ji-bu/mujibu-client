@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import clsxm from '@/libraries/utils/clsxm';
+import routePath from '@routes/routePath';
 
 import { Button, Typography } from '@mui/material';
 import { Facebook, Instagram } from '@mui/icons-material';
@@ -23,7 +24,7 @@ const Footer = () => {
             )}
           >
             <div className="shrink-0 mb-5 md:mb-0">
-              <Link href={'/'}>
+              <Link href={routePath.home}>
                 <Image src={'/logo@2x.png'} alt={'募質部 Mujibu logo'} width={128} height={48} priority={true} />
               </Link>
             </div>
@@ -34,7 +35,7 @@ const Footer = () => {
               <div className="flex flex-col">
                 <Link
                   className="text-secondary-66 no-underline hover:text-secondary visited:text-secondary-66 mb-3"
-                  href={'/aboutus'}
+                  href={routePath.aboutUs}
                 >
                   <Typography component="p" variant="caption">
                     關於我們
@@ -42,7 +43,7 @@ const Footer = () => {
                 </Link>
                 <Link
                   className="text-secondary-66 no-underline hover:text-secondary visited:text-secondary-66 mb-3"
-                  href={'/aboutus#contact'}
+                  href={`${routePath.aboutUs}#contact`}
                 >
                   <Typography component="p" variant="caption">
                     聯繫我們
@@ -57,7 +58,7 @@ const Footer = () => {
               <div className="links flex flex-col">
                 <Link
                   className="text-secondary-66 no-underline hover:text-secondary visited:text-secondary-66 mb-3"
-                  href={'/user-terms'}
+                  href={routePath.userTerms}
                 >
                   <Typography component="p" variant="caption">
                     服務條款
@@ -66,7 +67,7 @@ const Footer = () => {
 
                 <Link
                   className="text-secondary-66 no-underline hover:text-secondary visited:text-secondary-66 mb-3"
-                  href={'/user-privacy'}
+                  href={routePath.userPrivacy}
                 >
                   <Typography component="p" variant="caption">
                     隱私權政策
@@ -75,7 +76,7 @@ const Footer = () => {
 
                 <Link
                   className="text-secondary-66 no-underline hover:text-secondary visited:text-secondary-66 mb-3"
-                  href={'/faq'}
+                  href={routePath.faq}
                 >
                   <Typography component="p" variant="caption">
                     幫助中心

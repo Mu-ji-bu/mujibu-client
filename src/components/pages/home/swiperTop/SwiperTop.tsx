@@ -1,30 +1,37 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { ReactNode } from 'react';
+import { DeterminateSize } from '@/components/types/enum';
+import clsxm from '@/libraries/utils/clsxm';
+import { IconButton, Tooltip, Typography } from '@mui/material';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+import CircularDeterminate from '@/components/block/circularDeterminate';
+import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import { IProjectState } from '@/types/project';
+import { useAppSelector } from '@libraries/hooks/reduxHooks';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Autoplay, Navigation } from 'swiper';
-import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
-import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { selectHome } from '@/store/slices/homeSlice';
 
-import CircularDeterminate from '../../../block/circularDeterminate/CircularDeterminate';
-import { DeterminateSize } from '@/components/types/enum';
-import { IconButton, Tooltip, Typography } from '@mui/material';
-import clsxm from '@/libraries/utils/clsxm';
-import useBreakpoints from '@/libraries/hooks/useBreakPoints';
-
-export interface ISlideOption {
-  title: string;
-  imgSrc: string;
-  isMd?: boolean;
+interface ISwiperTopProps {
+  isLoading?: boolean;
+  projectDataArr: IProjectState[];
+}
+interface ISliderOptionProps {
+  projectData: IProjectState;
 }
 
-const SwiperTop = () => {
+const SwiperTop: React.FC<ISwiperTopProps> = ({ projectDataArr, isLoading }) => {
   SwiperCore.use([Autoplay]);
   const router = useRouter();
+  const { carouselData } = useAppSelector(selectHome);
+  console.log({ carouselData });
   const handleSlideClick = (slideIndex: number) => {
     // Navigate to the desired page using Next.js router
     // router.push(`/projects/introduction/${slideIndex}`);
@@ -55,100 +62,81 @@ const SwiperTop = () => {
 
   return (
     <div className="swiper-box relative w-screen flex justify-center">
-      <Swiper
-        initialSlide={1}
-        breakpoints={breakpoints}
-        onSwiper={(swiperInstance) => (swiper = swiperInstance)}
-        modules={[Navigation]}
-        centeredSlides={true}
-        spaceBetween={24}
-        loop={true}
-        autoplay={{ delay: 5000 }}
-        navigation={{
-          prevEl: '.custom-swiper-button-prev',
-          nextEl: '.custom-swiper-button-next',
-        }}
-        onSlideChange={() => {}}
-      >
-        <SwiperSlide className="cursor-pointer" onClick={() => handleSlideClick(0)}>
-          <Slide
-            title="PaintBoard - 運用圓圓方方角角的元素組成新的宇宙。PaintBoard - 運用圓圓方方角角的元素組成新的宇宙。PaintBoard - 運用圓圓方方角角的元素組成新的宇宙。"
-            imgSrc="/slides/Desktop_slides_1@2x.png"
-          />
-        </SwiperSlide>
-        <SwiperSlide className="cursor-pointer" onClick={() => handleSlideClick(1)}>
-          <Slide
-            title="智能家居系統 - 採用智能化技術和多功能設計，實現家居智能化控制和舒適度提升。智能家居系統 - 採用智能化技術和多功能設計，實現家居智能化控制和舒適度提升。智能家居系統 - 採用智能化技術和多功能設計，實現家居智能化控制和舒適度提升。"
-            imgSrc="/slides/Desktop_slides_2@2x.png"
-          />
-        </SwiperSlide>
-        <SwiperSlide className="cursor-pointer" onClick={() => handleSlideClick(2)}>
-          <Slide
-            title="DXRACER - 使用 DXR 新型人工纖維，編織出你我的夢想。DXRACER - 使用 DXR 新型人工纖維，編織出你我的夢想。DXRACER - 使用 DXR 新型人工纖維，編織出你我的夢想。"
-            imgSrc="/slides/Desktop_slides_3@2x.png"
-          />
-        </SwiperSlide>
-        <SwiperSlide className="cursor-pointer" onClick={() => handleSlideClick(3)}>
-          <Slide
-            title="PaintBoard - 運用圓圓方方角角的元素組成新的宇宙。PaintBoard - 運用圓圓方方角角的元素組成新的宇宙。PaintBoard - 運用圓圓方方角角的元素組成新的宇宙。"
-            imgSrc="/slides/Desktop_slides_1@2x.png"
-          />
-        </SwiperSlide>
-        <SwiperSlide className="cursor-pointer" onClick={() => handleSlideClick(4)}>
-          <Slide
-            title="智能家居系統 - 採用智能化技術和多功能設計，實現家居智能化控制和舒適度提升。智能家居系統 - 採用智能化技術和多功能設計，實現家居智能化控制和舒適度提升。智能家居系統 - 採用智能化技術和多功能設計，實現家居智能化控制和舒適度提升。"
-            imgSrc="/slides/Desktop_slides_2@2x.png"
-          />
-        </SwiperSlide>
-        <SwiperSlide className="cursor-pointer" onClick={() => handleSlideClick(5)}>
-          <Slide
-            title="DXRACER - 使用 DXR 新型人工纖維，編織出你我的夢想。DXRACER - 使用 DXR 新型人工纖維，編織出你我的夢想。DXRACER - 使用 DXR 新型人工纖維，編織出你我的夢想。"
-            imgSrc="/slides/Desktop_slides_3@2x.png"
-          />
-        </SwiperSlide>
-      </Swiper>
+      {carouselData.length > 1 ? (
+        <>
+          <Swiper
+            initialSlide={1}
+            breakpoints={breakpoints}
+            onSwiper={(swiperInstance) => (swiper = swiperInstance)}
+            modules={[Navigation]}
+            centeredSlides={true}
+            spaceBetween={24}
+            loop={true}
+            autoplay={{ delay: 5000 }}
+            navigation={{
+              prevEl: '.custom-swiper-button-prev',
+              nextEl: '.custom-swiper-button-next',
+            }}
+            onSlideChange={() => {}}
+          >
+            {carouselData.reduce((accumulator: ReactNode[], p, index) => {
+              const slide = (
+                <SwiperSlide key={index} className="cursor-pointer" onClick={() => handleSlideClick(index)}>
+                  <Slide projectData={p} />
+                </SwiperSlide>
+              );
+              accumulator.push(slide);
 
-      <div
-        className={clsxm(
-          'btn-left',
-          'absolute top-[42%] left-[2%] xl:left-[14.5%] z-50',
-          'bg-white opacity-[.87]',
-          'w-[60px] h-[60px] rounded-full',
-          'border-solid border-green-accent border',
-        )}
-      >
-        <IconButton
-          className="custom-swiper-button-prev w-full h-full text-green-accent"
-          aria-label="backward"
-          onClick={goPrev}
-        >
-          <ArrowBackIosRoundedIcon />
-        </IconButton>
-      </div>
+              return accumulator;
+            }, [])}
+          </Swiper>
 
-      <div
-        className={clsxm(
-          'btn-right',
-          'absolute top-[42%] right-[2%] xl:right-[14.5%] z-50',
-          'bg-white opacity-[.87]',
-          'w-[60px] h-[60px] rounded-full',
-          'border-solid border-green-accent border',
-        )}
-      >
-        <IconButton
-          className="custom-swiper-button-next w-full h-full text-green-accent"
-          aria-label="forward"
-          onClick={goNext}
-        >
-          <ArrowForwardIosRoundedIcon />
-        </IconButton>
-      </div>
+          <div
+            className={clsxm(
+              'btn-left',
+              'absolute top-[42%] left-[2%] xl:left-[14.5%] z-50',
+              'bg-white opacity-[.87]',
+              'w-[60px] h-[60px] rounded-full',
+              'border-solid border-green-accent border',
+            )}
+          >
+            <IconButton
+              className="custom-swiper-button-prev w-full h-full text-green-accent"
+              aria-label="backward"
+              onClick={goPrev}
+            >
+              <ArrowBackIosRoundedIcon />
+            </IconButton>
+          </div>
+
+          <div
+            className={clsxm(
+              'btn-right',
+              'absolute top-[42%] right-[2%] xl:right-[14.5%] z-50',
+              'bg-white opacity-[.87]',
+              'w-[60px] h-[60px] rounded-full',
+              'border-solid border-green-accent border',
+            )}
+          >
+            <IconButton
+              className="custom-swiper-button-next w-full h-full text-green-accent"
+              aria-label="forward"
+              onClick={goNext}
+            >
+              <ArrowForwardIosRoundedIcon />
+            </IconButton>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
 
-const Slide: React.FC<ISlideOption> = ({ title, imgSrc }) => {
+const Slide: React.FC<ISliderOptionProps> = ({ projectData }) => {
   const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
+  const { projectImage, projectDescription } = projectData;
 
   let size: string;
   let textSize: DeterminateSize;
@@ -180,7 +168,7 @@ const Slide: React.FC<ISlideOption> = ({ title, imgSrc }) => {
           <Image
             className="rounded-md overflow-hidden"
             priority={true}
-            src={imgSrc}
+            src={projectImage || ''}
             alt="slide1"
             width={0}
             height={0}
@@ -215,8 +203,8 @@ const Slide: React.FC<ISlideOption> = ({ title, imgSrc }) => {
                   maxHeight: '4.5em',
                 }}
               >
-                <Tooltip title={title}>
-                  <span>{title}</span>
+                <Tooltip title={projectDescription}>
+                  <span>{projectDescription}</span>
                 </Tooltip>
               </Typography>
             </div>
@@ -226,7 +214,7 @@ const Slide: React.FC<ISlideOption> = ({ title, imgSrc }) => {
         <div className="relative h-[282px] w-full flex justify-center">
           <Image
             priority={true}
-            src={imgSrc}
+            src={projectImage || ''}
             alt="slide1"
             width={0}
             height={0}
@@ -269,8 +257,8 @@ const Slide: React.FC<ISlideOption> = ({ title, imgSrc }) => {
                   maxHeight: '4.5em',
                 }}
               >
-                <Tooltip title={title}>
-                  <span>{title}</span>
+                <Tooltip title={projectDescription}>
+                  <span>{projectDescription}</span>
                 </Tooltip>
               </Typography>
             </div>
