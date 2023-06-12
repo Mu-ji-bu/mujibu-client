@@ -6,7 +6,7 @@ export declare interface Team {
 }
 
 export declare interface IUserState {
-  id?: string;
+  _id?: string;
   avatar?: string | undefined;
   email?: string;
   name?: string;
