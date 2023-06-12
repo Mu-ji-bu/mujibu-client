@@ -22,9 +22,9 @@ export const userApiService = createApi({
     }
   },
   endpoints: (builder) => ({
-    patchUser: builder.mutation<IUserState, { id: string | undefined; body: Object }>({
-      query: ({ id, body }) => ({
-        url: `${apiRoutes.usersURL}/${id}`,
+    patchUser: builder.mutation<IUserState, { _id: string | undefined; body: Object }>({
+      query: ({ _id, body }) => ({
+        url: `${apiRoutes.usersURL}/${_id}`,
         method: 'PATCH',
         body: body,
       }),
