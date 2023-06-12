@@ -13,7 +13,7 @@ interface InputTextDecoProps {
   label: string;
   placeholder?: string;
   deco: string;
-  defaultValue?: string;
+  defaultValue?: number;
   className?: string;
 }
 
@@ -34,10 +34,9 @@ const InputTextDeco: React.FC<InputTextDecoProps> = ({
       name={name}
       defaultValue={defaultValue || ''}
       render={({ field: { onChange, value } }) => (
-        <FormControl>
+        <FormControl className={clsxm(`${className} bg-white`)}>
           <InputLabel htmlFor={name}>{label}</InputLabel>
           <OutlinedInput
-            className={clsxm(className)}
             fullWidth
             id={name}
             label={label}

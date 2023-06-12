@@ -14,12 +14,12 @@ import {
 const projectTypes = ['實體產品類', '虛擬計畫類'];
 const categoryItems = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
 
-interface ProposalStep1Props {
+interface ProposalStep5Props {
   setValue: any;
   errors: any;
   control: any;
 }
-const ProposalStep1: React.FC<ProposalStep1Props> = ({ control, errors, setValue }) => {
+const ProposalStep5: React.FC<ProposalStep5Props> = ({ control, errors, setValue }) => {
   const [imageUploaded, setImageUploaded] = useState<string>('');
 
   useEffect(() => {
@@ -170,4 +170,4 @@ const ProposalStep1: React.FC<ProposalStep1Props> = ({ control, errors, setValue
   );
 };
 
-export default ProposalStep1;
+export default ProposalStep5;

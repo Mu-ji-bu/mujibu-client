@@ -12,8 +12,9 @@ interface InputTextProps {
   name: string;
   label: string;
   placeholder?: string;
-  defaultValue?: string;
+  defaultValue?: string | number;
   className?: string;
+  disabled?: boolean;
 }
 
 const InputText: React.FC<InputTextProps> = ({
@@ -25,6 +26,7 @@ const InputText: React.FC<InputTextProps> = ({
   placeholder,
   defaultValue,
   className,
+  disabled,
 }) => {
   return (
     <Controller
@@ -34,7 +36,7 @@ const InputText: React.FC<InputTextProps> = ({
       render={({ field: { onChange, value } }) => (
         <TextField
           fullWidth
-          className={clsxm(className)}
+          className={clsxm(`${className} bg-white`)}
           id={name}
           label={label}
           placeholder={placeholder}
@@ -44,6 +46,7 @@ const InputText: React.FC<InputTextProps> = ({
           onChange={onChange}
           error={error}
           helperText={helperText}
+          disabled={disabled || false}
         />
       )}
     />
