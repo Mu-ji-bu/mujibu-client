@@ -32,7 +32,7 @@ const InputSelect: React.FC<InputSelectProps> = ({
       name={name}
       render={({ field: { onChange, value } }) => (
         <TextField
-          className={clsxm(className)}
+          className={clsxm(`${className} bg-white`)}
           fullWidth
           id={name}
           label={label}

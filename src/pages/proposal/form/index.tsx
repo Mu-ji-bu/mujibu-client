@@ -13,6 +13,8 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 
 import ProposalStep1 from '@/components/pages/proposal/ProposalStep1';
 import ProposalStep2 from '@/components/pages/proposal/ProposalStep2';
+import ProposalStep3 from '@/components/pages/proposal/ProposalStep3';
+import ProposalStep4 from '@/components/pages/proposal/ProposalStep4';
 
 import type { IProjectState } from '@/types/project';
 
@@ -21,6 +23,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import ProposalStep6 from '@/components/pages/proposal/ProposalStep6';
 
 const schema = Yup.object().shape({
   projectType: Yup.number().required('此為必填欄位'),
@@ -68,6 +71,7 @@ const Form = () => {
     setValue,
     getValues,
     reset,
+    watch,
     control,
     formState: { errors },
   } = useForm<IProjectState>({
@@ -146,10 +150,13 @@ const Form = () => {
 
         <form className="flex flex-col items-center md:py-5" onSubmit={handleSubmit(onSubmit)}>
           {activeStep === 0 && <ProposalStep1 setValue={setValue} errors={errors} control={control} />}
-          {/* {activeStep === 1 && <ProposalStep2 setValue={setValue} errors={errors} control={control} />} */}
-          {activeStep !== 0 && activeStep !== 1 && (
-            <ProposalStep1 setValue={setValue} errors={errors} control={control} />
+          {activeStep === 1 && <ProposalStep2 setValue={setValue} errors={errors} control={control} />}
+          {activeStep === 2 && <ProposalStep3 setValue={setValue} errors={errors} control={control} />}
+          {activeStep === 3 && (
+            <ProposalStep4 setValue={setValue} getValues={getValues} errors={errors} control={control} watch={watch} />
           )}
+          {activeStep === 4 && <ProposalStep6 setValue={setValue} />}
+          {activeStep === 5 && <ProposalStep6 setValue={setValue} />}
 
           <div className="w-full border-0 border-t border-solid border-secondary-10 md:px-5 md:py-4 fixed bottom-0 left-0 bg-white z-10">
             <div className="hidden md:flex justify-between max-w-screen-xl mx-auto">
@@ -183,6 +190,10 @@ const Form = () => {
                     {`下一步：${steps[activeStep + 1]}`}
                   </Button>
                 )}
+
+                <Button type="submit" variant="contained" startIcon={<CheckIcon />}>
+                  送出提案
+                </Button>
               </div>
             </div>
 

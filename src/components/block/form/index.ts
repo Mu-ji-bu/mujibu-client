@@ -8,4 +8,5 @@ export { default as InputCheckboxes } from './InputCheckboxes';
 export { default as InputRadio } from './InputRadio';
 export { default as InputDatepicker } from './InputDatepicker';
 
+export { default as Switcher } from './Switcher';
 export { default as Editor } from './Editor';
