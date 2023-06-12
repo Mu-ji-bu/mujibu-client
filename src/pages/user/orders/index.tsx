@@ -115,7 +115,7 @@ const Orders = () => {
         {data.items && data.items.map((order, i) => <OrderCard key={`order_${i + 1}`} order={order} isPC={isPC} />)}
       </div>
       <div className="flex items-center justify-center">
-        <Pagination />
+        <Pagination page={0} />
       </div>
     </UserLayout>
   );

@@ -5,6 +5,7 @@ const apiRoutes = {
   usersURL: '/api/users',
   projectsURL: '/api/projects',
   uploadPhotoURL: '/api/upload/file',
+  homeURL: '/api/home',
 };
 
 export default apiRoutes;
