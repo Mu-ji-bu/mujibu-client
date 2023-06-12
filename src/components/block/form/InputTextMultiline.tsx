@@ -38,7 +38,7 @@ const InputTextMultiline: React.FC<InputTextMultilineProps> = ({
           multiline
           rows={rows}
           fullWidth
-          className={clsxm(className)}
+          className={clsxm(`${className} bg-white`)}
           id={name}
           label={label}
           placeholder={placeholder}

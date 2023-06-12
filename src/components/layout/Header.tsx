@@ -95,12 +95,11 @@ const Header = () => {
         document.body.style.paddingTop = '0px';
       }
     };
-
     router.pathname === routePath.proposalForm ? setIsFixed(false) : setIsFixed(true);
-    window.addEventListener('scroll', fixNav);
+    isFixed && window.addEventListener('scroll', fixNav);
 
     return () => {
-      window.removeEventListener('scroll', fixNav);
+      isFixed && window.removeEventListener('scroll', fixNav);
     };
   }, [isFixed, router]);
 

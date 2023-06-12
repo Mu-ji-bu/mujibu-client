@@ -33,7 +33,7 @@ const InputDatepicker: React.FC<InputDatepickerProps> = ({
       name={name}
       render={({ field: { onChange, value } }) => (
         <DatePicker
-          className={clsxm(className)}
+          className={clsxm(`${className} bg-white`)}
           label={label}
           disableFuture={disableFuture || false}
           disablePast={disablePast || false}
