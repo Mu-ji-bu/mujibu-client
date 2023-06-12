@@ -87,7 +87,7 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
           <InputText
             control={control}
             error={!!errors.projectName}
-            helperText={errors.projectName?.message}
+            helperText={errors.projectName?.message as string}
             name={'projectName'}
             label={'銀行帳號 *'}
             defaultValue={''}
