@@ -1,6 +1,11 @@
 import ProjectsLayout from '@/components/layout/ProjectsLayout';
+import Loading from '@/components/Loading';
 import Message from '@/components/pages/projects/message';
 import ProjectPlan from '@/components/pages/projects/ProjectPlan';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+import { useGetCarouselDataQuery } from '@/store/services/homeApi';
+import { IProjectState } from '@/types/project';
+import { useMemo } from 'react';
 
 const News = () => {
   const message1 = {
@@ -19,21 +24,34 @@ const News = () => {
     title: '標題標題好眠城實木床組配送進度通知',
   };
 
+  const { data: carouselDataRes, isLoading } = useGetCarouselDataQuery();
+  const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
+  const carouselDataList = useMemo(
+    (): IProjectState[] | never[] => carouselDataRes?.data || [],
+    [carouselDataRes?.data],
+  );
+
   return (
-    <ProjectsLayout>
-      <div className="details w-full flex justify-center gap-6">
-        <div className="flex flex-col w-2/3 gap-8">
-          <Message {...message1} />
-          <Message {...message2} />
-          <Message {...message3} />
-        </div>
-        <div className="w-1/3 flex flex-col gap-6">
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <ProjectsLayout projectState={carouselDataList[0]}>
+          <div className="details w-full flex justify-center gap-6">
+            <div className="flex flex-col w-2/3 gap-8">
+              <Message {...message1} />
+              <Message {...message2} />
+              <Message {...message3} />
+            </div>
+            <div className="w-1/3 flex flex-col gap-6">
+              {/* <ProjectPlan />
           <ProjectPlan />
-          <ProjectPlan />
-          <ProjectPlan />
-        </div>
-      </div>
-    </ProjectsLayout>
+          <ProjectPlan /> */}
+            </div>
+          </div>
+        </ProjectsLayout>
+      )}
+    </>
   );
 };
 
