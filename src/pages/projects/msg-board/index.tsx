@@ -4,10 +4,20 @@ import { Avatar, FormControl, IconButton, InputAdornment, InputLabel, OutlinedIn
 import SendIcon from '@mui/icons-material/Send';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import Input from '@mui/material/Input';
+import { useGetCarouselDataQuery } from '@/store/services/homeApi';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+import { useMemo } from 'react';
+import { IProjectState } from '@/types/project';
 
 const MsgBoard = () => {
+  const { data: carouselDataRes } = useGetCarouselDataQuery();
+  const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
+  const carouselDataList = useMemo(
+    (): IProjectState[] | never[] => carouselDataRes?.data || [],
+    [carouselDataRes?.data],
+  );
   return (
-    <ProjectsLayout>
+    <ProjectsLayout projectState={carouselDataList[0]}>
       <div className="details w-full flex justify-center gap-6">
         <div className="flex flex-col w-2/3 gap-8">
           <div className="send-msg flex gap-3 items-center h-[100px] p-5 border border-solid border-secondary-10">
@@ -149,9 +159,9 @@ const MsgBoard = () => {
           </div>
         </div>
         <div className="w-1/3 flex flex-col gap-6">
+          {/* <ProjectPlan />
           <ProjectPlan />
-          <ProjectPlan />
-          <ProjectPlan />
+          <ProjectPlan /> */}
         </div>
       </div>
     </ProjectsLayout>

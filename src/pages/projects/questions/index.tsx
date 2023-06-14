@@ -1,6 +1,10 @@
 import Accordion from '@/components/block/mujiAccordion';
 import ProjectsLayout from '@/components/layout/ProjectsLayout';
 import ProjectPlan from '@/components/pages/projects/ProjectPlan';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+import { useGetCarouselDataQuery } from '@/store/services/homeApi';
+import { IProjectState } from '@/types/project';
+import { useMemo } from 'react';
 
 const questionArray = [
   {
@@ -56,8 +60,15 @@ const questionArray = [
 ];
 
 const Questions = () => {
+  const { data: carouselDataRes } = useGetCarouselDataQuery();
+  const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
+  const carouselDataList = useMemo(
+    (): IProjectState[] | never[] => carouselDataRes?.data || [],
+    [carouselDataRes?.data],
+  );
+
   return (
-    <ProjectsLayout>
+    <ProjectsLayout projectState={carouselDataList[0]}>
       <div className="details w-full flex justify-center gap-6">
         <div className="flex flex-col w-2/3 gap-8">
           <Accordion {...questionArray[0]} />
@@ -69,9 +80,9 @@ const Questions = () => {
           <Accordion {...questionArray[6]} />
         </div>
         <div className="w-1/3 flex flex-col gap-6">
+          {/* <ProjectPlan />
           <ProjectPlan />
-          <ProjectPlan />
-          <ProjectPlan />
+          <ProjectPlan /> */}
         </div>
       </div>
     </ProjectsLayout>
