@@ -15,6 +15,7 @@ import { CardWidth } from '@/components/types/enum';
 import { IProjectState } from 'types/project';
 import { projectCategoryEnum, projectFormEnum } from '@/libraries/enum';
 import { calculatePercentage } from '@/libraries/utils';
+import { CardActionArea } from '@mui/material';
 
 // interface ImgMediaCardProps {
 //   isPC: boolean;
@@ -32,6 +33,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
   const {
     isPC,
     cardWidth = CardWidth.Normal,
+    _id: projectId,
     projectForm,
     projectName,
     currentAmount,
@@ -40,6 +42,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
     projectImage,
     projectCategory,
     projectProposer,
+    projectTeam,
     endTime,
   } = props;
 
@@ -133,13 +136,17 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
         'rounded-lg border-secondary shadow-none border border-solid border-opacity-[.12]',
       )}
     >
-      <CardMedia
-        className="rounded-lg object-cover"
-        component="img"
-        alt={projectName}
-        height="276"
-        image={projectImage}
-      />
+      <Link href={`/projects/introduction/${projectId}`}>
+        <CardActionArea>
+          <CardMedia
+            className="rounded-lg object-cover"
+            component="img"
+            alt={projectName}
+            height="276"
+            image={projectImage}
+          />
+        </CardActionArea>
+      </Link>
       <CardContent className="mt-5 p-0">
         <div className="flex justify-between items-center">
           <Chip
@@ -164,7 +171,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
             href="#"
             className="no-underline  text-primary  hover:text-secondary visited:text-primary font-normal md:font-medium text-sm md:text-base"
           >
-            {projectProposer?.name}
+            {projectTeam?.teamName || projectProposer?.name}
           </Link>
         </div>
         {renderCardBottom()}

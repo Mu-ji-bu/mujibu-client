@@ -29,10 +29,6 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
 
   const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
   const router = useRouter();
-  const handleSlideClick = (projectId: number) => {
-    // Navigate to the desired page using Next.js router
-    router.push(`/projects/${projectId}`);
-  };
 
   const swiperBoxRef = useRef<HTMLDivElement>(null); // 用於獲取 swiper-box 元素的參考
 
@@ -66,7 +62,7 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
                 if (index % 3 === 0) {
                   const slideProjects = projectData.slice(index, index + 3);
                   const slide = (
-                    <SwiperSlide key={index} className="cursor-pointer" onClick={() => handleSlideClick(index)}>
+                    <SwiperSlide key={index}>
                       <div className="flex justify-center gap-6">
                         {slideProjects.map((slideProject) => (
                           <div key={slideProject._id} className="max-w-[416px]">
@@ -102,7 +98,7 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
                 if (index % 2 === 0) {
                   const slideProjects = projectData.slice(index, index + 2);
                   const slide = (
-                    <SwiperSlide key={index} className="cursor-pointer" onClick={() => handleSlideClick(index)}>
+                    <SwiperSlide key={index}>
                       <div className="flex justify-center gap-6">
                         {slideProjects.map((slideProject) => (
                           <div key={slideProject._id} className="max-w-[416px]">
@@ -136,11 +132,7 @@ const SwiperCard: React.FC<ISwiperCardProps> = ({ ...props }) => {
             >
               {projectData &&
                 projectData.map((project) => (
-                  <SwiperSlide
-                    key={project._id}
-                    className="cursor-pointer"
-                    onClick={() => handleSlideClick(Number(project._id))}
-                  >
+                  <SwiperSlide key={project._id}>
                     <div className="max-w-[416px]">
                       <Card isPC={true} {...project} />
                     </div>
