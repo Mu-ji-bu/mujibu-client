@@ -11,20 +11,19 @@ interface SwitcherProps {
   helperText?: string;
   name: string;
   label: string;
-  defaultValue?: boolean | number;
+  defaultChecked?: boolean;
   className?: string;
 }
 
-const Switcher: React.FC<SwitcherProps> = ({ control, error, helperText, name, label, defaultValue, className }) => {
+const Switcher: React.FC<SwitcherProps> = ({ control, error, helperText, name, label, defaultChecked, className }) => {
   return (
     <Controller
       control={control}
       name={name}
-      defaultValue={defaultValue || false}
       render={({ field: { onChange, value } }) => (
         <FormControlLabel
           className={clsxm(className)}
-          control={<Switch color="primary" value={value} onChange={onChange} />}
+          control={<Switch color="primary" checked={value} onChange={onChange} />}
           label={label}
           labelPlacement="start"
         />

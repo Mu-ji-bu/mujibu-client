@@ -11,6 +11,7 @@ interface InputTextProps {
   helperText?: string;
   name: string;
   label: string;
+  type?: string;
   placeholder?: string;
   defaultValue?: string | number;
   className?: string;
@@ -23,6 +24,7 @@ const InputText: React.FC<InputTextProps> = ({
   helperText,
   name,
   label,
+  type,
   placeholder,
   defaultValue,
   className,
@@ -36,6 +38,7 @@ const InputText: React.FC<InputTextProps> = ({
       render={({ field: { onChange, value } }) => (
         <TextField
           fullWidth
+          type={type || 'text'}
           className={clsxm(`${className} bg-white`)}
           id={name}
           label={label}

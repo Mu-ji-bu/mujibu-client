@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Typography, FormLabel } from '@mui/material';
+import { Typography, FormLabel, CardMedia } from '@mui/material';
 import PhotoUpload from '@/components/block/photoUpload/PhotoUpload';
 import {
   InputText,
@@ -10,16 +10,19 @@ import {
   InputRadio,
   Editor,
 } from '@/components/block/form';
+import image from 'next/image';
 
 const projectTypes = ['實體產品類', '虛擬計畫類'];
 const categoryItems = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
 
 interface ProposalStep1Props {
-  setValue: any;
-  errors: any;
-  control: any;
+  setValue?: any;
+  getValues?: any;
+  errors?: any;
+  control?: any;
+  isPreview?: boolean;
 }
-const ProposalStep1: React.FC<ProposalStep1Props> = ({ control, errors, setValue }) => {
+const ProposalStep1: React.FC<ProposalStep1Props> = ({ control, errors, setValue, getValues, isPreview }) => {
   const [imageUploaded, setImageUploaded] = useState<string>('');
 
   useEffect(() => {
@@ -81,9 +84,23 @@ const ProposalStep1: React.FC<ProposalStep1Props> = ({ control, errors, setValue
                 請提供 JPEG或PNG 檔，圖片尺寸至少 1024 x 768 px (4:3)； 2MB 以內
               </span>
             </FormLabel>
-            <div className="flex flex-col items-center p-5 justify-center bg-gray-light rounded-md">
-              <PhotoUpload isProposal={true} setImageUploaded={setImageUploaded} />
-            </div>
+            {isPreview ? (
+              <div className="aspect-[4/3] w-full md:w-1/2 mx-auto overflow-hidden">
+                <CardMedia
+                  className="w-full h-full hover:scale-105 transition-all"
+                  component="img"
+                  image={
+                    getValues('projectImage') ||
+                    'https://firebasestorage.googleapis.com/v0/b/mujibu.appspot.com/o/images%2Fdefault%2Fdefault_image.jpg?alt=media&token=eafe76e5-ea42-4eb2-9fb0-dde5b3fd7dd4'
+                  }
+                  alt="preview"
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col items-center p-5 justify-center bg-gray-light rounded-md">
+                <PhotoUpload isProposal={true} setImageUploaded={setImageUploaded} />
+              </div>
+            )}
           </div>
 
           <InputSelect

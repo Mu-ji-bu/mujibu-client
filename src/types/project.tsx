@@ -28,9 +28,10 @@ export declare interface ShippingSettings {
   cvsInfo?: CvsInfo;
 }
 
-export declare interface WithdrawalSettings {
-  WithdrawalBank?: string;
-  bankAccount?: string;
+export declare interface withdrawSettings {
+  bankName?: string;
+  accountNumber?: string;
+  isAgreeTerms?: boolean;
 }
 
 export declare interface IProjectState {
@@ -63,7 +64,7 @@ export declare interface IProjectState {
   projectScore?: number;
   projectBackers?: number;
   carousel?: boolean;
-  withdrawalSettings?: WithdrawalSettings;
+  withdrawSettings?: withdrawSettings;
   shippingSettings?: ShippingSettings;
   createdAt?: Date | null;
   updatedAt?: Date | null;

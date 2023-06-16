@@ -11,7 +11,7 @@ interface InputCheckboxProps {
   helperText?: string;
   name: string;
   label: string;
-  defaultValue: boolean;
+  defaultValue?: boolean;
   className?: string;
 }
 
@@ -36,7 +36,7 @@ const InputCheckbox: React.FC<InputCheckboxProps> = ({
             control={<Checkbox checked={value} onChange={onChange} />}
             label={label}
           />
-          {error && <FormHelperText className="text-error">{helperText}</FormHelperText>}
+          {error && <FormHelperText className="text-error ml-3">{helperText}</FormHelperText>}
         </>
       )}
     />

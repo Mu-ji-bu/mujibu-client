@@ -41,7 +41,7 @@ const ProposalStep6: React.FC<ProposalStep6Props> = ({ setValue }) => {
       </div>
 
       <Typography className="text-secondary mb-2 text-center" component="h3" variant="h6">
-        提案已完成
+        提案已送出完成
       </Typography>
       <Typography className="text-secondary-66 mb-5 md:mb-10 text-center" component="p" variant="caption">
         待審核通過後會在個人中心通知您。

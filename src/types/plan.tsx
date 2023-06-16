@@ -13,7 +13,7 @@ export declare interface IPlanState {
   planStartTime?: Date | null;
   planEndTime?: Date | null;
   planDescription?: string;
-  planNotes?: string[];
+  otherNotes?: string[];
   isRealProduct?: boolean;
   createdAt?: Date | null;
   updatedAt?: Date | null;
