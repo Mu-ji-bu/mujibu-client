@@ -1,6 +1,11 @@
 import Accordion from '@/components/block/mujiAccordion';
 import ProjectsLayout from '@/components/layout/ProjectsLayout';
+import Loading from '@/components/Loading';
 import ProjectPlan from '@/components/pages/projects/ProjectPlan';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+import { useGetCarouselDataQuery } from '@/store/services/homeApi';
+import { IProjectState } from '@/types/project';
+import { useMemo } from 'react';
 
 const questionArray = [
   {
@@ -56,25 +61,38 @@ const questionArray = [
 ];
 
 const Questions = () => {
+  const { data: carouselDataRes, isLoading } = useGetCarouselDataQuery();
+  const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
+  const carouselDataList = useMemo(
+    (): IProjectState[] | never[] => carouselDataRes?.data || [],
+    [carouselDataRes?.data],
+  );
+
   return (
-    <ProjectsLayout>
-      <div className="details w-full flex justify-center gap-6">
-        <div className="flex flex-col w-2/3 gap-8">
-          <Accordion {...questionArray[0]} />
-          <Accordion {...questionArray[1]} />
-          <Accordion {...questionArray[2]} />
-          <Accordion {...questionArray[3]} />
-          <Accordion {...questionArray[4]} />
-          <Accordion {...questionArray[5]} />
-          <Accordion {...questionArray[6]} />
-        </div>
-        <div className="w-1/3 flex flex-col gap-6">
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <ProjectsLayout projectState={carouselDataList[0]}>
+          <div className="details w-full flex justify-center gap-6">
+            <div className="flex flex-col w-2/3 gap-8">
+              <Accordion {...questionArray[0]} />
+              <Accordion {...questionArray[1]} />
+              <Accordion {...questionArray[2]} />
+              <Accordion {...questionArray[3]} />
+              <Accordion {...questionArray[4]} />
+              <Accordion {...questionArray[5]} />
+              <Accordion {...questionArray[6]} />
+            </div>
+            <div className="w-1/3 flex flex-col gap-6">
+              {/* <ProjectPlan />
           <ProjectPlan />
-          <ProjectPlan />
-          <ProjectPlan />
-        </div>
-      </div>
-    </ProjectsLayout>
+          <ProjectPlan /> */}
+            </div>
+          </div>
+        </ProjectsLayout>
+      )}
+    </>
   );
 };
 
