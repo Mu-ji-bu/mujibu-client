@@ -21,6 +21,7 @@ import {
   projectSortEnum,
   searchQueryEnum,
 } from '@/libraries/enum';
+import { useRouter } from 'next/router';
 
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   '& .MuiOutlinedInput-notchedOutline': {
@@ -33,6 +34,7 @@ const Projects = () => {
   const { data, isLoading } = useGetProjectDataQuery(searchQuery);
   const dataTotal = useMemo((): number => data?.total || 1, [data?.total]);
   const dataList = useMemo((): IProjectState | never[] => data?.data || [], [data?.data]);
+  const router = useRouter();
 
   const { onPaginationChange, onSelectChange, paginationQuery, pageTotal, selectQuery } =
     useSearchDataQuery<IProjectState>({
@@ -197,7 +199,11 @@ const Projects = () => {
           <div className="flex flex-wrap justify-between gap-4 px-4">
             {Array.isArray(dataList) &&
               dataList.map((project: IProjectState) => (
-                <div key={project._id} className="md:-mx-4 w-full md:w-1/2 lg:w-1/3">
+                <div
+                  onClick={() => router.push(`/projects/${project._id}`)}
+                  key={project._id}
+                  className="md:-mx-4 w-full md:w-1/2 lg:w-1/3"
+                >
                   <Card isPC={isMd} {...project} />
                 </div>
               ))}

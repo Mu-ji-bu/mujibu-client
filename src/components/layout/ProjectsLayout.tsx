@@ -16,9 +16,10 @@ import { projectCategoryEnum } from '@/libraries/enum';
 interface IProjectLayoutProps {
   projectState: IProjectState;
   children: ReactNode;
+  handleFollow?: Function;
 }
 
-const ProjectsLayout: React.FC<IProjectLayoutProps> = ({ children, projectState }) => {
+const ProjectsLayout: React.FC<IProjectLayoutProps> = ({ children, projectState, handleFollow }) => {
   const {
     _id,
     projectType,
@@ -202,7 +203,15 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({ children, projectState 
                     </div>
                     <div className="btns-action flex justify-center gap-3 mt-3">
                       <div className="btn1 w-1/2">
-                        <Button variant="outlined" fullWidth color="secondary" startIcon={<Add />}>
+                        <Button
+                          onClick={() => {
+                            handleFollow && handleFollow();
+                          }}
+                          variant="outlined"
+                          fullWidth
+                          color="secondary"
+                          startIcon={<Add />}
+                        >
                           追蹤專案
                         </Button>
                       </div>

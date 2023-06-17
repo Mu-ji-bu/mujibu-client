@@ -6,6 +6,8 @@ const apiRoutes = {
   projectsURL: '/api/projects',
   uploadPhotoURL: '/api/upload/file',
   homeURL: '/api/home',
+  gerUserCollectURL: '/api/collect/:userId',
+  collectURL: '/api/collect',
 };
 
 export default apiRoutes;
