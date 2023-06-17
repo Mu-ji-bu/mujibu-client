@@ -56,7 +56,7 @@ const Introduction = () => {
       ) : (
         <>
           <h1>這邊現在用來測試喔，請帶入專案 id 。</h1>
-          <ProjectsLayout projectState={carouselDataList[0]}>
+          <ProjectsLayout projectState={carouselDataList[0]} tabIndex={2}>
             <div className="details w-full flex justify-center gap-6">
               <div className="flex flex-col w-2/3 my-auto">
                 <div className="news h-16 flex items-center bg-gray-light pl-5 rounded-lg">
