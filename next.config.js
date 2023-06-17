@@ -12,6 +12,9 @@ const nextConfig = {
       'dummyimage.com',
       'storage.googleapis.com',
       'images.unsplash.com',
+      'fastly.picsum.photos',
+      'loremflickr.com',
+      '',
     ],
   },
 };
