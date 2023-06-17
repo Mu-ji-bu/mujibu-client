@@ -5,14 +5,25 @@ import { Button, Typography } from '@mui/material';
 import { IPlanState } from '@/types/plan';
 import { useEffect, useState } from 'react';
 import { string } from 'yup';
+import clsxm from '@/libraries/utils/clsxm';
 
 interface IProjectPlanProps {
   projectId: string;
   handleProjectPlanClick: Function;
   projectPlan: IPlanState;
+  isSelectPage?: boolean;
+  isSelecting?: boolean;
+  handleSelect?: Function;
 }
 
-const ProjectPlan: React.FC<IProjectPlanProps> = ({ projectId, projectPlan, handleProjectPlanClick }) => {
+const ProjectPlan: React.FC<IProjectPlanProps> = ({
+  projectId,
+  projectPlan,
+  handleProjectPlanClick,
+  isSelectPage,
+  isSelecting,
+  handleSelect,
+}) => {
   const {
     _id,
     planName,
@@ -50,6 +61,10 @@ const ProjectPlan: React.FC<IProjectPlanProps> = ({ projectId, projectPlan, hand
     }
   }, [planEndTime]);
 
+  useEffect(() => {
+    setIsSelected(isSelecting as boolean);
+  }, [isSelecting]);
+
   function getRemainingTime(endT: Date) {
     const now = new Date();
     const endTime = endT;
@@ -63,8 +78,19 @@ const ProjectPlan: React.FC<IProjectPlanProps> = ({ projectId, projectPlan, hand
     return { days, hours, minutes, seconds };
   }
 
+  const [isSelected, setIsSelected] = useState(false);
+
   return (
-    <div className="plan p-6 border border-solid border-secondary-10 rounded-xl">
+    <div
+      className={clsxm(
+        'plan p-6',
+        'border border-solid border-secondary-10 rounded-xl',
+        isSelected ? 'border-green-accent' : 'hover:border-green-accent',
+      )}
+      onClick={() => {
+        handleSelect && handleSelect(_id);
+      }}
+    >
       <Image
         src={planImage || '/project/Desktop_Project_plan1.png'}
         alt="project1"
@@ -132,15 +158,17 @@ const ProjectPlan: React.FC<IProjectPlanProps> = ({ projectId, projectPlan, hand
         <PlanTag text={`已有 ${planBackers || 72} 人支持`} color="gray" />
         <PlanTag text={`限量 ${planQuantity} 組`} color="gray" />
       </div>
-      <Button
-        variant="contained"
-        fullWidth
-        size="large"
-        className="mt-5"
-        onClick={() => handleProjectPlanClick(projectId, _id)}
-      >
-        贊助此方案
-      </Button>
+      {isSelectPage ? null : (
+        <Button
+          variant="contained"
+          fullWidth
+          size="large"
+          className="mt-5"
+          onClick={() => handleProjectPlanClick(projectId, _id)}
+        >
+          贊助此方案
+        </Button>
+      )}
     </div>
   );
 };

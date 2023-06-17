@@ -57,7 +57,6 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({ children, projectState,
 
   useEffect(() => {
     if (endTime) {
-      console.log('running in ProjectsLayout', endTime);
       const timer = setInterval(() => {
         setRemainingTime(getRemainingTime(new Date(endTime)));
       }, 1000);
@@ -80,7 +79,6 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({ children, projectState,
   }
 
   const handleProjectClick = (projectId: string, projectPlanId?: string) => {
-    console.log(`click to ${projectId}`);
     router.push(`/projects/select/${projectId}`);
   };
 
@@ -231,7 +229,9 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({ children, projectState,
                       href={`${projectTeam?.socialWebsite || 'https://www.facebook.com/mujibu'}`}
                       className="text-xl no-underline visited:text-primary text-primary font-medium "
                     >
-                      {`${projectTeam?.companyName || projectTeam?.teamName || 'LiteConnect Inc 輕連結有限公司'}`}
+                      {`${
+                        projectTeam?.companyName || projectTeam?.teamName || 'LiteConnect Inc 輕連結有限公司(default)'
+                      }`}
                     </Link>
                   </div>
                   <div className="socials flex justify-between items-center">
