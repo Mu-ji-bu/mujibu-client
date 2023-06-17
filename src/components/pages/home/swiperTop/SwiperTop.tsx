@@ -35,7 +35,7 @@ const SwiperTop: React.FC<ISwiperTopProps> = ({ projectDataArr, isLoading }) => 
   const handleSlideClick = (slideIndex: number) => {
     // Navigate to the desired page using Next.js router
     // router.push(`/projects/introduction/${slideIndex}`);
-    router.push(`/projects/introduction`);
+    router.push(`/projects/introduction/${carouselData[slideIndex]._id}`);
   };
 
   const goPrev = () => {

@@ -1,7 +1,41 @@
+import { IProjectState } from '@/types/project';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-const ProjectSelectPage = () => {
+interface DetailsProps {
+  project: IProjectState;
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
+  const response = await res.json();
+  const data: IProjectState[] = response.data;
+
+  const paths = data.map((project) => {
+    return {
+      params: { id: project._id as string },
+    };
+  });
+
+  return {
+    paths: paths,
+    fallback: false, // beyond the scope, id doesn't exist, go to 404
+  };
+};
+
+export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
+  const id = context.params?.id;
+  const res = await fetch(`https://mujibu-server-fau1.onrender.com/api/projects/${id}`);
+  const response = await res.json();
+  const data: IProjectState = response.data;
+
+  return {
+    props: { project: data },
+  };
+};
+
+const ProjectSelectPage = ({ project }: DetailsProps) => {
   const router = useRouter();
   const [projectPlanId, setProjectPlanId] = useState('');
 

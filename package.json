@@ -29,6 +29,7 @@
     "autoprefixer": "10.4.14",
     "clsx": "^1.2.1",
     "dayjs": "^1.11.7",
+    "dompurify": "^3.0.3",
     "dotenv": "^16.0.3",
     "eslint-config-next": "13.3.2",
     "firebase": "^9.21.0",
@@ -53,6 +54,7 @@
     "yup": "^1.1.1"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.2",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.40.0",

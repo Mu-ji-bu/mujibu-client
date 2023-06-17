@@ -4,12 +4,18 @@ import { useAppSelector, useAppDispatch } from '@libraries/hooks/reduxHooks';
 import { setProjectTabsPage, selectTabs } from '../../../store/slices/tabsSlice';
 import ProjectProgress from './ProjectProgress';
 import clsxm from '@/libraries/utils/clsxm';
+import { useEffect } from 'react';
 
 interface ICusmtomTabProps {
   label: string;
   count: number;
   href: string;
   LinkComponent: any;
+}
+
+interface IProjectTabProps {
+  projectId?: string;
+  tabIndex?: number;
 }
 
 const CustomTab: React.FC<ICusmtomTabProps> = ({ label, count, ...props }) => (
@@ -37,13 +43,18 @@ const CustomTab: React.FC<ICusmtomTabProps> = ({ label, count, ...props }) => (
   />
 );
 
-const ProjectTabs: React.FC = () => {
+const ProjectTabs: React.FC<IProjectTabProps> = ({ projectId, tabIndex }) => {
   const { projectTabs } = useAppSelector(selectTabs);
   const dispatch = useAppDispatch();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     dispatch(setProjectTabsPage(newValue));
   };
+
+  useEffect(() => {
+    if (!tabIndex) return;
+    dispatch(setProjectTabsPage(tabIndex));
+  }, [tabIndex]);
 
   return (
     <div
@@ -61,12 +72,27 @@ const ProjectTabs: React.FC = () => {
         scrollButtons
         allowScrollButtonsMobile
       >
-        <Tab label="專案介紹" href="/projects/introduction" LinkComponent={Link} />
-        <CustomTab label="消息更新" href="/projects/news" LinkComponent={Link} count={3} />
-        <CustomTab label="常見問題" href="/projects/questions" LinkComponent={Link} count={7} />
-        <CustomTab label="留言" href="/projects/msg-board" LinkComponent={Link} count={1} />
+        <Tab label="專案介紹" href={`/projects/introduction/${projectId ? projectId : ''}`} LinkComponent={Link} />
+        <CustomTab
+          label="消息更新"
+          href={`/projects/news/${projectId ? projectId : ''}`}
+          LinkComponent={Link}
+          count={3}
+        />
+        <CustomTab
+          label="常見問題"
+          href={`/projects/questions/${projectId ? projectId : ''}`}
+          LinkComponent={Link}
+          count={7}
+        />
+        <CustomTab
+          label="留言"
+          href={`/projects/msg-board/${projectId ? projectId : ''}`}
+          LinkComponent={Link}
+          count={1}
+        />
       </Tabs>
-      <ProjectProgress />
+      <ProjectProgress step={0} />
     </div>
   );
 };
