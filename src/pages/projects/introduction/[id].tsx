@@ -1,20 +1,27 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import ProjectsLayout from '@/components/layout/ProjectsLayout';
-import useBreakpoints from '@/libraries/hooks/useBreakPoints';
-import { Typography } from '@mui/material';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import ProjectPlan from '@/components/pages/projects/ProjectPlan';
-import { IPlanState } from '@/types/plan';
-import { IProjectState } from '@/types/project';
-import { useGetCarouselDataQuery } from '@/store/services/homeApi';
 import { useEffect, useMemo, useState } from 'react';
-import Loading from '@/components/Loading';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
+import Image from 'next/image';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import * as DOMPurify from 'dompurify';
 import he from 'he';
+import Loading from '@/components/Loading';
 
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
+import { useAppSelector, useAppDispatch } from '@/libraries/hooks/reduxHooks';
+import { wrapper } from '@/store/store';
+
+import { useGetCarouselDataQuery } from '@/store/services/homeApi';
+import { getRunningQueriesThunk, getProjectById } from '@/store/services/projectApi';
+
+import { IPlanState } from '@/types/plan';
+import { IProjectState } from '@/types/project';
+
+import { Typography } from '@mui/material';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+
+import ProjectPlan from '@/components/pages/projects/ProjectPlan';
+import ProjectsLayout from '@/components/layout/ProjectsLayout';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 
 interface DetailsProps {
   project: IProjectState;
@@ -27,33 +34,48 @@ const getBackendText = (text: string) => {
   return modifiedText;
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
-  const response = await res.json();
-  const data: IProjectState[] = response.data;
-
-  const paths = data.map((project) => {
-    return {
-      params: { id: project._id as string },
-    };
-  });
-
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  const { id } = context.query;
+  console.log('id', id);
+  if (typeof id === 'string') {
+    store.dispatch(getProjectById.initiate(id));
+  }
+  const [res] = await Promise.all(store.dispatch(getRunningQueriesThunk()));
+  console.log(res);
   return {
-    paths: paths,
-    fallback: false, // beyond the scope, id doesn't exist, go to 404
+    props: {
+      project: (res.data as { status: string; data: IProjectState }).data,
+    },
   };
-};
+});
 
-export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
-  const id = context.params?.id;
-  const res = await fetch(`https://mujibu-server-fau1.onrender.com/api/projects/${id}`);
-  const response = await res.json();
-  const data: IProjectState = response.data;
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
+//   const response = await res.json();
+//   const data: IProjectState[] = response.data;
 
-  return {
-    props: { project: data },
-  };
-};
+//   const paths = data.map((project) => {
+//     return {
+//       params: { id: project._id as string },
+//     };
+//   });
+
+//   return {
+//     paths: paths,
+//     fallback: false, // beyond the scope, id doesn't exist, go to 404
+//   };
+// };
+
+// export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
+//   const id = context.params?.id;
+//   const res = await fetch(`https://mujibu-server-fau1.onrender.com/api/projects/${id}`);
+//   const response = await res.json();
+//   const data: IProjectState = response.data;
+
+//   return {
+//     props: { project: data },
+//   };
+// };
 
 const Introduction = ({ project }: DetailsProps) => {
   const router = useRouter();

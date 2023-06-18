@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { Button, IconButton, Typography } from '@mui/material';
+import { Avatar, Button, IconButton, Typography } from '@mui/material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -125,15 +125,17 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
               {projectName}
             </Typography>
             <div className="details w-full flex justify-center pt-8 gap-6">
-              <div className="flex flex-col w-2/3 relative">
+              <div className="flex flex-col w-2/3 relative ">
                 <Image
                   src={projectImage || '/project/Desktop_Project_kv.png'}
                   alt="project1"
+                  priority={true}
                   fill
-                  // style={{ objectFit: 'contain' }}
-                  // width={0}
-                  // height={0}
-                  // sizes="100vw"
+                  sizes="100vw"
+                  className="object-cover"
+                  // // style={{ objectFit: 'contain' }}
+                  // width={400}
+                  // height={300}
                   // style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: '8px' }}
                 />
               </div>
@@ -243,17 +245,8 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                   </div>
                 </div>
                 <div className="project-team bg-white h-[28%] rounded-lg p-6 flex flex-col justify-between">
-                  <div className="corporation flex justify-center items-center gap-5 pb-3 border-0 border-b border-solid border-secondary-10">
-                    <div className="icon w-[72px] h-[72px]">
-                      <Image
-                        src={projectTeam?.teamAvatar || '/proposal/Desktop_Proposal_logo.png'}
-                        alt="team1"
-                        width={0}
-                        height={0}
-                        sizes="100vw"
-                        style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-                      />
-                    </div>
+                  <div className="corporation flex items-center space-x-5 pb-3 mb-2 border-0 border-b border-solid border-secondary-10">
+                    <Avatar className="w-[72px] h-[72px]" alt="teamName" src={projectTeam?.teamAvatar || ''}></Avatar>
                     <Link
                       href={`${projectTeam?.socialWebsite || 'https://www.facebook.com/mujibu'}`}
                       className="text-xl no-underline visited:text-primary text-primary font-medium "

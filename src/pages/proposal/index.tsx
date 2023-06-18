@@ -1,8 +1,8 @@
+import { useRouter } from 'next/router';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
-import BoltRoundedIcon from '@mui/icons-material/BoltRounded';
 
 import { Button, Typography, styled } from '@mui/material';
-import { useRouter } from 'next/router';
+import BoltRoundedIcon from '@mui/icons-material/BoltRounded';
 
 const StyledButton = styled(Button)(({ theme }) => ({
   padding: '16px 32px 16px 32px',

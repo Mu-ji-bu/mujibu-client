@@ -41,4 +41,4 @@ export const {
 } = projectApiService;
 
 // export endpoints for use in SSR
-export const { getProjectById } = projectApiService.endpoints;
+export const { getAllProjectData, getProjectData, getProjectById } = projectApiService.endpoints;
