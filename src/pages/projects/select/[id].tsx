@@ -12,6 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { IPlanState } from '@/types/plan';
 import PaymentForm from '@/components/pages/select/PaymentForm';
 import { useGetProjectByIdQuery } from '@/store/services/projectApi';
+import Seo from '@/components/Seo';
 
 // interface DetailsProps {
 //   project: IProjectState;
@@ -139,6 +140,7 @@ const ProjectSelectPage = () => {
 
   return (
     <div>
+      <Seo templateTitle="選擇方案" />
       <div className="select-top bg-gray-light">
         <div className="max-w-screen-xl mx-auto px-10">
           <div className="project-category py-5">

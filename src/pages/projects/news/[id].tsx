@@ -2,6 +2,7 @@ import ProjectsLayout from '@/components/layout/ProjectsLayout';
 import Loading from '@/components/Loading';
 import Message from '@/components/pages/projects/message';
 import ProjectPlan from '@/components/pages/projects/ProjectPlan';
+import Seo from '@/components/Seo';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import { useGetCarouselDataQuery } from '@/store/services/homeApi';
 import { useGetProjectByIdQuery } from '@/store/services/projectApi';
@@ -72,6 +73,7 @@ const News = () => {
 
   return (
     <>
+      <Seo templateTitle="最新消息" />
       {isLoading ? (
         <Loading />
       ) : (

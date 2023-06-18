@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Typography, Button, Card, CardContent, CardMedia, Chip, Rating } from '@mui/material';
 import { projectFormEnum } from '@/libraries/enum';
+import routePath from '@/routes/routePath';
 
 import clsxm from '@/libraries/utils/clsxm';
 interface Collect {
@@ -24,7 +25,7 @@ const CollectsCard: React.FC<CollectsCardProps> = ({ isPC, collect, onCancelFoll
 
   return (
     <Card className="flex flex-col rounded-lg border border-solid border-secondary-10 shadow-none">
-      <Link href={collect._id} className="">
+      <Link href={`${routePath.projectsIntroduction}/${collect._id}`} className="">
         <div className="aspect-[16/9] w-full overflow-hidden">
           {' '}
           <CardMedia
@@ -51,7 +52,7 @@ const CollectsCard: React.FC<CollectsCardProps> = ({ isPC, collect, onCancelFoll
           )}
         </div>
         <Link
-          href={collect._id}
+          href={`${routePath.projectsIntroduction}/${collect._id}`}
           className="no-underline visited:text-secondary hover:text-primary text-secondary block mb-2"
         >
           <Typography component="h2" variant={isPC ? 'h5' : 'h6'} className="line-clamp-2">
@@ -72,7 +73,7 @@ const CollectsCard: React.FC<CollectsCardProps> = ({ isPC, collect, onCancelFoll
             className="no-underline line-clamp-1  text-primary  hover:text-secondary visited:text-primary"
           >
             <Typography component="span" variant={isPC ? 'h6' : 'caption'}>
-              {collect.projectTeam?.teamName}
+              {collect.projectTeam?.teamName || '沒有團隊名稱'}
             </Typography>
           </Link>
         </div>

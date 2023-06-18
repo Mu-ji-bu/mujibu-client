@@ -142,7 +142,7 @@ const ProjectPlan: React.FC<IProjectPlanProps> = ({
           </div>
         </div>
         <Typography component="h4" variant="h4" className="text-secondary mb-2">
-          ${planName}
+          {planName}
         </Typography>
         <Typography component="h3" variant="h3" className="text-primary">
           ${planDiscountPrice}

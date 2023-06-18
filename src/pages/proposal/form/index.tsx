@@ -26,6 +26,7 @@ import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsxm from '@/libraries/utils/clsxm';
+import Seo from '@/components/Seo';
 
 const schema = Yup.object().shape({
   projectType: Yup.number().required('此為必填欄位'),
@@ -125,15 +126,18 @@ const schema = Yup.object().shape({
         .typeError('免運金額只能填寫數字')
         .positive('免運金額必須大於零')
         .integer('免運金額必須為整數'),
-      senderName: Yup.string().when('deliverySwitch', ([deliverySwitch], schema) => {
-        return deliverySwitch ? schema.required('請提供寄件人姓名') : schema;
-      }),
-      senderPhone: Yup.string().when('deliverySwitch', ([deliverySwitch], schema) => {
-        return deliverySwitch ? schema.required('請提供寄件人電話號碼') : schema;
-      }),
-      senderAddress: Yup.string().when('deliverySwitch', ([deliverySwitch], schema) => {
-        return deliverySwitch ? schema.required('請提供寄件人地址') : schema;
-      }),
+      senderName: Yup.string(),
+      senderPhone: Yup.string(),
+      senderAddress: Yup.string(),
+      // senderName: Yup.string().when('deliverySwitch', ([deliverySwitch], schema) => {
+      //   return deliverySwitch ? schema.required('請提供寄件人姓名') : schema;
+      // }),
+      // senderPhone: Yup.string().when('deliverySwitch', ([deliverySwitch], schema) => {
+      //   return deliverySwitch ? schema.required('請提供寄件人電話號碼') : schema;
+      // }),
+      // senderAddress: Yup.string().when('deliverySwitch', ([deliverySwitch], schema) => {
+      //   return deliverySwitch ? schema.required('請提供寄件人地址') : schema;
+      // }),
     }),
 
     cvsInfo: Yup.object().shape({
@@ -390,202 +394,211 @@ const Form = () => {
   }, [handleSubmit, isPreview, onSubmit]);
 
   return (
-    <div className="bg-gray-light">
-      <div className="border-0 border-b border-solid border-secondary-10 sticky top-0 left-0 bg-green-accent-10 md:bg-white z-10">
-        <Stepper activeStep={activeStep} className="max-w-screen-md mx-auto md:flex hidden px-5 py-4">
-          {steps.map((label, index) => {
-            const stepProps: { completed?: boolean } = {};
-            return (
-              <Step key={label} {...stepProps}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
-        <div className="md:hidden flex items-center justify-between">
-          <Typography className="flex items-center px-5 py-3 w-2/3" component="h2" variant="h6">
-            <span className="bg-primary text-white pt-0 pb-0.5 px-[7px] text-sm rounded-full mr-2">
-              {activeStep + 1}
-            </span>{' '}
-            {steps[activeStep]}
-          </Typography>
+    <>
+      <Seo templateTitle="提案表單" />
+      <div className="bg-gray-light">
+        <div className="border-0 border-b border-solid border-secondary-10 sticky top-0 left-0 bg-green-accent-10 md:bg-white z-10">
+          <Stepper activeStep={activeStep} className="max-w-screen-md mx-auto md:flex hidden px-5 py-4">
+            {steps.map((label, index) => {
+              const stepProps: { completed?: boolean } = {};
+              return (
+                <Step key={label} {...stepProps}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+          <div className="md:hidden flex items-center justify-between">
+            <Typography className="flex items-center px-5 py-3 w-2/3" component="h2" variant="h6">
+              <span className="bg-primary text-white pt-0 pb-0.5 px-[7px] text-sm rounded-full mr-2">
+                {activeStep + 1}
+              </span>{' '}
+              {steps[activeStep]}
+            </Typography>
 
-          <div className="md:hidden bg-white shrink-0 p-2">
-            <LoadingButton
-              className="md:hidden bg-white bg-opacity-75"
-              // loading={patchUserLoading}
-              type="submit"
-              color="secondary"
-              startIcon={<SaveIcon />}
-            >
-              儲存草稿
-              {/* <span>{patchUserLoading ? '儲存中' : '儲存草稿'}</span> */}
-            </LoadingButton>
-          </div>
-        </div>
-      </div>
-      <div className="max-w-screen-md mx-auto md:py-5">
-        <div className="hidden md:block w-full bg-gray-dark text-secondary text-center px-5 py-3 rounded-md border border-solid border-secondary-10">
-          <Typography component="h2" variant="h5">
-            {steps[activeStep]}
-          </Typography>
-        </div>
-
-        <form className="flex flex-col items-center md:py-5" onSubmit={handleSubmit(onSubmit)}>
-          {activeStep === 0 && <ProposalStep1 setValue={setValue} errors={errors} control={control} />}
-          {activeStep === 1 && (
-            <ProposalStep2
-              setValue={setValue}
-              errors={errors}
-              control={control}
-              fields={fields}
-              append={append}
-              remove={remove}
-            />
-          )}
-          {activeStep === 2 && <ProposalStep3 setValue={setValue} errors={errors} control={control} />}
-          {activeStep === 3 && (
-            <ProposalStep4 setValue={setValue} getValues={getValues} errors={errors} control={control} watch={watch} />
-          )}
-          {activeStep === 4 && (
-            // <ProposalStep5 proposalForm={proposalForm} />
-            <>
-              <Typography className="text-primary my-5 md:mt-0 text-center" component="h3" variant="h6">
-                請確認您填寫好的提案資料
-              </Typography>
-              <div className="relative flex flex-col space-y-3">
-                <ProposalStep1
-                  isPreview={true}
-                  getValues={getValues}
-                  setValue={setValue}
-                  errors={errors}
-                  control={control}
-                />
-                <ProposalStep2
-                  isPreview={true}
-                  getValues={getValues}
-                  setValue={setValue}
-                  errors={errors}
-                  control={control}
-                  fields={fields}
-                  append={append}
-                  remove={remove}
-                />
-                <ProposalStep3
-                  isPreview={true}
-                  getValues={getValues}
-                  setValue={setValue}
-                  errors={errors}
-                  control={control}
-                />
-                <ProposalStep4
-                  setValue={setValue}
-                  getValues={getValues}
-                  errors={errors}
-                  control={control}
-                  watch={watch}
-                />
-                <div className="w-full h-full bg-primary bg-opacity-20 rounded-md absolute -top-3 left-0"></div>
-              </div>
-            </>
-          )}
-          {activeStep === 5 && (
-            <ProposalStep6
-              setValue={setValue}
-              proposalSuccess={proposalSuccess}
-              postProposalLoading={postProposalLoading}
-            />
-          )}
-
-          <div
-            className={clsxm(
-              activeStep === 5 && proposalSuccess && 'hidden',
-              'w-full border-0 border-t border-solid border-secondary-10 md:px-5 md:py-4 fixed bottom-0 left-0 bg-white z-10',
-            )}
-          >
-            <div className="hidden md:flex justify-between max-w-screen-xl mx-auto">
-              <Button
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                variant="outlined"
+            <div className="md:hidden bg-white shrink-0 p-2">
+              <LoadingButton
+                className="md:hidden bg-white bg-opacity-75"
+                // loading={patchUserLoading}
+                type="submit"
                 color="secondary"
-                startIcon={<UndoIcon />}
+                startIcon={<SaveIcon />}
               >
-                返回上一步
-              </Button>
-
-              <div className="flex space-x-5">
-                {activeStep !== steps.length - 1 && (
-                  <LoadingButton
-                    // loading={patchUserLoading}
-                    type="submit"
-                    variant="outlined"
-                    color="secondary"
-                    startIcon={<SaveIcon />}
-                  >
-                    {/* <span>{patchUserLoading ? '儲存中' : '儲存草稿'}</span> */}
-                    <span>儲存草稿</span>
-                  </LoadingButton>
-                )}
-
-                {activeStep === 0 && (
-                  <Button onClick={handleStep1} variant="contained" startIcon={<RedoIcon />}>
-                    {`下一步：${steps[activeStep + 1]}`}
-                  </Button>
-                )}
-                {activeStep > 0 && activeStep < steps.length - 2 && (
-                  <Button onClick={handleNext} variant="contained" startIcon={<RedoIcon />}>
-                    {`下一步：${steps[activeStep + 1]}`}
-                  </Button>
-                )}
-
-                {activeStep === steps.length - 2 && (
-                  <Button onClick={handleStep5} type="button" variant="contained" startIcon={<CheckIcon />}>
-                    送出提案
-                  </Button>
-                )}
-              </div>
+                儲存草稿
+                {/* <span>{patchUserLoading ? '儲存中' : '儲存草稿'}</span> */}
+              </LoadingButton>
             </div>
-
-            <MobileStepper
-              className={clsxm(activeStep === 5 && proposalSuccess && 'hidden', 'md:hidden')}
-              variant="text"
-              steps={6}
-              position="static"
-              activeStep={activeStep}
-              backButton={
-                <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-                  <KeyboardArrowLeft />
-                  上一步
-                </Button>
-              }
-              nextButton={
-                activeStep === 0 ? (
-                  <Button size="small" onClick={handleStep1}>
-                    下一步
-                    <KeyboardArrowRight />
-                  </Button>
-                ) : activeStep >= steps.length - 2 ? (
-                  <Button
-                    className={clsxm(activeStep === steps.length - 1 && 'invisible')}
-                    size="small"
-                    onClick={handleStep5}
-                  >
-                    送出提案
-                    <KeyboardArrowRight />
-                  </Button>
-                ) : (
-                  <Button size="small" onClick={handleNext}>
-                    下一步
-                    <KeyboardArrowRight />
-                  </Button>
-                )
-              }
-            />
           </div>
-        </form>
+        </div>
+        <div className="max-w-screen-md mx-auto md:py-5">
+          <div className="hidden md:block w-full bg-gray-dark text-secondary text-center px-5 py-3 rounded-md border border-solid border-secondary-10">
+            <Typography component="h2" variant="h5">
+              {steps[activeStep]}
+            </Typography>
+          </div>
+
+          <form className="flex flex-col items-center md:py-5" onSubmit={handleSubmit(onSubmit)}>
+            {activeStep === 0 && <ProposalStep1 setValue={setValue} errors={errors} control={control} />}
+            {activeStep === 1 && (
+              <ProposalStep2
+                setValue={setValue}
+                errors={errors}
+                control={control}
+                fields={fields}
+                append={append}
+                remove={remove}
+              />
+            )}
+            {activeStep === 2 && <ProposalStep3 setValue={setValue} errors={errors} control={control} />}
+            {activeStep === 3 && (
+              <ProposalStep4
+                setValue={setValue}
+                getValues={getValues}
+                errors={errors}
+                control={control}
+                watch={watch}
+              />
+            )}
+            {activeStep === 4 && (
+              // <ProposalStep5 proposalForm={proposalForm} />
+              <>
+                <Typography className="text-primary my-5 md:mt-0 text-center" component="h3" variant="h6">
+                  請確認您填寫好的提案資料
+                </Typography>
+                <div className="relative flex flex-col space-y-3">
+                  <ProposalStep1
+                    isPreview={true}
+                    getValues={getValues}
+                    setValue={setValue}
+                    errors={errors}
+                    control={control}
+                  />
+                  <ProposalStep2
+                    isPreview={true}
+                    getValues={getValues}
+                    setValue={setValue}
+                    errors={errors}
+                    control={control}
+                    fields={fields}
+                    append={append}
+                    remove={remove}
+                  />
+                  <ProposalStep3
+                    isPreview={true}
+                    getValues={getValues}
+                    setValue={setValue}
+                    errors={errors}
+                    control={control}
+                  />
+                  <ProposalStep4
+                    setValue={setValue}
+                    getValues={getValues}
+                    errors={errors}
+                    control={control}
+                    watch={watch}
+                  />
+                  <div className="w-full h-full bg-primary bg-opacity-20 rounded-md absolute -top-3 left-0"></div>
+                </div>
+              </>
+            )}
+            {activeStep === 5 && (
+              <ProposalStep6
+                setValue={setValue}
+                proposalSuccess={proposalSuccess}
+                postProposalLoading={postProposalLoading}
+              />
+            )}
+
+            <div
+              className={clsxm(
+                activeStep === 5 && proposalSuccess && 'hidden',
+                'w-full border-0 border-t border-solid border-secondary-10 md:px-5 md:py-4 fixed bottom-0 left-0 bg-white z-10',
+              )}
+            >
+              <div className="hidden md:flex justify-between max-w-screen-xl mx-auto">
+                <Button
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  variant="outlined"
+                  color="secondary"
+                  startIcon={<UndoIcon />}
+                >
+                  返回上一步
+                </Button>
+
+                <div className="flex space-x-5">
+                  {activeStep !== steps.length - 1 && (
+                    <LoadingButton
+                      // loading={patchUserLoading}
+                      type="submit"
+                      variant="outlined"
+                      color="secondary"
+                      startIcon={<SaveIcon />}
+                    >
+                      {/* <span>{patchUserLoading ? '儲存中' : '儲存草稿'}</span> */}
+                      <span>儲存草稿</span>
+                    </LoadingButton>
+                  )}
+
+                  {activeStep === 0 && (
+                    <Button onClick={handleStep1} variant="contained" startIcon={<RedoIcon />}>
+                      {`下一步：${steps[activeStep + 1]}`}
+                    </Button>
+                  )}
+                  {activeStep > 0 && activeStep < steps.length - 2 && (
+                    <Button onClick={handleNext} variant="contained" startIcon={<RedoIcon />}>
+                      {`下一步：${steps[activeStep + 1]}`}
+                    </Button>
+                  )}
+
+                  {activeStep === steps.length - 2 && (
+                    <Button onClick={handleStep5} type="button" variant="contained" startIcon={<CheckIcon />}>
+                      送出提案
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              <MobileStepper
+                className={clsxm(activeStep === 5 && proposalSuccess && 'hidden', 'md:hidden')}
+                variant="text"
+                steps={6}
+                position="static"
+                activeStep={activeStep}
+                backButton={
+                  <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                    <KeyboardArrowLeft />
+                    上一步
+                  </Button>
+                }
+                nextButton={
+                  activeStep === 0 ? (
+                    <Button size="small" onClick={handleStep1}>
+                      下一步
+                      <KeyboardArrowRight />
+                    </Button>
+                  ) : activeStep >= steps.length - 2 ? (
+                    <Button
+                      className={clsxm(activeStep === steps.length - 1 && 'invisible')}
+                      size="small"
+                      onClick={handleStep5}
+                    >
+                      送出提案
+                      <KeyboardArrowRight />
+                    </Button>
+                  ) : (
+                    <Button size="small" onClick={handleNext}>
+                      下一步
+                      <KeyboardArrowRight />
+                    </Button>
+                  )
+                }
+              />
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -8,6 +8,7 @@ import CollectsCard from '@/components/pages/user/CollectsCard';
 import ToggleButtons from '@/components/pages/user/ToggleButtons';
 import { useGerUserCollectQuery, useDeleteUserCollectMutation } from '@/store/services/userApi';
 import { projectFormEnum } from '@/libraries/enum';
+import Seo from '@/components/Seo';
 
 const Collects = () => {
   const user = useAppSelector(selectUser);
@@ -50,21 +51,25 @@ const Collects = () => {
   }, [userId]);
 
   return (
-    <UserLayout>
-      <div className="mb-5 flex justify-center">
-        <ToggleButtons types={types} setTypes={setTypes} />
-      </div>
+    <>
+      <Seo templateTitle="我的收藏" />
+      <UserLayout>
+        <div className="mb-5 flex justify-center">
+          <ToggleButtons types={types} setTypes={setTypes} />
+        </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-        {collectsData && collectsData.total !== 0 ? (
-          filteredItems.map((collect: any, i: number) => (
-            <CollectsCard key={`collect_${i + 1}`} isPC={isPC} collect={collect} onCancelFollow={onCancelFollow} />
-          ))
-        ) : (
-          <p className="text-center w-full">- 沒有相關追蹤資料 -</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+          {collectsData &&
+            collectsData.total !== 0 &&
+            filteredItems.map((collect: any, i: number) => (
+              <CollectsCard key={`collect_${i + 1}`} isPC={isPC} collect={collect} onCancelFollow={onCancelFollow} />
+            ))}
+        </div>
+        {filteredItems && filteredItems.length === 0 && (
+          <p className="text-center col-span-full">- 沒有相關追蹤資料 -</p>
         )}
-      </div>
-    </UserLayout>
+      </UserLayout>
+    </>
   );
 };
 
