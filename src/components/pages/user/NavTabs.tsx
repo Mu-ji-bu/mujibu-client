@@ -2,10 +2,12 @@ import { Tab, Tabs } from '@mui/material';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@libraries/hooks/reduxHooks';
 import { setUserTabsPage, selectTabs } from '../../../store/slices/tabsSlice';
+import { selectUser } from '../../../store/slices/userSlice';
 
 const NavTabs: React.FC = () => {
   const { userTabs } = useAppSelector(selectTabs);
   const dispatch = useAppDispatch();
+  const { collects } = useAppSelector(selectUser);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     dispatch(setUserTabsPage(newValue));
@@ -33,7 +35,7 @@ const NavTabs: React.FC = () => {
         <Tab label="我的收藏" href="/user/collects" LinkComponent={Link} />
         <Tab
           disabled
-          label="29"
+          label={collects?.length || '0'}
           className="text-xs min-w-0 py-2 px-1 -ml-4 mt-1 bg-primary text-white min-h-0 h-2 rounded-full"
         />
         <Tab disabled className="min-w-0 w-[1px] bg-secondary-30 p-0 mx-6 min-h-0 h-6 mt-3" />

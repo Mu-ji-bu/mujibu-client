@@ -125,15 +125,18 @@ const schema = Yup.object().shape({
         .typeError('免運金額只能填寫數字')
         .positive('免運金額必須大於零')
         .integer('免運金額必須為整數'),
-      senderName: Yup.string().when('deliverySwitch', ([deliverySwitch], schema) => {
-        return deliverySwitch ? schema.required('請提供寄件人姓名') : schema;
-      }),
-      senderPhone: Yup.string().when('deliverySwitch', ([deliverySwitch], schema) => {
-        return deliverySwitch ? schema.required('請提供寄件人電話號碼') : schema;
-      }),
-      senderAddress: Yup.string().when('deliverySwitch', ([deliverySwitch], schema) => {
-        return deliverySwitch ? schema.required('請提供寄件人地址') : schema;
-      }),
+      senderName: Yup.string(),
+      senderPhone: Yup.string(),
+      senderAddress: Yup.string(),
+      // senderName: Yup.string().when('deliverySwitch', ([deliverySwitch], schema) => {
+      //   return deliverySwitch ? schema.required('請提供寄件人姓名') : schema;
+      // }),
+      // senderPhone: Yup.string().when('deliverySwitch', ([deliverySwitch], schema) => {
+      //   return deliverySwitch ? schema.required('請提供寄件人電話號碼') : schema;
+      // }),
+      // senderAddress: Yup.string().when('deliverySwitch', ([deliverySwitch], schema) => {
+      //   return deliverySwitch ? schema.required('請提供寄件人地址') : schema;
+      // }),
     }),
 
     cvsInfo: Yup.object().shape({
