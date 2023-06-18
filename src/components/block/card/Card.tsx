@@ -89,7 +89,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
                   達成
                 </Typography>
                 <Typography component="span" variant="h6" color="primary">
-                  NT${currentAmount}k
+                  NT${currentAmount}
                 </Typography>
               </div>
               <div>
@@ -97,7 +97,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
                   目標
                 </Typography>
                 <Typography className="opacity-[.87]" component="span" variant="h6" color="secondary">
-                  NT${goalAmount}k
+                  NT${goalAmount}
                 </Typography>
               </div>
             </div>
