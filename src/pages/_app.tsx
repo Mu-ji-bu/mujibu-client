@@ -13,6 +13,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/zh-tw';
 
+import { Elements } from '@stripe/react-stripe-js';
+import { stripePromise } from '@libraries/utils/stripe.utils';
+
 const App = ({ Component, ...rest }: AppProps) => {
   const { store, props } = wrapper?.useWrappedStore(rest);
 
@@ -38,9 +41,11 @@ const App = ({ Component, ...rest }: AppProps) => {
       <CssBaseline />
       <StoreProvider store={store}>
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="zh-tw">
-          <Layout>
-            <Component {...props.pageProps} />
-          </Layout>
+          <Elements stripe={stripePromise}>
+            <Layout>
+              <Component {...props.pageProps} />
+            </Layout>
+          </Elements>
         </LocalizationProvider>
       </StoreProvider>
     </ThemeProvider>

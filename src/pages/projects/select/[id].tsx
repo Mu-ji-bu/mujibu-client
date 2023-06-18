@@ -5,46 +5,54 @@ import { IProjectState } from '@/types/project';
 import { Button, IconButton, Typography } from '@mui/material';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { use, useEffect, useState } from 'react';
+import { use, useEffect, useMemo, useState } from 'react';
 import clsxm from '@/libraries/utils/clsxm';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { IPlanState } from '@/types/plan';
+import PaymentForm from '@/components/pages/select/PaymentForm';
+import { useGetProjectByIdQuery } from '@/store/services/projectApi';
 
-interface DetailsProps {
-  project: IProjectState;
-}
+// interface DetailsProps {
+//   project: IProjectState;
+// }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
-  const response = await res.json();
-  const data: IProjectState[] = response.data;
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
+//   const response = await res.json();
+//   const data: IProjectState[] = response.data;
 
-  const paths = data.map((project) => {
-    return {
-      params: { id: project._id as string },
-    };
-  });
+//   const paths = data.map((project) => {
+//     return {
+//       params: { id: project._id as string },
+//     };
+//   });
 
-  return {
-    paths: paths,
-    fallback: false, // beyond the scope, id doesn't exist, go to 404
-  };
-};
+//   return {
+//     paths: paths,
+//     fallback: false, // beyond the scope, id doesn't exist, go to 404
+//   };
+// };
 
-export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
-  const id = context.params?.id;
-  const res = await fetch(`https://mujibu-server-fau1.onrender.com/api/projects/${id}`);
-  const response = await res.json();
-  const data: IProjectState = response.data;
+// export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
+//   const id = context.params?.id;
+//   const res = await fetch(`https://mujibu-server-fau1.onrender.com/api/projects/${id}`);
+//   const response = await res.json();
+//   const data: IProjectState = response.data;
 
-  return {
-    props: { project: data },
-  };
-};
+//   return {
+//     props: { project: data },
+//   };
+// };
 
-const ProjectSelectPage = ({ project }: DetailsProps) => {
+// const ProjectSelectPage = ({ project }: DetailsProps) => {
+
+const ProjectSelectPage = () => {
   const router = useRouter();
+  const { id: projectId } = router.query;
+  const { data, isLoading } = useGetProjectByIdQuery(projectId);
+
+  const project = useMemo((): IProjectState => data?.data || [], [data?.data]);
   const {
     _id,
     projectType,
@@ -324,6 +332,7 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
                   前往結帳
                 </Button>
               )}
+              <PaymentForm />
             </div>
           </div>
         </div>
