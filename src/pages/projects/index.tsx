@@ -202,7 +202,7 @@ const Projects = () => {
             {Array.isArray(dataList) &&
               dataList.map((project: IProjectState) => (
                 <div
-                  onClick={() => router.push(`/projects/${project._id}`)}
+                  // onClick={() => router.push(`/projects/${project._id}`)}
                   key={project._id}
                   className="md:-mx-4 w-full md:w-1/2 lg:w-1/3"
                 >
