@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -44,6 +44,8 @@ const fakeProjectPlan: IPlanState = {
 
 const Project = () => {
   const router = useRouter();
+  // 在 introduction/id 按上一頁，會來到這邊，這邊的 plan 不對，所以先改名為 id.tsx
+
   const { id: projectId } = router.query;
 
   const { data, isLoading } = useGetProjectByIdQuery(projectId);
