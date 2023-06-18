@@ -13,6 +13,7 @@ import useFirebaseAuthentication from '@libraries/hooks/useFirebaseAuthenticatio
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Seo from '@/components/Seo';
 
 type FormData = {
   email: string;
@@ -62,85 +63,88 @@ const LogIn = () => {
   }, [googleToken, router]);
 
   return (
-    <div className="max-w-xl mx-auto px-5 py-20">
-      <div
-        className={clsxm(
-          'py-10 px-5 sm:px-20',
-          'flex flex-col items-center',
-          'border border-solid border-secondary-10',
-          'shadow-md rounded-md',
-        )}
-      >
-        <Typography className="text-secondary mb-5" component="h2" variant="h5">
-          開始你的募資旅程
-        </Typography>
-        <form className="mb-10 w-full" onSubmit={handleSubmit(onSubmit)}>
-          <TextField
-            margin="normal"
-            fullWidth
-            id="email"
-            label="Email"
-            autoComplete="email"
-            autoFocus
-            {...register('email', { required: true })}
-            error={!!errors.email}
-            helperText={errors.email?.message}
-          />
-          <TextField
+    <>
+      <Seo templateTitle="登入" />
+      <div className="max-w-xl mx-auto px-5 py-20">
+        <div
+          className={clsxm(
+            'py-10 px-5 sm:px-20',
+            'flex flex-col items-center',
+            'border border-solid border-secondary-10',
+            'shadow-md rounded-md',
+          )}
+        >
+          <Typography className="text-secondary mb-5" component="h2" variant="h5">
+            開始你的募資旅程
+          </Typography>
+          <form className="mb-10 w-full" onSubmit={handleSubmit(onSubmit)}>
+            <TextField
+              margin="normal"
+              fullWidth
+              id="email"
+              label="Email"
+              autoComplete="email"
+              autoFocus
+              {...register('email', { required: true })}
+              error={!!errors.email}
+              helperText={errors.email?.message}
+            />
+            <TextField
+              className="mb-5"
+              margin="normal"
+              fullWidth
+              label="密碼"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              {...register('password', { required: true })}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+            />
+            <div className="flex flex-col items-center mb-5">
+              <Typography component="p" variant="caption">
+                忘記密碼了嗎 ?{' '}
+                <Link
+                  href="/forget-password"
+                  className="no-underline visited:text-primary text-primary hover:text-secondary font-medium mx-1"
+                >
+                  重設密碼
+                </Link>
+              </Typography>
+            </div>
+
+            <Button type="submit" fullWidth variant="contained">
+              登入
+            </Button>
+          </form>
+
+          <Typography className="text-secondary mb-10" component="h2" variant="h6">
+            — 透過其他方式登入 —
+          </Typography>
+          <Button
+            onClick={handleGoogleAuth}
             className="mb-5"
-            margin="normal"
+            type="submit"
             fullWidth
-            label="密碼"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            {...register('password', { required: true })}
-            error={!!errors.password}
-            helperText={errors.password?.message}
-          />
+            variant="outlined"
+            startIcon={<GoogleIcon />}
+          >
+            使用 Google 登入
+          </Button>
           <div className="flex flex-col items-center mb-5">
             <Typography component="p" variant="caption">
-              忘記密碼了嗎 ?{' '}
+              還沒有帳號嗎 ?{' '}
               <Link
-                href="/forget-password"
+                href={routePath.signup}
                 className="no-underline visited:text-primary text-primary hover:text-secondary font-medium mx-1"
               >
-                重設密碼
+                馬上註冊
               </Link>
             </Typography>
           </div>
-
-          <Button type="submit" fullWidth variant="contained">
-            登入
-          </Button>
-        </form>
-
-        <Typography className="text-secondary mb-10" component="h2" variant="h6">
-          — 透過其他方式登入 —
-        </Typography>
-        <Button
-          onClick={handleGoogleAuth}
-          className="mb-5"
-          type="submit"
-          fullWidth
-          variant="outlined"
-          startIcon={<GoogleIcon />}
-        >
-          使用 Google 登入
-        </Button>
-        <div className="flex flex-col items-center mb-5">
-          <Typography component="p" variant="caption">
-            還沒有帳號嗎 ?{' '}
-            <Link
-              href={routePath.signup}
-              className="no-underline visited:text-primary text-primary hover:text-secondary font-medium mx-1"
-            >
-              馬上註冊
-            </Link>
-          </Typography>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default LogIn;

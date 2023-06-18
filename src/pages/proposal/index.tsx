@@ -3,6 +3,7 @@ import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 
 import { Button, Typography, styled } from '@mui/material';
 import BoltRoundedIcon from '@mui/icons-material/BoltRounded';
+import Seo from '@/components/Seo';
 
 const StyledButton = styled(Button)(({ theme }) => ({
   padding: '16px 32px 16px 32px',
@@ -14,6 +15,7 @@ const Proposal = () => {
 
   return (
     <main>
+      <Seo templateTitle="開始提案" />
       <section className="bg-[url('/proposal/Desktop_Proposal_kv.png')] bg-center bg-cover md:h-[600px] h-[560px]">
         <div className="h-full flex flex-col justify-center items-center gap-10">
           <Typography

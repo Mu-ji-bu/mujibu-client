@@ -19,6 +19,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import PhotoUpload from '@/components/block/photoUpload/PhotoUpload';
 import { InputText, InputSelect, InputCheckbox, InputCheckboxes, InputDatepicker } from '@/components/block/form';
+import Seo from '@/components/Seo';
 
 const genderItems = ['男', '女', '不方便透露'];
 const categoryItems = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
@@ -124,155 +125,158 @@ const PersonalSettings = () => {
   }, [userData, reset]);
 
   return (
-    <UserLayout>
-      <div className="flex justify-end px-0 lg:px-10">
-        <Button onClick={() => router.push('/new-password')} className="" variant="outlined" startIcon={<KeyIcon />}>
-          修改密碼
-        </Button>
-      </div>
-
-      <form className="flex md:flex-row flex-col md:space-x-5 px-0 lg:px-10 py-5" onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-full md:w-1/3 shrink-0 flex flex-col items-center mb-5 md:mb-0">
-          <PhotoUpload
-            isProposal={false}
-            originalName={userData.name ?? ''}
-            originalAvatar={userData.avatar ?? ''}
-            setImageUploaded={setImageUploaded}
-          />
+    <>
+      <Seo templateTitle="個人設定" />
+      <UserLayout>
+        <div className="flex justify-end px-0 lg:px-10">
+          <Button onClick={() => router.push('/new-password')} className="" variant="outlined" startIcon={<KeyIcon />}>
+            修改密碼
+          </Button>
         </div>
-        <div className={clsxm('w-full md:w-2/3 flex flex-col ')}>
-          <div className="mb-10 w-full">
-            <Typography className="text-secondary mb-5" component="h2" variant="h5">
-              修改個人資料
-            </Typography>
-            <div className="grid grid-cols-2 gap-3">
-              <InputText
-                control={control}
-                error={!!errors.name}
-                helperText={errors.name?.message}
-                name={'name'}
-                label={'姓名 *'}
-                defaultValue={''}
-              />
-              <InputText
-                control={control}
-                error={!!errors.nickname}
-                helperText={errors.nickname?.message}
-                name={'nickname'}
-                label={'暱稱 *'}
-                defaultValue={''}
-              />
 
-              <InputSelect
-                control={control}
-                error={!!errors.gender}
-                helperText={errors.gender?.message}
-                name={'gender'}
-                label={'性別 *'}
-                items={genderItems}
-                isNumber={true}
-              />
-
-              <TextField
-                fullWidth
-                id="email"
-                label="Email"
-                autoComplete="email"
-                size="small"
-                disabled
-                value={userData.email}
-              />
-
-              <InputDatepicker
-                control={control}
-                error={!!errors.birthDate}
-                helperText={errors.birthDate?.message}
-                name={'birthDate'}
-                label={'生日 *'}
-                disableFuture={true}
-              />
-
-              <InputText
-                control={control}
-                error={!!errors.phone}
-                helperText={errors.phone?.message}
-                name={'phone'}
-                label={'聯絡電話 *'}
-                defaultValue={''}
-              />
-
-              <div className="col-span-full">
-                <InputCheckbox
+        <form className="flex md:flex-row flex-col md:space-x-5 px-0 lg:px-10 py-5" onSubmit={handleSubmit(onSubmit)}>
+          <div className="w-full md:w-1/3 shrink-0 flex flex-col items-center mb-5 md:mb-0">
+            <PhotoUpload
+              isProposal={false}
+              originalName={userData.name ?? ''}
+              originalAvatar={userData.avatar ?? ''}
+              setImageUploaded={setImageUploaded}
+            />
+          </div>
+          <div className={clsxm('w-full md:w-2/3 flex flex-col ')}>
+            <div className="mb-10 w-full">
+              <Typography className="text-secondary mb-5" component="h2" variant="h5">
+                修改個人資料
+              </Typography>
+              <div className="grid grid-cols-2 gap-3">
+                <InputText
                   control={control}
-                  name={'subscribeNewsletter'}
-                  label={'接收電子報'}
-                  defaultValue={false}
-                  className="text-secondary"
+                  error={!!errors.name}
+                  helperText={errors.name?.message}
+                  name={'name'}
+                  label={'姓名 *'}
+                  defaultValue={''}
                 />
-              </div>
-              <div className="col-span-full">
-                <InputCheckboxes
+                <InputText
                   control={control}
-                  name={'category'}
-                  label={'請選擇感興趣的類別'}
-                  items={categoryItems}
-                  defaultValue={userData.category ?? []}
-                  className="text-secondary"
+                  error={!!errors.nickname}
+                  helperText={errors.nickname?.message}
+                  name={'nickname'}
+                  label={'暱稱 *'}
+                  defaultValue={''}
+                />
+
+                <InputSelect
+                  control={control}
+                  error={!!errors.gender}
+                  helperText={errors.gender?.message}
+                  name={'gender'}
+                  label={'性別 *'}
+                  items={genderItems}
+                  isNumber={true}
+                />
+
+                <TextField
+                  fullWidth
+                  id="email"
+                  label="Email"
+                  autoComplete="email"
+                  size="small"
+                  disabled
+                  value={userData.email}
+                />
+
+                <InputDatepicker
+                  control={control}
+                  error={!!errors.birthDate}
+                  helperText={errors.birthDate?.message}
+                  name={'birthDate'}
+                  label={'生日 *'}
+                  disableFuture={true}
+                />
+
+                <InputText
+                  control={control}
+                  error={!!errors.phone}
+                  helperText={errors.phone?.message}
+                  name={'phone'}
+                  label={'聯絡電話 *'}
+                  defaultValue={''}
+                />
+
+                <div className="col-span-full">
+                  <InputCheckbox
+                    control={control}
+                    name={'subscribeNewsletter'}
+                    label={'接收電子報'}
+                    defaultValue={false}
+                    className="text-secondary"
+                  />
+                </div>
+                <div className="col-span-full">
+                  <InputCheckboxes
+                    control={control}
+                    name={'category'}
+                    label={'請選擇感興趣的類別'}
+                    items={categoryItems}
+                    defaultValue={userData.category ?? []}
+                    className="text-secondary"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-10 w-full">
+              <Typography className="text-secondary mb-5" component="h2" variant="h5">
+                修改收件資料
+              </Typography>
+              <div className="grid grid-cols-2 gap-3">
+                <InputText
+                  control={control}
+                  error={!!errors.contactName}
+                  helperText={errors.contactName?.message}
+                  name={'contactName'}
+                  label={'收件者姓名 *'}
+                  defaultValue={''}
+                />
+
+                <InputText
+                  control={control}
+                  error={!!errors.contactPhone}
+                  helperText={errors.contactPhone?.message}
+                  name={'contactPhone'}
+                  label={'收件者電話 *'}
+                  defaultValue={''}
+                />
+
+                <div className="col-span-full">
+                  <FormControlLabel
+                    className="text-secondary"
+                    control={<Checkbox checked={sameAbove} onChange={handleSameAboveChange} />}
+                    name="sameAbove"
+                    label="與贊助人資料相同"
+                  />
+                </div>
+
+                <InputText
+                  className="col-span-full"
+                  control={control}
+                  error={!!errors.address}
+                  helperText={errors.address?.message}
+                  name={'address'}
+                  label={'收件地址 *'}
+                  defaultValue={''}
                 />
               </div>
             </div>
+
+            <LoadingButton loading={patchUserLoading} type="submit" fullWidth variant="contained">
+              <span>{patchUserLoading ? '儲存中' : '儲存'}</span>
+            </LoadingButton>
           </div>
-
-          <div className="mb-10 w-full">
-            <Typography className="text-secondary mb-5" component="h2" variant="h5">
-              修改收件資料
-            </Typography>
-            <div className="grid grid-cols-2 gap-3">
-              <InputText
-                control={control}
-                error={!!errors.contactName}
-                helperText={errors.contactName?.message}
-                name={'contactName'}
-                label={'收件者姓名 *'}
-                defaultValue={''}
-              />
-
-              <InputText
-                control={control}
-                error={!!errors.contactPhone}
-                helperText={errors.contactPhone?.message}
-                name={'contactPhone'}
-                label={'收件者電話 *'}
-                defaultValue={''}
-              />
-
-              <div className="col-span-full">
-                <FormControlLabel
-                  className="text-secondary"
-                  control={<Checkbox checked={sameAbove} onChange={handleSameAboveChange} />}
-                  name="sameAbove"
-                  label="與贊助人資料相同"
-                />
-              </div>
-
-              <InputText
-                className="col-span-full"
-                control={control}
-                error={!!errors.address}
-                helperText={errors.address?.message}
-                name={'address'}
-                label={'收件地址 *'}
-                defaultValue={''}
-              />
-            </div>
-          </div>
-
-          <LoadingButton loading={patchUserLoading} type="submit" fullWidth variant="contained">
-            <span>{patchUserLoading ? '儲存中' : '儲存'}</span>
-          </LoadingButton>
-        </div>
-      </form>
-    </UserLayout>
+        </form>
+      </UserLayout>
+    </>
   );
 };
 export default PersonalSettings;
