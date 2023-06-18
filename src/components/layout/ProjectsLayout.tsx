@@ -1,17 +1,25 @@
-import Image from 'next/image';
-import ProjectTabs from '../pages/projects/ProjectTabs';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Button, IconButton, Typography } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
-import { Add, EmailOutlined, Facebook, Instagram, Public, YouTube } from '@mui/icons-material';
-import ShareIcon from '@mui/icons-material/Share';
-import CircularDeterminate from '../block/circularDeterminate';
-import { DeterminateSize } from '../types/enum';
+import Image from 'next/image';
 import Link from 'next/link';
-import useBreakpoints from '@/libraries/hooks/useBreakPoints';
-import { IProjectState } from '@/types/project';
-import { formatDateWithTime } from '@/libraries/utils';
 import { useRouter } from 'next/router';
+
+import { Button, IconButton, Typography } from '@mui/material';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
+import PublicIcon from '@mui/icons-material/Public';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import CheckIcon from '@mui/icons-material/Check';
+import ShareIcon from '@mui/icons-material/Share';
+
+import { IProjectState } from '@/types/project';
+import { DeterminateSize } from '../types/enum';
+
+import ProjectTabs from '../pages/projects/ProjectTabs';
+import CircularDeterminate from '../block/circularDeterminate';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+import { formatDateWithTime } from '@/libraries/utils';
 import { projectCategoryEnum } from '@/libraries/enum';
 
 interface IProjectLayoutProps {
@@ -220,7 +228,7 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                           variant="outlined"
                           fullWidth
                           color="secondary"
-                          startIcon={followed ? <CheckIcon /> : <Add />}
+                          startIcon={followed ? <CheckIcon /> : <AddRoundedIcon />}
                           className="flex justify-center items-center"
                         >
                           {followed ? '已追蹤' : '追蹤專案'}
@@ -271,7 +279,7 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                           window.open(`${projectTeam?.socialFb || 'https://www.facebook.com/mujibu'}`, '_ blank')
                         }
                       >
-                        <Public fontSize="small" />
+                        <PublicIcon fontSize="small" />
                       </IconButton>
                       <IconButton
                         aria-label="email"
@@ -281,7 +289,7 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                           window.open(`${projectTeam?.socialEmail || 'https://www.facebook.com/mujibu'}`, '_ blank')
                         }
                       >
-                        <EmailOutlined fontSize="small" />
+                        <MailOutlineRoundedIcon fontSize="small" />
                       </IconButton>
                       <IconButton
                         aria-label="facebook"
@@ -291,7 +299,7 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                           window.open(`${projectTeam?.socialFb || 'https://www.facebook.com/mujibu'}`, '_ blank')
                         }
                       >
-                        <Facebook fontSize="small" />
+                        <FacebookIcon fontSize="small" />
                       </IconButton>
                       <IconButton
                         aria-label="youtube"
@@ -301,10 +309,10 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                           window.open(`${projectTeam?.socialYoutube || 'https://www.facebook.com/mujibu'}`, '_ blank')
                         }
                       >
-                        <YouTube fontSize="small" />
+                        <YouTubeIcon fontSize="small" />
                       </IconButton>
                       {/* <IconButton aria-label="instagram" color="secondary" size="small">
-                        <Instagram fontSize="small" />
+                        <InstagramIcon fontSize="small" />
                       </IconButton> */}
                       <IconButton
                         aria-label="line"

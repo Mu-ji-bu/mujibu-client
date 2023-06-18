@@ -1,5 +1,14 @@
 import { Container, Box, Grid, Stack, Button, IconButton, Typography, Avatar } from '@mui/material';
-import { Bolt, Add, Facebook, Instagram, YouTube, Search, Google, EmailOutlined, Public } from '@mui/icons-material';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
+import PublicIcon from '@mui/icons-material/Public';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import GoogleIcon from '@mui/icons-material/Google';
+import BoltRoundedIcon from '@mui/icons-material/BoltRounded';
+
 import Link from 'next/link';
 import CircularDeterminate from '@/components/block/circularDeterminate';
 import { DeterminateSize } from '@/components/types/enum';
@@ -79,7 +88,7 @@ const Mui = () => {
         </Stack>
 
         <Stack direction="row" spacing={2} className="mb-5">
-          <Button variant="contained" size="large" startIcon={<Bolt />}>
+          <Button variant="contained" size="large" startIcon={<BoltRoundedIcon />}>
             開始提案
           </Button>
         </Stack>
@@ -95,22 +104,22 @@ const Mui = () => {
           <Button variant="outlined" color="secondary">
             發現更多
           </Button>
-          <Button variant="outlined" color="secondary" startIcon={<Add />}>
+          <Button variant="outlined" color="secondary" startIcon={<AddRoundedIcon />}>
             追蹤專案
           </Button>
         </Stack>
         <Stack direction="row" spacing={2} className="mb-5">
           <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="search">
-            <Search />
+            <SearchRoundedIcon />
           </Button>
           <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="facebook">
-            <Facebook />
+            <FacebookIcon />
           </Button>
           <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="instagram">
-            <Instagram />
+            <InstagramIcon />
           </Button>
           <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="youtube">
-            <YouTube />
+            <YouTubeIcon />
           </Button>
           <Button variant="outlined" color="secondary" className="p-[6px] min-w-0" aria-label="line">
             <svg width="24" height="24" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -124,19 +133,19 @@ const Mui = () => {
 
         <Stack direction="row" className="mb-5">
           <IconButton aria-label="homepage" color="secondary" size="small">
-            <Public fontSize="small" />
+            <PublicIcon fontSize="small" />
           </IconButton>
           <IconButton aria-label="email" color="secondary" size="small">
-            <EmailOutlined fontSize="small" />
+            <MailOutlineRoundedIcon fontSize="small" />
           </IconButton>
           <IconButton aria-label="facebook" color="secondary" size="small">
-            <Facebook fontSize="small" />
+            <FacebookIcon fontSize="small" />
           </IconButton>
           <IconButton aria-label="youtube" color="secondary" size="small">
-            <YouTube fontSize="small" />
+            <YouTubeIcon fontSize="small" />
           </IconButton>
           <IconButton aria-label="instagram" color="secondary" size="small">
-            <Instagram fontSize="small" />
+            <InstagramIcon fontSize="small" />
           </IconButton>
           <IconButton aria-label="line" color="secondary" size="small">
             <svg width="20" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -148,7 +157,7 @@ const Mui = () => {
           </IconButton>
         </Stack>
 
-        <Button type="submit" fullWidth variant="outlined" startIcon={<Google />}>
+        <Button type="submit" fullWidth variant="outlined" startIcon={<GoogleIcon />}>
           使用 Google 登入
         </Button>
       </Box>

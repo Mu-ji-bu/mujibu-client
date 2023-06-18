@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { InputBase } from '@mui/material';
-import { Search } from '@mui/icons-material';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import Button from '../button/Button';
 import clsxm from '@/libraries/utils/clsxm';
 
@@ -45,7 +45,7 @@ const SearchButton = () => {
         className="p-[6px] min-w-0 border-none"
         aria-label="button"
       >
-        <Search />
+        <SearchRoundedIcon />
       </Button>
     </div>
   );

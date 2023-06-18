@@ -1,5 +1,6 @@
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
-import { Bolt } from '@mui/icons-material';
+import BoltRoundedIcon from '@mui/icons-material/BoltRounded';
+
 import { Button, Typography, styled } from '@mui/material';
 import { useRouter } from 'next/router';
 
@@ -26,7 +27,7 @@ const Proposal = () => {
             onClick={() => router.push('/proposal/form')}
             variant="contained"
             size="large"
-            startIcon={<Bolt />}
+            startIcon={<BoltRoundedIcon />}
           >
             <Typography component="h5" variant="h5">
               開始提案

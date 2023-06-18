@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import { Menu, MenuItem } from '@mui/material';
-import { NotificationsOutlined as NotificationsOutlinedIcon } from '@mui/icons-material';
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import Button from '../button';
 
 export interface INotificationsMenuOption {
