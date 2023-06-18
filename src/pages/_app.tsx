@@ -15,6 +15,7 @@ import 'dayjs/locale/zh-tw';
 
 import { Elements } from '@stripe/react-stripe-js';
 import { stripePromise } from '@libraries/utils/stripe.utils';
+import Head from 'next/head';
 
 const App = ({ Component, ...rest }: AppProps) => {
   const { store, props } = wrapper?.useWrappedStore(rest);
@@ -43,6 +44,13 @@ const App = ({ Component, ...rest }: AppProps) => {
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="zh-tw">
           <Elements stripe={stripePromise}>
             <Layout>
+              <Head>
+                <link rel="shortcut icon" href="/favicon.ico" />
+                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                <link rel="manifest" href="/site.webmanifest" />
+              </Head>
               <Component {...props.pageProps} />
             </Layout>
           </Elements>
