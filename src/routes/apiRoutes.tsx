@@ -7,6 +7,8 @@ const apiRoutes = {
   proposalURL: '/api/proposal',
   uploadPhotoURL: '/api/upload/file',
   homeURL: '/api/home',
+  gerUserCollectURL: '/api/collect/:userId',
+  collectURL: '/api/collect',
 };
 
 export default apiRoutes;

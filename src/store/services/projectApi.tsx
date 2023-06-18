@@ -22,7 +22,15 @@ export const projectApiService = createApi({
         return `${apiRoutes.projectsURL}?${searchParams}`;
       },
     }),
+    getProjectById: builder.query<any, any>({
+      query: (projectId) => {
+        if (projectId) {
+          return `${apiRoutes.projectsURL}/${projectId}`;
+        }
+        throw new Error('Invalid projectId');
+      },
+    }),
   }),
 });
 
-export const { useGetAllProjectDataQuery, useGetProjectDataQuery } = projectApiService;
+export const { useGetAllProjectDataQuery, useGetProjectDataQuery, useGetProjectByIdQuery } = projectApiService;
