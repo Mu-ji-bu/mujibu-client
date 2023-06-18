@@ -20,7 +20,7 @@ import routePath from '@/routes/routePath';
 import clsxm from '@/libraries/utils/clsxm';
 
 const multiProductCheckoutOptions = ['僅計算一次', '將總運費相加'];
-const freeShippingOptions = ['無減免條件', '結帳滿'];
+const freeShippingOptions = ['無減免條件', '超過此金額免運'];
 const cvsList = ['7-11', '全家', '萊爾富'];
 const bankList = [
   '004 台灣銀行',
@@ -36,36 +36,29 @@ const bankList = [
 ];
 
 interface ProposalStep4Props {
-  setValue: UseFormSetValue<any>;
+  setValue: any;
   getValues: any;
-  errors: FieldErrors<any>;
-  control: Control<any>;
-  watch: UseFormWatch<any>;
+  errors: any;
+  control: any;
+  watch: any;
 }
 const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue, getValues, watch }) => {
-  const [imageUploaded, setImageUploaded] = useState<string>('');
   // const [shippingSwitch, setShippingSwitch] = useState<boolean>(true);
   const [sameRepresent, setSameRepresent] = useState(false);
 
   const handleSameRepresentChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSameRepresent(e.target.checked);
     if (e.target.checked) {
-      setValue('senderName', getValues('representativeName'));
-      setValue('senderPhone', getValues('representativePhone'));
+      setValue('shippingSettings.deliveryInfo.senderName', getValues('projectTeam.representativeName'));
+      setValue('shippingSettings.deliveryInfo.senderPhone', getValues('projectTeam.representativeMobile'));
     } else {
-      setValue('senderName', '');
-      setValue('senderPhone', '');
+      setValue('shippingSettings.deliveryInfo.senderName', '');
+      setValue('shippingSettings.deliveryInfo.senderPhone', '');
     }
   };
-  const shippingSwitchValue = watch('shippingSwitch');
-  const deliverySwitchValue = watch('deliverySwitch');
-  const cvsSwitchValue = watch('cvsSwitch');
-
-  useEffect(() => {
-    if (imageUploaded) {
-      setValue('projectImage', imageUploaded);
-    }
-  }, [imageUploaded, setValue]);
+  const shippingSwitchValue = watch('shippingSettings.shippingSwitch');
+  const deliverySwitchValue = watch('shippingSettings.deliveryInfo.deliverySwitch');
+  const cvsSwitchValue = watch('shippingSettings.cvsInfo.cvsSwitch');
 
   return (
     <div className="py-5 md:py-10 px-5 md:px-20  bg-white w-full rounded-md md:border md:border-solid md:border-secondary-10">
@@ -76,38 +69,41 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
         <div className="grid grid-cols-2 gap-3">
           <InputSelect
             control={control}
-            error={!!errors.projectCategory}
-            // helperText={errors.projectCategory?.message}
-            name={'projectCategory'}
+            error={!!errors.withdrawSettings?.bankName}
+            helperText={errors.withdrawSettings?.bankName?.message}
+            name={'withdrawSettings.bankName'}
             label={'提領銀行 *'}
             items={bankList}
-            isNumber={true}
+            isNumber={false}
           />
-
           <InputText
             control={control}
-            error={!!errors.projectName}
-            helperText={errors.projectName?.message as string}
-            name={'projectName'}
+            error={!!errors.withdrawSettings?.accountNumber}
+            helperText={errors.withdrawSettings?.accountNumber?.message}
+            name={'withdrawSettings.accountNumber'}
             label={'銀行帳號 *'}
             defaultValue={''}
           />
-
           <Typography className="col-span-full text-secondary-66" component="p" variant="caption">
             專案順利達標後，您將根據逐筆訂單所使用的付款方式支付「平台服務費用」與「金流服務費用」。
             若對應訂單使用信用卡付款，募質部將收取 5.5% 募質部平台手續費，金流服務商則將依據消費者付款類別（如：國內 /
             外信用卡、銀聯卡、Google Pay、Samsung Pay 等），收取不同比例之金流手續費，詳情可見 「消費者付費條款」。
           </Typography>
-          <div className="col-span-full flex items-center">
-            <InputCheckbox
-              control={control}
-              name={'isAgreeTerms'}
-              label={'已閱讀並同意'}
-              defaultValue={false}
-              className="text-secondary mr-1"
-            />
+
+          <div className="col-span-full flex">
+            <div>
+              <InputCheckbox
+                control={control}
+                error={!!errors.withdrawSettings?.isAgreeTerms}
+                helperText={errors.withdrawSettings?.isAgreeTerms?.message}
+                name={'withdrawSettings.isAgreeTerms'}
+                label={'已閱讀並同意'}
+                defaultValue={false}
+                className="text-secondary mr-1"
+              />
+            </div>
             <Link
-              className="text-primary no-underline hover:text-secondary visited:text-primary"
+              className="text-primary no-underline hover:text-secondary visited:text-primary mt-[9px]"
               href={routePath.userTerms}
             >
               <Typography component="p" variant="body16">
@@ -128,7 +124,7 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
         <div className="w-full text-center mb-5">
           <Switcher
             control={control}
-            name={'shippingSwitch'}
+            name={'shippingSettings.shippingSwitch'}
             label={'是否需要開啟物流'}
             className={'ml-0 text-secondary-66 '}
           />
@@ -144,18 +140,17 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
             >
               <Switcher
                 control={control}
-                name={'deliverySwitch'}
+                name={'shippingSettings.deliveryInfo.deliverySwitch'}
                 label={'宅配寄送'}
                 className={'ml-0  text-secondary-66 '}
-                defaultValue={0}
               />
               {deliverySwitchValue == 1 && (
                 <div className="grid grid-cols-2 gap-3 mt-5">
                   <InputTextDeco
                     control={control}
-                    error={!!errors.deliveryFee}
-                    // helperText={errors.deliveryFee?.message}
-                    name={'deliveryFee'}
+                    error={!!errors.shippingSettings?.deliveryInfo?.deliveryFee}
+                    helperText={errors.shippingSettings?.deliveryInfo?.deliveryFee?.message}
+                    name={'shippingSettings.deliveryInfo.deliveryFee'}
                     label={'運費 *'}
                     deco={'NT$'}
                     defaultValue={100}
@@ -163,9 +158,9 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
                   />
                   <InputRadio
                     control={control}
-                    error={!!errors.multiProductCheckout}
-                    // helperText={errors.multiProductCheckout?.message}
-                    name={'multiProductCheckout'}
+                    error={!!errors.shippingSettings?.deliveryInfo?.multiProductCheckout}
+                    helperText={errors.shippingSettings?.deliveryInfo?.multiProductCheckout?.message}
+                    name={'shippingSettings.deliveryInfo.multiProductCheckout'}
                     label={'多商品結帳'}
                     defaultValue={0}
                     items={multiProductCheckoutOptions}
@@ -173,34 +168,33 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
                     classNameRadio={'mr-2 md:mr-5'}
                   />
 
-                  <div className="col-span-full flex items-end md:items-center">
+                  <div
+                    className={clsxm(
+                      'col-span-full flex',
+                      !!errors.shippingSettings?.deliveryInfo?.freeShippingPrice && 'items-center',
+                      !errors.shippingSettings?.deliveryInfo?.freeShippingPrice && 'items-end',
+                    )}
+                  >
                     <InputRadio
                       control={control}
-                      error={!!errors.freeShippingConditions}
-                      // helperText={errors.freeShippingConditions?.message}
-                      name={'freeShippingConditions'}
+                      error={!!errors.shippingSettings?.deliveryInfo?.freeShippingPrice}
+                      helperText={errors.shippingSettings?.deliveryInfo?.freeShippingPrice?.message}
+                      name={'shippingSettings.deliveryInfo.freeShippingConditions'}
                       label={'運費減免條件'}
                       defaultValue={0}
                       items={freeShippingOptions}
-                      classNameForm={
-                        'col-span-full flex flex-col md:flex-row md:flex-wrap md:items-center md:justify-start md:space-x-2'
-                      }
+                      classNameForm={'123'}
                       classNameRadio={'mr-2 md:mr-5'}
                     />
-                    <div className="flex items-center justify-start">
+                    <div className="">
                       <InputTextDeco
                         control={control}
-                        error={!!errors.freeShippingPrice}
-                        // helperText={errors.freeShippingPrice?.message}
-                        name={'freeShippingPrice'}
+                        name={'shippingSettings.deliveryInfo.freeShippingPrice'}
                         label={''}
                         deco={'NT$'}
                         defaultValue={100}
-                        className={'w-[100px]'}
+                        className={'w-[120px]'}
                       />
-                      <Typography className="ml-2 whitespace-nowrap" component="p" variant="body16">
-                        免運
-                      </Typography>
                     </div>
                   </div>
 
@@ -215,18 +209,18 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
 
                   <InputText
                     control={control}
-                    error={!!errors.senderName}
-                    // helperText={errors.senderName?.message}
-                    name={'senderName'}
+                    error={!!errors.shippingSettings?.deliveryInfo?.senderName}
+                    helperText={errors.shippingSettings?.deliveryInfo?.senderName?.message}
+                    name={'shippingSettings.deliveryInfo.senderName'}
                     label={'寄件人姓名 *'}
                     defaultValue={''}
                   />
 
                   <InputText
                     control={control}
-                    error={!!errors.senderPhone}
-                    // helperText={errors.senderPhone?.message}
-                    name={'senderPhone'}
+                    error={!!errors.shippingSettings?.deliveryInfo?.senderPhone}
+                    helperText={errors.shippingSettings?.deliveryInfo?.senderPhone?.message}
+                    name={'shippingSettings.deliveryInfo.senderPhone'}
                     label={'寄件人電話 *'}
                     defaultValue={''}
                   />
@@ -234,9 +228,9 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
                   <InputText
                     className="col-span-full"
                     control={control}
-                    error={!!errors.senderAddress}
-                    // helperText={errors.senderAddress?.message}
-                    name={'senderAddress'}
+                    error={!!errors.shippingSettings?.deliveryInfo?.senderAddress}
+                    helperText={errors.shippingSettings?.deliveryInfo?.senderAddress?.message}
+                    name={'shippingSettings.deliveryInfo.senderAddress'}
                     label={'寄件地址 *'}
                     defaultValue={''}
                   />
@@ -252,18 +246,17 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
             >
               <Switcher
                 control={control}
-                name={'cvsSwitch'}
+                name={'shippingSettings.cvsInfo.cvsSwitch'}
                 label={'超商取貨'}
                 className={'ml-0  text-secondary-66 '}
-                defaultValue={0}
               />
               {cvsSwitchValue == 1 && (
                 <div className="grid grid-cols-2 gap-3 mt-5">
                   <InputTextDeco
                     control={control}
-                    error={!!errors.deliveryFee}
-                    // helperText={errors.deliveryFee?.message}
-                    name={'deliveryFee'}
+                    // error={!!errors.shippingSettings?.cvsInfo?.deliveryFee}
+                    // helperText={errors.shippingSettings?.cvsInfo?.deliveryFee?.message}
+                    name={'shippingSettings.cvsInfo.deliveryFee'}
                     label={'運費 *'}
                     deco={'NT$'}
                     defaultValue={70}
@@ -271,9 +264,9 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
                   />
                   <InputRadio
                     control={control}
-                    error={!!errors.multiProductCheckout}
-                    // helperText={errors.multiProductCheckout?.message}
-                    name={'multiProductCheckout'}
+                    // error={!!errors.shippingSettings?.cvsInfo?.multiProductCheckout}
+                    // helperText={errors.shippingSettings?.cvsInfo?.multiProductCheckout?.message}
+                    name={'shippingSettings.cvsInfo.multiProductCheckout'}
                     label={'多商品結帳'}
                     defaultValue={0}
                     items={multiProductCheckoutOptions}
@@ -284,9 +277,9 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
                   <div className="col-span-full flex items-end md:items-center">
                     <InputRadio
                       control={control}
-                      error={!!errors.freeShippingConditions}
-                      // helperText={errors.freeShippingConditions?.message}
-                      name={'freeShippingConditions'}
+                      // error={!!errors.shippingSettings?.cvsInfo?.freeShippingConditions}
+                      // helperText={errors.shippingSettings?.cvsInfo?.freeShippingConditions?.message}
+                      name={'shippingSettings.cvsInfo.freeShippingConditions'}
                       label={'運費減免條件'}
                       defaultValue={0}
                       items={freeShippingOptions}
@@ -298,9 +291,9 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
                     <div className="flex items-center justify-start">
                       <InputTextDeco
                         control={control}
-                        error={!!errors.freeShippingPrice}
-                        // helperText={errors.freeShippingPrice?.message}
-                        name={'freeShippingPrice'}
+                        // error={!!errors.shippingSettings?.cvsInfo?.freeShippingPrice}
+                        // helperText={errors.shippingSettings?.cvsInfo?.freeShippingPrice?.message}
+                        name={'shippingSettings.cvsInfo.freeShippingPrice'}
                         label={''}
                         deco={'NT$'}
                         defaultValue={100}
@@ -315,9 +308,9 @@ const ProposalStep4: React.FC<ProposalStep4Props> = ({ control, errors, setValue
                   <InputSelect
                     className={'col-span-full'}
                     control={control}
-                    error={!!errors.projectCategory}
-                    // helperText={errors.projectCategory?.message}
-                    name={'cvsName'}
+                    // error={!!errors.shippingSettings?.cvsInfo?.projectCategory}
+                    // helperText={errors.shippingSettings?.cvsInfo?.projectCategory?.message}
+                    name={'shippingSettings.cvsInfo.cvsName'}
                     label={'合作超商 *'}
                     items={cvsList}
                     isNumber={true}

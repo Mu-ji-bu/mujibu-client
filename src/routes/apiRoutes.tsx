@@ -4,6 +4,7 @@ const apiRoutes = {
   firebaseGoogleloginURL: '/api/auth/firebase-google',
   usersURL: '/api/users',
   projectsURL: '/api/projects',
+  proposalURL: '/api/proposal',
   uploadPhotoURL: '/api/upload/file',
   homeURL: '/api/home',
   gerUserCollectURL: '/api/collect/:userId',

@@ -22,6 +22,9 @@ export declare interface ITeamState {
   socialLine?: string;
   socialIg?: string;
   socialYoutube?: string;
+  isTaiwan?: boolean;
+  isAgreeTerms?: boolean;
+  isOver18?: boolean;
   createdAt?: Date | null;
   updatedAt?: Date | null;
 }

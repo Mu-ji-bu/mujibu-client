@@ -35,7 +35,6 @@ const ProjectPlan: React.FC<IProjectPlanProps> = ({
     planStartTime,
     planEndTime,
     planDescription,
-    planNotes,
     planOrders,
     planBackers,
     otherNotes,

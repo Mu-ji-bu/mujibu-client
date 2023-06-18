@@ -14,6 +14,7 @@ const nextConfig = {
       'images.unsplash.com',
       'fastly.picsum.photos',
       'loremflickr.com',
+      'plus.unsplash.com',
       '',
     ],
   },

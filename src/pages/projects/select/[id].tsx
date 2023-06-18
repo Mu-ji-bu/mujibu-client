@@ -165,7 +165,7 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
                   提案者
                 </Typography>
                 <Typography component="span" variant="body16" className="text-primary">
-                  {projectTeam?.teamName || projectProposer?.name}
+                  {projectTeam?.teamName || '沒有團隊名稱'}
                 </Typography>
               </div>
             </div>

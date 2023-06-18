@@ -47,8 +47,8 @@ const LogIn = () => {
 
   useEffect(() => {
     if (googleToken) {
-      // 過期時間120分鐘
-      const expirationTime = 120;
+      // 過期時間600分鐘
+      const expirationTime = 600;
       const currentDate = new Date();
       currentDate.setTime(currentDate.getTime() + expirationTime * 60 * 1000);
       Cookies.set('googleToken', googleToken, { expires: currentDate });

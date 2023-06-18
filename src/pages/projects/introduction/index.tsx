@@ -25,7 +25,7 @@ const fakeProjectPlan: IPlanState = {
   planEndTime: new Date('2023-06-30'),
   planDescription:
     '這款超薄可折疊筆記電腦套組提供了高效的處理器和充足的存儲空間，讓您能夠在不同的場景中輕鬆地進行多任務處理。',
-  planNotes: [
+  otherNotes: [
     '內容物： 超薄可折疊筆記電腦本體x1，充電器x1，保護套x1，筆記本鼠標x1，使用說明書x1',
     '贈送市值2000元螢幕保護膜',
   ],

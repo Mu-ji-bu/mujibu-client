@@ -171,7 +171,7 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
             href="#"
             className="no-underline  text-primary  hover:text-secondary visited:text-primary font-normal md:font-medium text-sm md:text-base"
           >
-            {projectTeam?.teamName || projectProposer?.name || '沒有團隊也沒有提案者'}
+            {projectTeam?.teamName || '沒有團隊也沒有提案者'}
           </Link>
         </div>
         {renderCardBottom()}

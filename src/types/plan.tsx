@@ -1,9 +1,9 @@
-import { IProjectState } from './project';
+// import { IProjectState } from './project';
 
 export declare interface IPlanState {
   _id?: string;
-  project?: string; // 討論後刪去
-  planOrders?: any[];
+  // project?: IProjectState; // 討論後刪去，暫存
+  planOrders?: any[]; // 還未建立先放any[]替代
   planName?: string;
   planType?: string;
   planDiscountPrice: number;
@@ -13,8 +13,7 @@ export declare interface IPlanState {
   planStartTime?: Date | null;
   planEndTime?: Date | null;
   planDescription?: string;
-  planNotes?: string[]; // 討論後刪去
-  otherNotes?: any[]; // 取代 planNotes
+  otherNotes?: string[];
   planBackers?: number; // 新增
   isRealProduct?: boolean;
   createdAt?: Date | null;
