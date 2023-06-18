@@ -16,6 +16,7 @@ import { IProjectState } from 'types/project';
 import { projectCategoryEnum, projectFormEnum } from '@/libraries/enum';
 import { calculatePercentage } from '@/libraries/utils';
 import { CardActionArea } from '@mui/material';
+import { useRouter } from 'next/router';
 
 // interface ImgMediaCardProps {
 //   isPC: boolean;
@@ -45,6 +46,8 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
     projectTeam,
     endTime,
   } = props;
+
+  const router = useRouter();
 
   const progressBar = useMemo(() => {
     return currentAmount && goalAmount ? calculatePercentage(currentAmount, goalAmount) : 0;
@@ -136,17 +139,21 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
         'rounded-lg border-secondary shadow-none border border-solid border-opacity-[.12]',
       )}
     >
-      <Link href={`/projects/introduction/${projectId}`}>
-        <CardActionArea>
-          <CardMedia
-            className="rounded-lg object-cover"
-            component="img"
-            alt={projectName}
-            height="276"
-            image={projectImage}
-          />
-        </CardActionArea>
-      </Link>
+      {/* <Link href={`/projects/introduction/${projectId}`}> */}
+      <CardActionArea
+        onClick={() => {
+          router.push(`/projects/introduction/${projectId}`);
+        }}
+      >
+        <CardMedia
+          className="rounded-lg object-cover"
+          component="img"
+          alt={projectName}
+          height="276"
+          image={projectImage}
+        />
+      </CardActionArea>
+      {/* </Link> */}
       <CardContent className="mt-5 p-0">
         <div className="flex justify-between items-center">
           <Chip

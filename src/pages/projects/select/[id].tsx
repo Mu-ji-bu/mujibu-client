@@ -108,7 +108,6 @@ const ProjectSelectPage = () => {
   }, [count, selectedPlan]);
 
   useEffect(() => {
-    console.log(router.query);
     if (!router.query.projectPlanId) return;
     // 取得 projectPlanId 參數的值
     setProjectPlanId(router.query.projectPlanId as string);
