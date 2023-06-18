@@ -2,6 +2,7 @@ import Image from 'next/image';
 import ProjectTabs from '../pages/projects/ProjectTabs';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { Button, IconButton, Typography } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
 import { Add, EmailOutlined, Facebook, Instagram, Public, YouTube } from '@mui/icons-material';
 import ShareIcon from '@mui/icons-material/Share';
 import CircularDeterminate from '../block/circularDeterminate';
@@ -16,10 +17,18 @@ import { projectCategoryEnum } from '@/libraries/enum';
 interface IProjectLayoutProps {
   projectState: IProjectState;
   children: ReactNode;
+  handleFollow?: Function;
+  followed?: boolean;
   tabIndex?: number;
 }
 
-const ProjectsLayout: React.FC<IProjectLayoutProps> = ({ children, projectState, tabIndex }) => {
+const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
+  children,
+  projectState,
+  handleFollow,
+  followed,
+  tabIndex,
+}) => {
   const {
     _id,
     projectType,
@@ -105,17 +114,19 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({ children, projectState,
           </div>
           <div className="project-main py-8">
             <Typography component="h2" variant="h2">
-              {projectDescription}
+              {projectName}
             </Typography>
             <div className="details w-full flex justify-center pt-8 gap-6">
-              <div className="flex flex-col w-2/3">
+              <div className="flex flex-col w-2/3 relative">
                 <Image
                   src={projectImage || '/project/Desktop_Project_kv.png'}
                   alt="project1"
-                  width={0}
-                  height={0}
-                  sizes="100vw"
-                  style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: '8px' }}
+                  fill
+                  // style={{ objectFit: 'contain' }}
+                  // width={0}
+                  // height={0}
+                  // sizes="100vw"
+                  // style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: '8px' }}
                 />
               </div>
               <div className="w-1/3 flex flex-col justify-between">
@@ -200,9 +211,19 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({ children, projectState,
                       </Button>
                     </div>
                     <div className="btns-action flex justify-center gap-3 mt-3">
-                      <div className="btn1 w-1/2">
-                        <Button variant="outlined" fullWidth color="secondary" startIcon={<Add />}>
-                          追蹤專案
+                      <div className="btn1 w-1/2 flex">
+                        <Button
+                          onClick={() => {
+                            console.log(handleFollow);
+                            handleFollow && handleFollow();
+                          }}
+                          variant="outlined"
+                          fullWidth
+                          color="secondary"
+                          startIcon={followed ? <CheckIcon /> : <Add />}
+                          className="flex justify-center items-center"
+                        >
+                          {followed ? '已追蹤' : '追蹤專案'}
                         </Button>
                       </div>
                       <div className="btn2 w-1/2">
