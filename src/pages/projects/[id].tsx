@@ -49,10 +49,17 @@ const Project = () => {
   const [postUserCollect, { isLoading: postUserCollectLoading }] = usePostUserCollectMutation();
 
   const handleFollow = async () => {
-    if (!userId) alert('請登入');
-    await postUserCollect({ userId, projectId }).finally(() => {
-      setFollowed(!followed);
-      alert('已新增');
+    if (!userId) {
+      return alert('請登入');
+    }
+    await postUserCollect({ userId, projectId }).then((res: any) => {
+      try {
+        if (res?.data.status === 'Success') {
+          setFollowed(!followed);
+        }
+      } catch (err) {
+        alert('已新增');
+      }
     });
   };
   const dataList = useMemo((): any => data?.data || [], [data?.data]);
