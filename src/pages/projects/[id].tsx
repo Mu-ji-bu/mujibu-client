@@ -18,6 +18,7 @@ import ProjectPlan from '@/components/pages/projects/ProjectPlan';
 import ProjectsLayout from '@/components/layout/ProjectsLayout';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import Loading from '@/components/Loading';
+import Seo from '@/components/Seo';
 
 const fakeProjectPlan: IPlanState = {
   _id: '1',
@@ -74,6 +75,7 @@ const Project = () => {
 
   return (
     <>
+      <Seo templateTitle="專案介紹" />
       {isLoading ? (
         <Loading />
       ) : (

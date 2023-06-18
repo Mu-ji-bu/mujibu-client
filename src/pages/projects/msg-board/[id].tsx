@@ -10,6 +10,7 @@ import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import ProjectPlan from '@/components/pages/projects/ProjectPlan';
 import { useRouter } from 'next/router';
 import { useGetProjectByIdQuery } from '@/store/services/projectApi';
+import Seo from '@/components/Seo';
 
 // interface DetailsProps {
 //   project: IProjectState;
@@ -59,6 +60,7 @@ const MsgBoard = () => {
 
   return (
     <>
+      <Seo templateTitle="留言板" />
       {isLoading ? (
         <Loading />
       ) : (
