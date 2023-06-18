@@ -269,11 +269,11 @@ const Form = () => {
   const projectPlansNum = watch('projectPlans');
   const isDelivery = watch('shippingSettings.deliveryInfo.deliverySwitch');
 
-  const handleGetValues = () => {
-    const formData = getValues();
-    setProposalForm(formData);
-    console.log(formData);
-  };
+  // const handleGetValues = () => {
+  //   const formData = getValues();
+  //   setProposalForm(formData);
+  //   console.log(formData);
+  // };
 
   const handleStep1 = () => {
     const checkData = getValues();
@@ -372,7 +372,7 @@ const Form = () => {
         }
       }
     },
-    [userData._id, activeStep, postProposal, isPreview],
+    [userData._id, postProposal, isPreview],
   );
 
   useEffect(() => {
