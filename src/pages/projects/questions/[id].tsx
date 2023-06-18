@@ -3,13 +3,16 @@ import ProjectsLayout from '@/components/layout/ProjectsLayout';
 import Loading from '@/components/Loading';
 import ProjectPlan from '@/components/pages/projects/ProjectPlan';
 import Seo from '@/components/Seo';
+import { useAppSelector } from '@/libraries/hooks/reduxHooks';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import { useGetCarouselDataQuery } from '@/store/services/homeApi';
 import { useGetProjectByIdQuery } from '@/store/services/projectApi';
+import { usePostUserCollectMutation } from '@/store/services/userApi';
+import { selectUser } from '@/store/slices/userSlice';
 import { IProjectState } from '@/types/project';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 // interface DetailsProps {
 //   project: IProjectState;
@@ -104,6 +107,27 @@ const Questions = () => {
 
   const project = useMemo((): IProjectState => data?.data || [], [data?.data]);
 
+  const user = useAppSelector(selectUser);
+  const userId = user._id;
+  const [followed, setFollowed] = useState(false);
+
+  const [postUserCollect, { isLoading: postUserCollectLoading }] = usePostUserCollectMutation();
+
+  const handleFollow = async () => {
+    if (!userId) {
+      return alert('請登入');
+    }
+    await postUserCollect({ userId, projectId }).then((res: any) => {
+      try {
+        if (res?.data.status === 'Success') {
+          setFollowed(true);
+        }
+      } catch (err) {
+        alert('已新增');
+      }
+    });
+  };
+
   const handleProjectPlanClick = (projectId: string, projectPlanId: string) => {
     console.log(`click on plan ${projectPlanId}`);
     router.push(`/projects/select/${projectId}?projectPlanId=${projectPlanId}`);
@@ -115,7 +139,7 @@ const Questions = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        <ProjectsLayout projectState={project} tabIndex={2}>
+        <ProjectsLayout projectState={project} tabIndex={2} handleFollow={handleFollow}>
           <div className="details w-full flex justify-center gap-6">
             <div className="flex flex-col w-2/3 gap-8">
               <MujiAccordion {...questionArray[0]} />
