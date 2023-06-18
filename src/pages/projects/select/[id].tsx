@@ -126,8 +126,6 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
 
   return (
     <div>
-      <h1>Project Select Page</h1>
-      <p>Clicked projectPlan ID: {projectPlanId}</p>
       <div className="select-top bg-gray-light">
         <div className="max-w-screen-xl mx-auto px-10">
           <div className="project-category py-5">

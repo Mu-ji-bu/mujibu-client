@@ -9,7 +9,7 @@ import { IPlanState } from '@/types/plan';
 import { IProjectState } from '@/types/project';
 import { useGetProjectByIdQuery } from '@/store/services/projectApi';
 import { usePostUserCollectMutation } from '@/store/services/userApi';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Loading from '@/components/Loading';
 import { useRouter } from 'next/router';
 import { useAppSelector } from '@libraries/hooks/reduxHooks';
@@ -44,12 +44,14 @@ const Project = () => {
   const { data, isLoading } = useGetProjectByIdQuery(projectId);
   const user = useAppSelector(selectUser);
   const userId = user._id;
+  const [followed, setFollowed] = useState(false);
 
   const [postUserCollect, { isLoading: postUserCollectLoading }] = usePostUserCollectMutation();
 
   const handleFollow = async () => {
     if (!userId) alert('請登入');
     await postUserCollect({ userId, projectId }).finally(() => {
+      setFollowed(!followed);
       alert('已新增');
     });
   };
@@ -65,7 +67,7 @@ const Project = () => {
         <Loading />
       ) : (
         <>
-          <ProjectsLayout handleFollow={handleFollow} projectState={dataList}>
+          <ProjectsLayout followed={followed} handleFollow={handleFollow} projectState={dataList}>
             <div className="details w-full flex justify-center gap-6">
               <div className="flex flex-col w-2/3 my-auto">
                 <div className="news h-16 flex items-center bg-gray-light pl-5 rounded-lg">

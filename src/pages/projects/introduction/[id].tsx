@@ -12,6 +12,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Loading from '@/components/Loading';
 import { useRouter } from 'next/router';
 import * as DOMPurify from 'dompurify';
+import he from 'he';
 
 import { GetStaticPaths, GetStaticProps } from 'next';
 
@@ -61,15 +62,13 @@ const Introduction = ({ project }: DetailsProps) => {
   const [sample, setSample] = useState('');
 
   const handleProjectPlanClick = (projectId: string, projectPlanId: string) => {
-    console.log(`click on plan ${projectPlanId}`);
-    // router.push(`/projects/select/`);
     router.push(`/projects/select/${projectId}?projectPlanId=${projectPlanId}`);
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/sampleContent.json'); // 請根據你的實際路徑修改這裡
+        const response = await fetch('/sampleContent2.json'); // 請根據你的實際路徑修改這裡
         const jsonData = await response.json();
         setSample(jsonData.data);
       } catch (error) {
@@ -107,7 +106,7 @@ const Introduction = ({ project }: DetailsProps) => {
                 </Typography>
               </div>
               {/* 左側編輯器 */}
-              <BackendHtmlComponent htmlString={getBackendText(sample)} />
+              <BackendHtmlComponent htmlString={(project.projectContent as string) || sample} />
             </div>
             {/* 右側方案 */}
             <div className="w-1/3 flex flex-col gap-6">
@@ -128,9 +127,11 @@ const Introduction = ({ project }: DetailsProps) => {
 };
 
 const BackendHtmlComponent: React.FC<{ htmlString: string }> = ({ htmlString }) => {
-  const sanitizedHtml = DOMPurify.sanitize(htmlString);
+  const decodedHtml = he.decode(htmlString);
+  const imgModifiedHtml = getBackendText(decodedHtml);
+  const sanitizedHtml = DOMPurify.sanitize(imgModifiedHtml);
 
-  return <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />;
+  return <div dangerouslySetInnerHTML={{ __html: imgModifiedHtml }} />;
 };
 
 export default Introduction;
