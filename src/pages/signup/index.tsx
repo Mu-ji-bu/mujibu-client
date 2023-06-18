@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import clsxm from '@/libraries/utils/clsxm';
-import { Button, Typography, TextField, MenuItem, InputLabel, FormControl } from '@mui/material';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Google } from '@mui/icons-material';
+
+import { Button, Typography, TextField, MenuItem } from '@mui/material';
+import GoogleIcon from '@mui/icons-material/Google';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
 import useFirebaseAuthentication from '@libraries/hooks/useFirebaseAuthentication';
@@ -233,7 +233,7 @@ const SignUp = () => {
           type="submit"
           fullWidth
           variant="outlined"
-          startIcon={<Google />}
+          startIcon={<GoogleIcon />}
         >
           使用 Google 註冊
         </Button>

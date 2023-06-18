@@ -33,4 +33,12 @@ export const projectApiService = createApi({
   }),
 });
 
-export const { useGetAllProjectDataQuery, useGetProjectDataQuery, useGetProjectByIdQuery } = projectApiService;
+export const {
+  useGetAllProjectDataQuery,
+  useGetProjectDataQuery,
+  useGetProjectByIdQuery,
+  util: { getRunningQueriesThunk },
+} = projectApiService;
+
+// export endpoints for use in SSR
+export const { getAllProjectData, getProjectData, getProjectById } = projectApiService.endpoints;

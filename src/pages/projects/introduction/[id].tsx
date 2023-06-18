@@ -1,24 +1,33 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import ProjectsLayout from '@/components/layout/ProjectsLayout';
-import useBreakpoints from '@/libraries/hooks/useBreakPoints';
-import { Typography } from '@mui/material';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import ProjectPlan from '@/components/pages/projects/ProjectPlan';
-import { IPlanState } from '@/types/plan';
-import { IProjectState } from '@/types/project';
-import { useGetCarouselDataQuery } from '@/store/services/homeApi';
 import { Key, useEffect, useMemo, useState } from 'react';
-import Loading from '@/components/Loading';
+// import Link from 'next/link';
+// import Image from 'next/image';
+// import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import { useAppSelector, useAppDispatch } from '@/libraries/hooks/reduxHooks';
+import { wrapper } from '@/store/store';
+
 import DOMPurify from 'isomorphic-dompurify';
 import he from 'he';
+import Loading from '@/components/Loading';
 
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { useGetProjectByIdQuery } from '@/store/services/projectApi';
-import { useAppSelector } from '@/libraries/hooks/reduxHooks';
+import { Typography } from '@mui/material';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+
+import { IPlanState } from '@/types/plan';
+import { IProjectState } from '@/types/project';
+
+import { useGetCarouselDataQuery } from '@/store/services/homeApi';
+import { useGetProjectByIdQuery, getRunningQueriesThunk, getProjectById } from '@/store/services/projectApi';
 import { selectUser } from '@/store/slices/userSlice';
 import { usePostUserCollectMutation } from '@/store/services/userApi';
+
+import ProjectPlan from '@/components/pages/projects/ProjectPlan';
+import ProjectsLayout from '@/components/layout/ProjectsLayout';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+
+interface DetailsProps {
+  project: IProjectState;
+}
 
 const getBackendText = (text: string) => {
   let pattern = /<img\b((?![^>]*style=)[^>]*)>/gi;
@@ -27,49 +36,55 @@ const getBackendText = (text: string) => {
   return modifiedText;
 };
 
-/**
- * @description SSR
- // interface DetailsProps {
- //   project: IProjectState;
- // }
- 
- // export const getStaticPaths: GetStaticPaths = async () => {
- //   const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
- //   const response = await res.json();
- //   const data: IProjectState[] = response.data;
- 
- //   const paths = data.map((project) => {
- //     return {
- //       params: { id: project._id as string },
- //     };
- //   });
- 
- //   return {
- //     paths: paths,
- //     fallback: false, // beyond the scope, id doesn't exist, go to 404
- //   };
- // };
- 
- // export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
- //   const id = context.params?.id;
- //   const res = await fetch(`https://mujibu-server-fau1.onrender.com/api/projects/${id}`);
- //   const response = await res.json();
- //   const data: IProjectState = response.data;
- 
- //   return {
- //     props: { project: data },
- //   };
- // };
- 
- // const Introduction = ({ project }: DetailsProps) => {
- */
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  const { id } = context.query;
+  console.log('id', id);
+  if (typeof id === 'string') {
+    store.dispatch(getProjectById.initiate(id));
+  }
+  const [res] = await Promise.all(store.dispatch(getRunningQueriesThunk()));
+  console.log(res);
+  return {
+    props: {
+      project: (res.data as { status: string; data: IProjectState }).data,
+    },
+  };
+});
 
-const Introduction = () => {
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
+//   const response = await res.json();
+//   const data: IProjectState[] = response.data;
+
+//   const paths = data.map((project) => {
+//     return {
+//       params: { id: project._id as string },
+//     };
+//   });
+
+//   return {
+//     paths: paths,
+//     fallback: false, // beyond the scope, id doesn't exist, go to 404
+//   };
+// };
+
+// export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
+//   const id = context.params?.id;
+//   const res = await fetch(`https://mujibu-server-fau1.onrender.com/api/projects/${id}`);
+//   const response = await res.json();
+//   const data: IProjectState = response.data;
+
+//   return {
+//     props: { project: data },
+//   };
+// };
+
+const Introduction = ({ project }: DetailsProps) => {
   const router = useRouter();
   const { id: projectId } = router.query;
   const { data, isLoading } = useGetProjectByIdQuery(projectId);
 
-  const project = useMemo((): IProjectState => data?.data || [], [data?.data]);
+  // const project = useMemo((): IProjectState => data?.data || [], [data?.data]);
   const user = useAppSelector(selectUser);
   const userId = user._id;
   const [followed, setFollowed] = useState(false);

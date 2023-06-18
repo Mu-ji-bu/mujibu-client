@@ -1,20 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Typography, FormLabel } from '@mui/material';
-import PhotoUpload from '@/components/block/photoUpload/PhotoUpload';
+import { Typography } from '@mui/material';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import LoopRoundedIcon from '@mui/icons-material/LoopRounded';
-import {
-  InputText,
-  InputTextMultiline,
-  InputSelect,
-  InputDatepicker,
-  InputTextDeco,
-  InputRadio,
-  Editor,
-} from '@/components/block/form';
-
-const projectTypes = ['實體產品類', '虛擬計畫類'];
-const categoryItems = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
 
 interface ProposalStep6Props {
   setValue?: any;
@@ -22,14 +8,6 @@ interface ProposalStep6Props {
   proposalSuccess?: boolean;
 }
 const ProposalStep6: React.FC<ProposalStep6Props> = ({ setValue, postProposalLoading, proposalSuccess }) => {
-  const [imageUploaded, setImageUploaded] = useState<string>('');
-
-  useEffect(() => {
-    if (imageUploaded) {
-      setValue('projectImage', imageUploaded);
-    }
-  }, [imageUploaded, setValue]);
-
   return (
     <div className="py-20 px-5 md:px-20  bg-white w-full rounded-md md:border md:border-solid md:border-secondary-10">
       {postProposalLoading && (

@@ -1,22 +1,26 @@
+import { useCallback, useEffect, useState, useRef } from 'react';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useCallback, useEffect, useState, useRef } from 'react';
-import { Button, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
 import routePath from '@routes/routePath';
-import AccountMenu, { IAccountMenuOption } from '../block/accountMenu/AccountMenu';
+import clsxm from '@/libraries/utils/clsxm';
+
+import { Button, Typography } from '@mui/material';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+
+import AccountMenu, { IAccountMenuOption } from '../block/accountMenu/AccountMenu';
 import NotificationsMenu, { INotificationsMenuOption } from '../block/notificationsMenu/NotificationsMenu';
 import SearchButton from '../block/searchButton';
-import { Menu } from '@mui/icons-material';
-import Cookies from 'js-cookie';
+
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { authentication } from '../../../firebaseConfig';
+
 import { useAppDispatch, useAppSelector } from '@libraries/hooks/reduxHooks';
 import { useLoginMutation } from '../../store/services/authApi';
 import { updateUser } from '../../store/slices/userSlice';
 import { clearToken, selectAuth, setToken, setUserToken } from '../../store/slices/authSlice';
-import clsxm from '@/libraries/utils/clsxm';
 
 const Header = () => {
   const [isFixed, setIsFixed] = useState<boolean>(true);
@@ -167,7 +171,7 @@ const Header = () => {
             )}
 
             <Button variant="outlined" color="secondary" className="p-[6px] min-w-0 md:hidden ml-5" aria-label="search">
-              <Menu />
+              <MenuRoundedIcon />
             </Button>
           </div>
         </div>

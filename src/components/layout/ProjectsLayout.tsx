@@ -1,17 +1,25 @@
-import Image from 'next/image';
-import ProjectTabs from '../pages/projects/ProjectTabs';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Button, IconButton, Typography } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
-import { Add, EmailOutlined, Facebook, Instagram, Public, YouTube } from '@mui/icons-material';
-import ShareIcon from '@mui/icons-material/Share';
-import CircularDeterminate from '../block/circularDeterminate';
-import { DeterminateSize } from '../types/enum';
+import Image from 'next/image';
 import Link from 'next/link';
-import useBreakpoints from '@/libraries/hooks/useBreakPoints';
-import { IProjectState } from '@/types/project';
-import { formatDateWithTime } from '@/libraries/utils';
 import { useRouter } from 'next/router';
+
+import { Avatar, Button, IconButton, Typography } from '@mui/material';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
+import PublicIcon from '@mui/icons-material/Public';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import CheckIcon from '@mui/icons-material/Check';
+import ShareIcon from '@mui/icons-material/Share';
+
+import { IProjectState } from '@/types/project';
+import { DeterminateSize } from '../types/enum';
+
+import ProjectTabs from '../pages/projects/ProjectTabs';
+import CircularDeterminate from '../block/circularDeterminate';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+import { formatDateWithTime } from '@/libraries/utils';
 import { projectCategoryEnum } from '@/libraries/enum';
 
 interface IProjectLayoutProps {
@@ -117,15 +125,17 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
               {projectName}
             </Typography>
             <div className="details w-full flex justify-center pt-8 gap-6">
-              <div className="flex flex-col w-2/3 relative">
+              <div className="flex flex-col w-2/3 relative ">
                 <Image
                   src={projectImage || '/project/Desktop_Project_kv.png'}
                   alt="project1"
+                  priority={true}
                   fill
-                  // style={{ objectFit: 'contain' }}
-                  // width={0}
-                  // height={0}
-                  // sizes="100vw"
+                  sizes="100vw"
+                  className="object-cover"
+                  // // style={{ objectFit: 'contain' }}
+                  // width={400}
+                  // height={300}
                   // style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: '8px' }}
                 />
               </div>
@@ -220,7 +230,7 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                           variant="outlined"
                           fullWidth
                           color="secondary"
-                          startIcon={followed ? <CheckIcon /> : <Add />}
+                          startIcon={followed ? <CheckIcon /> : <AddRoundedIcon />}
                           className="flex justify-center items-center"
                         >
                           {followed ? '已追蹤' : '追蹤專案'}
@@ -235,17 +245,8 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                   </div>
                 </div>
                 <div className="project-team bg-white h-[28%] rounded-lg p-6 flex flex-col justify-between">
-                  <div className="corporation flex justify-center items-center gap-5 pb-3 border-0 border-b border-solid border-secondary-10">
-                    <div className="icon w-[72px] h-[72px]">
-                      <Image
-                        src={projectTeam?.teamAvatar || '/proposal/Desktop_Proposal_logo.png'}
-                        alt="team1"
-                        width={0}
-                        height={0}
-                        sizes="100vw"
-                        style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-                      />
-                    </div>
+                  <div className="corporation flex items-center space-x-5 pb-3 mb-2 border-0 border-b border-solid border-secondary-10">
+                    <Avatar className="w-[72px] h-[72px]" alt="teamName" src={projectTeam?.teamAvatar || ''}></Avatar>
                     <Link
                       href={`${projectTeam?.socialWebsite || 'https://www.facebook.com/mujibu'}`}
                       className="text-xl no-underline visited:text-primary text-primary font-medium "
@@ -271,7 +272,7 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                           window.open(`${projectTeam?.socialFb || 'https://www.facebook.com/mujibu'}`, '_ blank')
                         }
                       >
-                        <Public fontSize="small" />
+                        <PublicIcon fontSize="small" />
                       </IconButton>
                       <IconButton
                         aria-label="email"
@@ -281,7 +282,7 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                           window.open(`${projectTeam?.socialEmail || 'https://www.facebook.com/mujibu'}`, '_ blank')
                         }
                       >
-                        <EmailOutlined fontSize="small" />
+                        <MailOutlineRoundedIcon fontSize="small" />
                       </IconButton>
                       <IconButton
                         aria-label="facebook"
@@ -291,7 +292,7 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                           window.open(`${projectTeam?.socialFb || 'https://www.facebook.com/mujibu'}`, '_ blank')
                         }
                       >
-                        <Facebook fontSize="small" />
+                        <FacebookIcon fontSize="small" />
                       </IconButton>
                       <IconButton
                         aria-label="youtube"
@@ -301,10 +302,10 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                           window.open(`${projectTeam?.socialYoutube || 'https://www.facebook.com/mujibu'}`, '_ blank')
                         }
                       >
-                        <YouTube fontSize="small" />
+                        <YouTubeIcon fontSize="small" />
                       </IconButton>
                       {/* <IconButton aria-label="instagram" color="secondary" size="small">
-                        <Instagram fontSize="small" />
+                        <InstagramIcon fontSize="small" />
                       </IconButton> */}
                       <IconButton
                         aria-label="line"

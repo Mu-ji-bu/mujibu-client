@@ -4,7 +4,8 @@ import clsxm from '@/libraries/utils/clsxm';
 import routePath from '@routes/routePath';
 
 import { Button, Typography } from '@mui/material';
-import { Facebook, Instagram } from '@mui/icons-material';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import InstagramIcon from '@mui/icons-material/Instagram';
 
 const Footer = () => {
   return (
@@ -97,7 +98,7 @@ const Footer = () => {
                 className="p-[6px] min-w-0"
                 aria-label="facebook"
               >
-                <Facebook />
+                <FacebookIcon />
               </Button>
               <Button
                 onClick={() => window.open('https://line.me/R/ti/p/mujibu', '_ blank')}
@@ -120,7 +121,7 @@ const Footer = () => {
                 className="p-[6px] min-w-0"
                 aria-label="instagram"
               >
-                <Instagram />
+                <InstagramIcon />
               </Button>
             </div>
           </div>

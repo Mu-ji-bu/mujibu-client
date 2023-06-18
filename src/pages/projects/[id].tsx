@@ -1,19 +1,23 @@
-import Image from 'next/image';
+import { useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
-import ProjectsLayout from '@/components/layout/ProjectsLayout';
-import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+import Image from 'next/image';
+
 import { Typography } from '@mui/material';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import ProjectPlan from '@/components/pages/projects/ProjectPlan';
+
 import { IPlanState } from '@/types/plan';
 import { IProjectState } from '@/types/project';
-import { useGetProjectByIdQuery } from '@/store/services/projectApi';
-import { usePostUserCollectMutation } from '@/store/services/userApi';
-import { useMemo, useState } from 'react';
-import Loading from '@/components/Loading';
-import { useRouter } from 'next/router';
+
 import { useAppSelector } from '@libraries/hooks/reduxHooks';
 import { selectUser } from '../../store/slices/userSlice';
+import { useGetProjectByIdQuery } from '@/store/services/projectApi';
+import { usePostUserCollectMutation } from '@/store/services/userApi';
+
+import ProjectPlan from '@/components/pages/projects/ProjectPlan';
+import ProjectsLayout from '@/components/layout/ProjectsLayout';
+import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+import Loading from '@/components/Loading';
 
 const fakeProjectPlan: IPlanState = {
   _id: '1',

@@ -1,19 +1,13 @@
 import { useState, useEffect, Key } from 'react';
+import { useFieldArray } from 'react-hook-form';
 import dayjs from 'dayjs';
+
 import { Typography, FormLabel, Button, IconButton, CardMedia } from '@mui/material';
 import PhotoUpload from '@/components/block/photoUpload/PhotoUpload';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
-import {
-  InputText,
-  InputTextMultiline,
-  InputSelect,
-  InputDatepicker,
-  InputTextDeco,
-  InputRadio,
-  Editor,
-} from '@/components/block/form';
-import { useFieldArray } from 'react-hook-form';
+
+import { InputText, InputTextMultiline, InputDatepicker, InputTextDeco } from '@/components/block/form';
 
 interface ProposalStep2Props {
   setValue?: any;

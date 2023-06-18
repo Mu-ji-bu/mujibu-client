@@ -90,14 +90,24 @@ const ProjectPlan: React.FC<IProjectPlanProps> = ({
         handleSelect && handleSelect(_id);
       }}
     >
-      <Image
+      {/* <Image
         src={planImage || '/project/Desktop_Project_plan1.png'}
         alt="project1"
         width={0}
         height={0}
         sizes="100vw"
         style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: '8px' }}
-      />
+      /> */}
+      <div className="aspect-[9/3] rounded-lg">
+        <Image
+          src={planImage || '/project/Desktop_Project_plan1.png'}
+          alt="project1"
+          width={0}
+          height={0}
+          sizes="100vw"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      </div>
       <div className="plan-description mt-5">
         <div className="primary-info flex justify-between mb-4">
           <PlanTag text={planType || '超早鳥限時優惠'} color="green" />

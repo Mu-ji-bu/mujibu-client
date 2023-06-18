@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import { IconButton, Menu, MenuItem, ListItemIcon, Tooltip, Avatar } from '@mui/material';
-import { PersonOutlineRounded as PersonOutlineRoundedIcon } from '@mui/icons-material';
+import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import Button from '../button';
 import clsxm from '@/libraries/utils/clsxm';
 import { useAppSelector } from '@libraries/hooks/reduxHooks';
