@@ -5,46 +5,53 @@ import { IProjectState } from '@/types/project';
 import { Button, IconButton, Typography } from '@mui/material';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { use, useEffect, useState } from 'react';
+import { use, useEffect, useMemo, useState } from 'react';
 import clsxm from '@/libraries/utils/clsxm';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { IPlanState } from '@/types/plan';
+import PaymentForm from '@/components/pages/select/PaymentForm';
+import { useGetProjectByIdQuery } from '@/store/services/projectApi';
 
-interface DetailsProps {
-  project: IProjectState;
-}
+// interface DetailsProps {
+//   project: IProjectState;
+// }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
-  const response = await res.json();
-  const data: IProjectState[] = response.data;
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
+//   const response = await res.json();
+//   const data: IProjectState[] = response.data;
 
-  const paths = data.map((project) => {
-    return {
-      params: { id: project._id as string },
-    };
-  });
+//   const paths = data.map((project) => {
+//     return {
+//       params: { id: project._id as string },
+//     };
+//   });
 
-  return {
-    paths: paths,
-    fallback: false, // beyond the scope, id doesn't exist, go to 404
-  };
-};
+//   return {
+//     paths: paths,
+//     fallback: false, // beyond the scope, id doesn't exist, go to 404
+//   };
+// };
 
-export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
-  const id = context.params?.id;
-  const res = await fetch(`https://mujibu-server-fau1.onrender.com/api/projects/${id}`);
-  const response = await res.json();
-  const data: IProjectState = response.data;
+// export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
+//   const id = context.params?.id;
+//   const res = await fetch(`https://mujibu-server-fau1.onrender.com/api/projects/${id}`);
+//   const response = await res.json();
+//   const data: IProjectState = response.data;
 
-  return {
-    props: { project: data },
-  };
-};
+//   return {
+//     props: { project: data },
+//   };
+// };
 
-const ProjectSelectPage = ({ project }: DetailsProps) => {
+// const ProjectSelectPage = ({ project }: DetailsProps) => {
+const ProjectSelectPage = () => {
   const router = useRouter();
+  const { id: projectId } = router.query;
+  const { data, isLoading, error, refetch } = useGetProjectByIdQuery(projectId);
+
+  const project = useMemo((): IProjectState => data?.data || [], [data?.data]);
   const {
     _id,
     projectType,
@@ -88,6 +95,10 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
   };
 
   const updatePrize = () => {
+    if (!selectedPlan) {
+      setPrize(0);
+      return;
+    }
     setPrize(Number(selectedPlan[0]?.planDiscountPrice) * count + shippingFee);
   };
 
@@ -96,6 +107,8 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
   }, [count, selectedPlan]);
 
   useEffect(() => {
+    console.log(router.query);
+    if (!router.query.projectPlanId) return;
     // 取得 projectPlanId 參數的值
     setProjectPlanId(router.query.projectPlanId as string);
 
@@ -104,7 +117,7 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
 
     // 使用 replaceState 方法修改網址，不會產生新的歷史紀錄
     window.history.replaceState({}, '', urlWithoutParam);
-  }, [router.query.projectPlanId]);
+  }, [router.query]);
 
   useEffect(() => {
     let selectedPlan =
@@ -206,7 +219,7 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
                   請先選擇要贊助的方案：
                 </Typography>
               )}
-              {selectedPlan.length > 0 && (
+              {selectedPlan?.length > 0 && (
                 <Typography component="h3" variant="h3" className="text-secondary mb-5">
                   {selectedPlan[0]?.planName}
                 </Typography>
@@ -219,23 +232,23 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
                   className={clsxm(
                     'counter flex items-center gap-5',
                     'border border-solid border-secondary-10 rounded-sm',
-                    !selectedPlan.length ? 'bg-secondary-10 border-secondary-10' : '',
+                    !selectedPlan?.length ? 'bg-secondary-10 border-secondary-10' : '',
                   )}
                 >
                   <div
                     className={clsxm(
                       'minus',
                       'border-solid border-0 border-r border-secondary-10',
-                      !selectedPlan.length ? 'border-secondary-10' : '',
+                      !selectedPlan?.length ? 'border-secondary-10' : '',
                     )}
                   >
                     <IconButton
-                      disabled={!selectedPlan.length}
+                      disabled={!selectedPlan?.length}
                       aria-label="minus"
                       color="secondary"
                       size="large"
                       onClick={minusCount}
-                      className={clsxm('text-secondary', !selectedPlan.length ? 'text-secondary-30' : '')}
+                      className={clsxm('text-secondary', !selectedPlan?.length ? 'text-secondary-30' : '')}
                     >
                       <RemoveIcon />
                     </IconButton>
@@ -245,7 +258,7 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
                     variant="h5"
                     className={clsxm(
                       'count w-[60px] flex justify-center items-center text-secondary',
-                      !selectedPlan.length ? 'text-secondary-30' : '',
+                      !selectedPlan?.length ? 'text-secondary-30' : '',
                     )}
                   >
                     {count}
@@ -254,16 +267,16 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
                     className={clsxm(
                       'plus',
                       'border-solid border-0 border-r border-secondary-10',
-                      !selectedPlan.length ? 'border-secondary-10' : '',
+                      !selectedPlan?.length ? 'border-secondary-10' : '',
                     )}
                   >
                     <IconButton
-                      disabled={!selectedPlan.length}
+                      disabled={!selectedPlan?.length}
                       aria-label="plus"
                       color="secondary"
                       size="large"
                       onClick={addCount}
-                      className={clsxm('text-secondary', !selectedPlan.length ? 'text-secondary-30' : '')}
+                      className={clsxm('text-secondary', !selectedPlan?.length ? 'text-secondary-30' : '')}
                     >
                       <AddIcon />
                     </IconButton>
@@ -279,7 +292,7 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
                     NT$
                   </Typography>
                   <Typography component="h4" variant="h4" className="text-primary">
-                    {selectedPlan.length > 0 ? selectedPlan[0]?.planDiscountPrice : '-'}
+                    {selectedPlan?.length > 0 ? selectedPlan[0]?.planDiscountPrice.toString() : '-'}
                   </Typography>
                 </div>
               </div>
@@ -292,7 +305,7 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
                     NT$
                   </Typography>
                   <Typography component="h4" variant="h4" className="text-primary">
-                    {selectedPlan.length > 0 ? shippingFee : '-'}
+                    {selectedPlan?.length > 0 ? shippingFee.toString() : '-'}
                   </Typography>
                 </div>
               </div>
@@ -305,11 +318,11 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
                     NT$
                   </Typography>
                   <Typography component="h4" variant="h4" className="text-primary">
-                    {count > 0 && selectedPlan.length > 0 ? prize : '-'}
+                    {count > 0 && selectedPlan?.length > 0 ? prize.toString() : '-'}
                   </Typography>
                 </div>
               </div>
-              {count > 0 && selectedPlan.length > 0 ? (
+              {count > 0 && selectedPlan?.length > 0 ? (
                 <Button
                   variant="contained"
                   fullWidth
@@ -324,6 +337,7 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
                   前往結帳
                 </Button>
               )}
+              <PaymentForm prize={prize} isDisabled={!selectedPlan?.length} />
             </div>
           </div>
         </div>

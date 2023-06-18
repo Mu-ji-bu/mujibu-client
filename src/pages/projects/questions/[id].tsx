@@ -4,41 +4,43 @@ import Loading from '@/components/Loading';
 import ProjectPlan from '@/components/pages/projects/ProjectPlan';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import { useGetCarouselDataQuery } from '@/store/services/homeApi';
+import { useGetProjectByIdQuery } from '@/store/services/projectApi';
 import { IProjectState } from '@/types/project';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 
-interface DetailsProps {
-  project: IProjectState;
-}
+// interface DetailsProps {
+//   project: IProjectState;
+// }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
-  const response = await res.json();
-  const data: IProjectState[] = response.data;
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
+//   const response = await res.json();
+//   const data: IProjectState[] = response.data;
 
-  const paths = data.map((project) => {
-    return {
-      params: { id: project._id as string },
-    };
-  });
+//   const paths = data.map((project) => {
+//     return {
+//       params: { id: project._id as string },
+//     };
+//   });
 
-  return {
-    paths: paths,
-    fallback: false, // beyond the scope, id doesn't exist, go to 404
-  };
-};
+//   return {
+//     paths: paths,
+//     fallback: false, // beyond the scope, id doesn't exist, go to 404
+//   };
+// };
 
-export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
-  const id = context.params?.id;
-  const res = await fetch(`https://mujibu-server-fau1.onrender.com/api/projects/${id}`);
-  const response = await res.json();
-  const data: IProjectState = response.data;
+// export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
+//   const id = context.params?.id;
+//   const res = await fetch(`https://mujibu-server-fau1.onrender.com/api/projects/${id}`);
+//   const response = await res.json();
+//   const data: IProjectState = response.data;
 
-  return {
-    props: { project: data },
-  };
-};
+//   return {
+//     props: { project: data },
+//   };
+// };
 
 const questionArray = [
   {
@@ -93,14 +95,16 @@ const questionArray = [
   },
 ];
 
-const Questions = ({ project }: DetailsProps) => {
+// const Questions = ({ project }: DetailsProps) => {
+const Questions = () => {
   const router = useRouter();
-  const { data: carouselDataRes, isLoading } = useGetCarouselDataQuery();
-  const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
+  const { id: projectId } = router.query;
+  const { data, isLoading } = useGetProjectByIdQuery(projectId);
+
+  const project = useMemo((): IProjectState => data?.data || [], [data?.data]);
 
   const handleProjectPlanClick = (projectId: string, projectPlanId: string) => {
     console.log(`click on plan ${projectPlanId}`);
-    // router.push(`/projects/select/`);
     router.push(`/projects/select/${projectId}?projectPlanId=${projectPlanId}`);
   };
 
