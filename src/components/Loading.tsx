@@ -1,4 +1,4 @@
-import { Loop } from '@mui/icons-material';
+import LoopIcon from '@mui/icons-material/Loop';
 import Image from 'next/image';
 const Loading = ({ className = null }) => {
   return (
@@ -16,7 +16,7 @@ const Loading = ({ className = null }) => {
         />
       </div>
       <div className="flex justify-center items-center">
-        <Loop className="animate-spin mr-2" />
+        <LoopIcon className="animate-spin mr-2" />
         Loading...
       </div>
     </div>

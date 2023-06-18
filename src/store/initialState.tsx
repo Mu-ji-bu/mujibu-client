@@ -56,7 +56,7 @@ const initialState: IInitialState = {
         planEndTime: null, //Date
         planImage: '',
         planDescription: '',
-        planNotes: [],
+        otherNotes: [],
         isRealProduct: true,
         createdAt: null,
         updatedAt: null,
@@ -83,6 +83,9 @@ const initialState: IInitialState = {
       socialLine: '',
       socialIg: '',
       socialYoutube: '',
+      isTaiwan: false,
+      isAgreeTerms: false,
+      isOver18: false,
       createdAt: null,
       updatedAt: null,
     },
@@ -96,9 +99,10 @@ const initialState: IInitialState = {
     projectScore: 0,
     projectBackers: 0,
     carousel: false,
-    withdrawalSettings: {
-      WithdrawalBank: '',
-      bankAccount: '',
+    withdrawSettings: {
+      bankName: '',
+      accountNumber: '',
+      isAgreeTerms: false,
     },
     shippingSettings: {
       shippingSwitch: false,
@@ -135,7 +139,7 @@ const initialState: IInitialState = {
     planEndTime: null, //Date
     planImage: '',
     planDescription: '',
-    planNotes: [],
+    otherNotes: [],
     isRealProduct: true,
     createdAt: null,
     updatedAt: null,

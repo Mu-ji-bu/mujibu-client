@@ -35,7 +35,7 @@ const SwiperTop: React.FC<ISwiperTopProps> = ({ projectDataArr, isLoading }) => 
   const handleSlideClick = (slideIndex: number) => {
     // Navigate to the desired page using Next.js router
     // router.push(`/projects/introduction/${slideIndex}`);
-    router.push(`/projects/introduction`);
+    router.push(`/projects/introduction/${carouselData[slideIndex]._id}`);
   };
 
   const goPrev = () => {
@@ -136,7 +136,7 @@ const SwiperTop: React.FC<ISwiperTopProps> = ({ projectDataArr, isLoading }) => 
 
 const Slide: React.FC<ISliderOptionProps> = ({ projectData }) => {
   const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
-  const { projectImage, projectDescription } = projectData;
+  const { projectImage, projectDescription, currentAmountPercentage } = projectData;
 
   let size: string;
   let textSize: DeterminateSize;
@@ -180,7 +180,7 @@ const Slide: React.FC<ISliderOptionProps> = ({ projectData }) => {
 
           <div className="cover absolute bottom-0 left-0 right-0 h-[100px] flex justify-center items-center bg-white bg-opacity-90 z-10">
             <div className="absolute bottom-11 left-[2%]">
-              <CircularDeterminate value={30} size={size} textSize={textSize} />
+              <CircularDeterminate value={currentAmountPercentage || 30} size={size} textSize={textSize} />
             </div>
             <div
               className={clsxm(
@@ -233,7 +233,7 @@ const Slide: React.FC<ISliderOptionProps> = ({ projectData }) => {
           >
             <div className="relative w-[30%]">
               <div className={clsxm('absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2')}>
-                <CircularDeterminate value={30} size={size} textSize={textSize} />
+                <CircularDeterminate value={currentAmountPercentage || 30} size={size} textSize={textSize} />
               </div>
               <div
                 className={clsxm(

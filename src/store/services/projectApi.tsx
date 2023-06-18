@@ -22,7 +22,23 @@ export const projectApiService = createApi({
         return `${apiRoutes.projectsURL}?${searchParams}`;
       },
     }),
+    getProjectById: builder.query<any, any>({
+      query: (projectId) => {
+        if (projectId) {
+          return `${apiRoutes.projectsURL}/${projectId}`;
+        }
+        throw new Error('Invalid projectId');
+      },
+    }),
   }),
 });
 
-export const { useGetAllProjectDataQuery, useGetProjectDataQuery } = projectApiService;
+export const {
+  useGetAllProjectDataQuery,
+  useGetProjectDataQuery,
+  useGetProjectByIdQuery,
+  util: { getRunningQueriesThunk },
+} = projectApiService;
+
+// export endpoints for use in SSR
+export const { getAllProjectData, getProjectData, getProjectById } = projectApiService.endpoints;

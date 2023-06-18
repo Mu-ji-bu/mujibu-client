@@ -6,6 +6,7 @@ import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { projectFormEnum } from '@/libraries/enum';
 
 interface ToggleButtonsProps {
   types: number[];
@@ -25,14 +26,17 @@ const ToggleButtons: React.FC<ToggleButtonsProps> = ({ types, setTypes }) => {
       className="rounded-lg"
       size="small"
     >
-      <ToggleButton className="px-5" value={0} aria-label="募資中">
-        募資中
+      <ToggleButton className="px-5" value={projectFormEnum.GENERAL} aria-label={projectFormEnum[0]}>
+        {projectFormEnum[0]}
       </ToggleButton>
-      <ToggleButton className="px-5" value={1} aria-label="長期販售">
-        長期販售
+      <ToggleButton className="px-5" value={projectFormEnum.LONG_TERM} aria-label={projectFormEnum[1]}>
+        {projectFormEnum[1]}
       </ToggleButton>
-      <ToggleButton className="px-5" value={2} aria-label="已結束">
-        已結束
+      <ToggleButton className="px-5" value={projectFormEnum.SUCCESS} aria-label={projectFormEnum[2]}>
+        {projectFormEnum[2]}
+      </ToggleButton>
+      <ToggleButton className="px-5" value={projectFormEnum.FAILED} aria-label={projectFormEnum[3]}>
+        {projectFormEnum[3]}
       </ToggleButton>
     </ToggleButtonGroup>
   );

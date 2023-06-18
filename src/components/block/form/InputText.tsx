@@ -11,6 +11,7 @@ interface InputTextProps {
   helperText?: string;
   name: string;
   label: string;
+  type?: string;
   placeholder?: string;
   defaultValue?: string | number;
   className?: string;
@@ -23,6 +24,7 @@ const InputText: React.FC<InputTextProps> = ({
   helperText,
   name,
   label,
+  type,
   placeholder,
   defaultValue,
   className,
@@ -33,9 +35,10 @@ const InputText: React.FC<InputTextProps> = ({
       control={control}
       name={name}
       defaultValue={defaultValue || ''}
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange, onBlur, value, ref } }) => (
         <TextField
           fullWidth
+          type={type || ''}
           className={clsxm(`${className} bg-white`)}
           id={name}
           label={label}
@@ -43,6 +46,8 @@ const InputText: React.FC<InputTextProps> = ({
           autoComplete={name}
           size="small"
           value={value}
+          inputRef={ref}
+          onBlur={onBlur}
           onChange={onChange}
           error={error}
           helperText={helperText}

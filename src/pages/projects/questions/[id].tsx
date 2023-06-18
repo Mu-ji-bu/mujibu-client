@@ -1,12 +1,46 @@
 import MujiAccordion from '@/components/block/mujiAccordion';
-import Accordion from '@/components/block/mujiAccordion';
 import ProjectsLayout from '@/components/layout/ProjectsLayout';
 import Loading from '@/components/Loading';
 import ProjectPlan from '@/components/pages/projects/ProjectPlan';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import { useGetCarouselDataQuery } from '@/store/services/homeApi';
+import { useGetProjectByIdQuery } from '@/store/services/projectApi';
 import { IProjectState } from '@/types/project';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import { useMemo } from 'react';
+
+// interface DetailsProps {
+//   project: IProjectState;
+// }
+
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
+//   const response = await res.json();
+//   const data: IProjectState[] = response.data;
+
+//   const paths = data.map((project) => {
+//     return {
+//       params: { id: project._id as string },
+//     };
+//   });
+
+//   return {
+//     paths: paths,
+//     fallback: false, // beyond the scope, id doesn't exist, go to 404
+//   };
+// };
+
+// export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
+//   const id = context.params?.id;
+//   const res = await fetch(`https://mujibu-server-fau1.onrender.com/api/projects/${id}`);
+//   const response = await res.json();
+//   const data: IProjectState = response.data;
+
+//   return {
+//     props: { project: data },
+//   };
+// };
 
 const questionArray = [
   {
@@ -61,20 +95,25 @@ const questionArray = [
   },
 ];
 
+// const Questions = ({ project }: DetailsProps) => {
 const Questions = () => {
-  const { data: carouselDataRes, isLoading } = useGetCarouselDataQuery();
-  const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
-  const carouselDataList = useMemo(
-    (): IProjectState[] | never[] => carouselDataRes?.data || [],
-    [carouselDataRes?.data],
-  );
+  const router = useRouter();
+  const { id: projectId } = router.query;
+  const { data, isLoading } = useGetProjectByIdQuery(projectId);
+
+  const project = useMemo((): IProjectState => data?.data || [], [data?.data]);
+
+  const handleProjectPlanClick = (projectId: string, projectPlanId: string) => {
+    console.log(`click on plan ${projectPlanId}`);
+    router.push(`/projects/select/${projectId}?projectPlanId=${projectPlanId}`);
+  };
 
   return (
     <>
       {isLoading ? (
         <Loading />
       ) : (
-        <ProjectsLayout projectState={carouselDataList[0]} tabIndex={2}>
+        <ProjectsLayout projectState={project} tabIndex={2}>
           <div className="details w-full flex justify-center gap-6">
             <div className="flex flex-col w-2/3 gap-8">
               <MujiAccordion {...questionArray[0]} />
@@ -85,10 +124,16 @@ const Questions = () => {
               <MujiAccordion {...questionArray[5]} />
               <MujiAccordion {...questionArray[6]} />
             </div>
+            {/* 右側方案 */}
             <div className="w-1/3 flex flex-col gap-6">
-              {/* <ProjectPlan />
-          <ProjectPlan />
-          <ProjectPlan /> */}
+              {project.projectPlans?.map((plan, i) => (
+                <ProjectPlan
+                  key={i}
+                  projectId={project._id || '0'}
+                  projectPlan={plan}
+                  handleProjectPlanClick={handleProjectPlanClick}
+                />
+              ))}
             </div>
           </div>
         </ProjectsLayout>

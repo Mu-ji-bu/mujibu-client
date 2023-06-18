@@ -29,7 +29,39 @@ export const userApiService = createApi({
         body: body,
       }),
     }),
+    gerUserCollect: builder.query<any, any>({
+      query: (userId) => {
+        if (userId) {
+          const gerUserCollectRoute = apiRoutes.gerUserCollectURL.replace(':userId', userId);
+          return gerUserCollectRoute;
+        }
+        throw new Error('Invalid userId');
+      },
+    }),
+    postUserCollect: builder.mutation<any, any>({
+      query: (body) => {
+        return {
+          url: apiRoutes.collectURL,
+          method: 'POST',
+          body,
+        };
+      },
+    }),
+    deleteUserCollect: builder.mutation<any, any>({
+      query: (body) => {
+        return {
+          url: apiRoutes.collectURL,
+          method: 'delete',
+          body,
+        };
+      },
+    }),
   }),
 });
 
-export const { usePatchUserMutation } = userApiService;
+export const {
+  usePatchUserMutation,
+  useGerUserCollectQuery,
+  usePostUserCollectMutation,
+  useDeleteUserCollectMutation,
+} = userApiService;

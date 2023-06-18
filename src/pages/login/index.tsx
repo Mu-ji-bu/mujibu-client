@@ -1,15 +1,18 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import routePath from '@routes/routePath';
 import Link from 'next/link';
 import clsxm from '@/libraries/utils/clsxm';
+import Cookies from 'js-cookie';
+
 import { Button, Typography, TextField } from '@mui/material';
-import { Google } from '@mui/icons-material';
+import GoogleIcon from '@mui/icons-material/Google';
+
 import useFirebaseAuthentication from '@libraries/hooks/useFirebaseAuthentication';
-import routePath from '@routes/routePath';
+
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Cookies from 'js-cookie';
 
 type FormData = {
   email: string;
@@ -47,8 +50,8 @@ const LogIn = () => {
 
   useEffect(() => {
     if (googleToken) {
-      // 過期時間120分鐘
-      const expirationTime = 120;
+      // 過期時間600分鐘
+      const expirationTime = 600;
       const currentDate = new Date();
       currentDate.setTime(currentDate.getTime() + expirationTime * 60 * 1000);
       Cookies.set('googleToken', googleToken, { expires: currentDate });
@@ -121,7 +124,7 @@ const LogIn = () => {
           type="submit"
           fullWidth
           variant="outlined"
-          startIcon={<Google />}
+          startIcon={<GoogleIcon />}
         >
           使用 Google 登入
         </Button>

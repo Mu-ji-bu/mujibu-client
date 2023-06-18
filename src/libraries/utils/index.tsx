@@ -19,3 +19,18 @@ export function calculatePercentage(currentValue: number, totalValue: number) {
   const percentage = (currentValue / totalValue) * 100;
   return Math.ceil(percentage);
 }
+
+export function formatDateWithTime(dateString: string): string {
+  const date = new Date(dateString);
+
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day} ${
+    hours < 10 ? '0' + hours : hours
+  }:${minutes < 10 ? '0' + minutes : minutes}`;
+  return formattedDate;
+}

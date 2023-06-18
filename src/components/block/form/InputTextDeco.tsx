@@ -38,6 +38,7 @@ const InputTextDeco: React.FC<InputTextDecoProps> = ({
           <InputLabel htmlFor={name}>{label}</InputLabel>
           <OutlinedInput
             fullWidth
+            type="number"
             id={name}
             label={label}
             placeholder={placeholder}
@@ -47,7 +48,7 @@ const InputTextDeco: React.FC<InputTextDecoProps> = ({
             onChange={onChange}
             error={error}
           />
-          {error && <FormHelperText className="text-error">{helperText}</FormHelperText>}
+          {error && <FormHelperText className="text-error whitespace-nowrap">{helperText}</FormHelperText>}
         </FormControl>
       )}
     />

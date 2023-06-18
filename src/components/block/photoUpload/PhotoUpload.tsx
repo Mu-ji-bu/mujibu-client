@@ -9,13 +9,24 @@ import Image from 'next/image';
 import clsxm from '@/libraries/utils/clsxm';
 
 interface PhotoUploadProps {
-  isProposal: boolean;
+  isProposal?: boolean;
+  isPlan?: boolean;
+  index?: number;
   originalName?: string;
   originalAvatar?: string;
-  setImageUploaded: React.Dispatch<React.SetStateAction<string>>;
+  setImageUploaded?: React.Dispatch<React.SetStateAction<string>>;
+  setImageUploadedList?: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const PhotoUpload: React.FC<PhotoUploadProps> = ({ isProposal, originalName, originalAvatar, setImageUploaded }) => {
+const PhotoUpload: React.FC<PhotoUploadProps> = ({
+  isProposal,
+  isPlan,
+  index,
+  originalName,
+  originalAvatar,
+  setImageUploaded,
+  setImageUploadedList,
+}) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageSaved, setImageSaved] = useState<boolean>(false);
   const [uploadPhoto, { isLoading: uploadPhotoLoading }] = useUploadPhotoMutation();
@@ -31,7 +42,16 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ isProposal, originalName, ori
       formData.append('file', file);
       const res = await uploadPhoto(formData).unwrap();
       console.log(res.fileUrl);
-      setImageUploaded(res.fileUrl);
+      if (isPlan) {
+        setImageUploadedList &&
+          setImageUploadedList((prev) => {
+            const newList = [...prev];
+            index !== undefined && (newList[index] = res.fileUrl);
+            return newList;
+          });
+      } else {
+        setImageUploaded && setImageUploaded(res.fileUrl);
+      }
       setImageSaved(true);
     } catch (err) {
       console.log(err);
@@ -40,19 +60,19 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ isProposal, originalName, ori
 
   return (
     <>
-      {isProposal && imageFile && (
-        <div className="w-full md:w-2/3 aspect-[4/3] rounded-md overflow-hidden mb-5">
+      {isPlan && imageFile && (
+        <div className="w-full md:w-2/3 aspect-[2/1] rounded-md overflow-hidden mb-5">
           <Image
             className="w-full h-full object-cover"
             alt={originalName ?? 'unknown name'}
             width={400}
-            height={300}
+            height={200}
             src={URL.createObjectURL(imageFile)}
           />
         </div>
       )}
 
-      {isProposal && imageFile && (
+      {isPlan && imageFile && (
         <div className="flex space-x-2 w-full md:w-2/3">
           <Button
             className="w-1/2 bg-white"
@@ -80,7 +100,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ isProposal, originalName, ori
           </LoadingButton>
         </div>
       )}
-      {isProposal && !imageFile && (
+      {isPlan && !imageFile && (
         <div className="w-full md:w-2/3">
           <Button
             className="w-full bg-white"
@@ -94,14 +114,68 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ isProposal, originalName, ori
         </div>
       )}
 
-      {!isProposal && (
+      {isProposal && !isPlan && imageFile && (
+        <div className="w-full md:w-2/3 aspect-[4/3] rounded-md overflow-hidden mb-5">
+          <Image
+            className="w-full h-full object-cover"
+            alt={originalName ?? 'unknown name'}
+            width={400}
+            height={300}
+            src={URL.createObjectURL(imageFile)}
+          />
+        </div>
+      )}
+
+      {isProposal && !isPlan && imageFile && (
+        <div className="flex space-x-2 w-full md:w-2/3">
+          <Button
+            className="w-1/2 bg-white"
+            onClick={() => {
+              setImageSaved(false);
+              setImageFile(null);
+            }}
+            variant="outlined"
+            component="label"
+            startIcon={<CancelIcon />}
+          >
+            重選圖片
+          </Button>
+          <LoadingButton
+            className="w-1/2 shadow-none"
+            loading={uploadPhotoLoading}
+            loadingPosition="start"
+            onClick={() => imageFile && handleImageUpload(imageFile)}
+            variant="contained"
+            component="label"
+            startIcon={<CheckCircleIcon />}
+            disabled={imageSaved}
+          >
+            <span>{imageSaved ? '上傳完成' : '確認上傳'}</span>
+          </LoadingButton>
+        </div>
+      )}
+      {isProposal && !isPlan && !imageFile && (
+        <div className="w-full md:w-2/3">
+          <Button
+            className="w-full bg-white"
+            variant="outlined"
+            component="label"
+            startIcon={<AddPhotoAlternateIcon />}
+          >
+            請選擇上傳圖片
+            <input type="file" hidden onChange={handleImageSelect} />
+          </Button>
+        </div>
+      )}
+
+      {!isProposal && !isPlan && (
         <Avatar
           className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] mb-5"
           alt={originalName ?? 'unknown name'}
           src={imageFile ? URL.createObjectURL(imageFile) : originalAvatar ?? ''}
         ></Avatar>
       )}
-      {!isProposal && imageFile && (
+      {!isProposal && !isPlan && imageFile && (
         <div className="flex space-x-2">
           <Button
             onClick={() => {
@@ -127,7 +201,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ isProposal, originalName, ori
           </LoadingButton>
         </div>
       )}
-      {!isProposal && !imageFile && (
+      {!isProposal && !isPlan && !imageFile && (
         <Button className="mb-2" variant="outlined" component="label" startIcon={<AddPhotoAlternateIcon />}>
           請選擇上傳圖片
           <input type="file" hidden onChange={handleImageSelect} />
