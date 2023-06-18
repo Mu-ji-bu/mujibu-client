@@ -56,14 +56,13 @@ const Collects = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-        {collectsData && collectsData.total !== 0 ? (
+        {collectsData &&
+          collectsData.total !== 0 &&
           filteredItems.map((collect: any, i: number) => (
             <CollectsCard key={`collect_${i + 1}`} isPC={isPC} collect={collect} onCancelFollow={onCancelFollow} />
-          ))
-        ) : (
-          <p className="text-center w-full">- 沒有相關追蹤資料 -</p>
-        )}
+          ))}
       </div>
+      {filteredItems && filteredItems.length === 0 && <p className="text-center col-span-full">- 沒有相關追蹤資料 -</p>}
     </UserLayout>
   );
 };
