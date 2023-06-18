@@ -35,6 +35,7 @@ export declare interface withdrawSettings {
 }
 
 export declare interface IProjectState {
+  [x: string]: any;
   _id?: string;
   projectType?: number;
   projectForm?: number;
@@ -54,7 +55,7 @@ export declare interface IProjectState {
   projectContent?: string;
   projectPlans?: IPlanState[];
   projectTeam?: ITeamState;
-  projectProposer?: IUserState;
+  projectProposer?: IUserState | string;
   projectOrders?: any[]; // 還未建立先放any[]替代
   projectRefunds?: any[]; // 還未建立先放any[]替代
   latestNews?: any[]; // 還未建立先放any[]替代

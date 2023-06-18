@@ -35,10 +35,10 @@ const InputText: React.FC<InputTextProps> = ({
       control={control}
       name={name}
       defaultValue={defaultValue || ''}
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange, onBlur, value, ref } }) => (
         <TextField
           fullWidth
-          type={type || 'text'}
+          type={type || ''}
           className={clsxm(`${className} bg-white`)}
           id={name}
           label={label}
@@ -46,6 +46,8 @@ const InputText: React.FC<InputTextProps> = ({
           autoComplete={name}
           size="small"
           value={value}
+          inputRef={ref}
+          onBlur={onBlur}
           onChange={onChange}
           error={error}
           helperText={helperText}

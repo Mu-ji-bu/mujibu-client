@@ -22,7 +22,7 @@ const withAuth = <P extends object>(Component: React.ComponentType<P>) => {
         routePath.userTeamSettings,
         routePath.newPassword,
         routePath.notifications,
-        // routePath.proposalForm,
+        routePath.proposalForm,
         routePath.proposalId,
       ];
 

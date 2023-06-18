@@ -1,6 +1,8 @@
 import { setIsCarousel, selectProject } from '../../store/slices/projectSlice';
 import { useAppSelector, useAppDispatch } from '../../libraries/hooks/reduxHooks';
 import { wrapper } from '../../store/store';
+import type { IProjectState } from '../../types/project';
+import { parse } from 'node-html-parser';
 
 import {
   useGetPostsListQuery,
@@ -20,28 +22,36 @@ interface Post {
   body: string;
 }
 
-const Projects = ({ data }: { data: Post }) => {
+const Projects = ({ data }: { data: any }) => {
   const { projectName, carousel } = useAppSelector(selectProject);
   const dispatch = useAppDispatch();
 
-  const { data: postsList, error: listError, isLoading: listIsLoading } = useGetPostsListQuery();
+  // const { data: postsList, error: listError, isLoading: listIsLoading } = useGetPostsListQuery();
 
   // const { data: post, error: postError, isLoading: postIsLoading } = useGetPostsQuery('2');
-  const [updatePost, { isLoading }] = useUpdatePostMutation();
+  // const [updatePost, { isLoading }] = useUpdatePostMutation();
 
-  console.log('postsList', postsList);
+  // console.log('postsList', postsList);
   // console.log('post', post);
   // console.log('error', error);
   // console.log('isLoading', isLoading);
 
-  const handleUpdatePost = async (postId: number) => {
-    try {
-      const result = await updatePost({ id: postId, title: '123', body: 'new body' });
-      console.log(result);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const handleUpdatePost = async (postId: number) => {
+  //   try {
+  //     const result = await updatePost({ id: postId, title: '123', body: 'new body' });
+  //     console.log(result);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  const textParse = parse(data?.data?.projectContent).structuredText;
+  function createMarkup() {
+    return { __html: textParse };
+  }
+  function TextComponent() {
+    return <div dangerouslySetInnerHTML={createMarkup()} />;
+  }
 
   return (
     <>
@@ -60,26 +70,24 @@ const Projects = ({ data }: { data: Post }) => {
       {console.log('data', data)}
       {data && (
         <div>
-          <span>
-            <p></p>文章編號 {data.id}
-          </span>
-          <p>文章標題 {data.title}</p>
+          <p className="mb-10">projectContent</p>
+          <TextComponent />
         </div>
       )}
 
       <h2 className="text-green-accent">Patch 單一文章</h2>
-      <Button variant="outlined" onClick={() => handleUpdatePost(2)}>
+      {/* <Button variant="outlined" onClick={() => handleUpdatePost(2)}>
         修改文章
-      </Button>
+      </Button> */}
 
-      <h2 className="text-green-accent">FC fetch 文章列表</h2>
+      {/* <h2 className="text-green-accent">FC fetch 文章列表</h2>
       {listIsLoading && <div>Loading...</div>}
       <ul>
         {postsList &&
           postsList.map((item, i) => {
             return <li key={`user${i + 1}`}>{item.title}</li>;
           })}
-      </ul>
+      </ul> */}
     </>
   );
 };

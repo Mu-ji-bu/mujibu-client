@@ -43,7 +43,6 @@ const PersonalSettings = () => {
   const userData = useAppSelector(selectUser);
 
   const [imageUploaded, setImageUploaded] = useState<string>('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(userData.category ?? []);
   const [sameAbove, setSameAbove] = useState(false);
 
   const {
@@ -85,7 +84,7 @@ const PersonalSettings = () => {
   };
 
   const onSubmit: SubmitHandler<IUserState> = async (data) => {
-    console.log('form data : ', data);
+    console.log('user form data : ', data);
     try {
       const res = await patchUser({ _id: userData._id, body: data }).unwrap();
       const updateData = {

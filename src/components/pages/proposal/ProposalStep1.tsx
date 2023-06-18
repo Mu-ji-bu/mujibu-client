@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Typography, FormLabel, CardMedia } from '@mui/material';
+import { Typography, FormLabel, CardMedia, FormHelperText } from '@mui/material';
 import PhotoUpload from '@/components/block/photoUpload/PhotoUpload';
 import {
   InputText,
@@ -181,6 +181,10 @@ const ProposalStep1: React.FC<ProposalStep1Props> = ({ control, errors, setValue
           <div className="editor-container col-span-full">
             <Editor control={control} name={'projectContent'} placeholder={'請提供至少一張介紹圖、200字以上的介紹'} />
           </div>
+
+          {!!errors.projectContent && (
+            <FormHelperText className="text-error w-full">{errors.projectContent?.message}</FormHelperText>
+          )}
         </div>
       </div>
     </div>

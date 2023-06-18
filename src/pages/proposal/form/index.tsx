@@ -1,8 +1,8 @@
-import { useEffect, useState, useMemo, ReactNode } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@libraries/hooks/reduxHooks';
-import { usePatchUserMutation } from '../../../store/services/userApi';
-import { selectUser, updateUser } from '../../../store/slices/userSlice';
-import { Typography, Stepper, Step, StepLabel, Button, MobileStepper, TextField } from '@mui/material';
+import { selectUser } from '../../../store/slices/userSlice';
+import { usePostProposalMutation } from '../../../store/services/proposalApi';
+import { Typography, Stepper, Step, StepLabel, Button, MobileStepper } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
 import UndoIcon from '@mui/icons-material/Undo';
@@ -15,16 +15,16 @@ import ProposalStep1 from '@/components/pages/proposal/ProposalStep1';
 import ProposalStep2 from '@/components/pages/proposal/ProposalStep2';
 import ProposalStep3 from '@/components/pages/proposal/ProposalStep3';
 import ProposalStep4 from '@/components/pages/proposal/ProposalStep4';
+// import ProposalStep5 from '@/components/pages/proposal/ProposalStep5';
+import ProposalStep6 from '@/components/pages/proposal/ProposalStep6';
 
 import type { IProjectState } from '@/types/project';
+import dayjs from 'dayjs';
 
-import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
-import { useForm, SubmitHandler, Controller, useFieldArray } from 'react-hook-form';
+import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import ProposalStep6 from '@/components/pages/proposal/ProposalStep6';
-import ProposalStep5 from '@/components/pages/proposal/ProposalStep5';
+import clsxm from '@/libraries/utils/clsxm';
 
 const schema = Yup.object().shape({
   projectType: Yup.number().required('此為必填欄位'),
@@ -52,7 +52,7 @@ const schema = Yup.object().shape({
   officialPage: Yup.string(),
   fanPage: Yup.string(),
   attachmentLink: Yup.string(),
-  projectContent: Yup.string(),
+  projectContent: Yup.string().required('此為必填欄位'),
   projectPlans: Yup.array().of(
     Yup.object().shape({
       planName: Yup.string().required('此為必填欄位'),
@@ -92,7 +92,7 @@ const schema = Yup.object().shape({
     teamAvatar: Yup.string(),
     representativeName: Yup.string().required('此為必填欄位'),
     representativeMobile: Yup.string().required('此為必填欄位'),
-    representativePhone: Yup.string(),
+    representativePhone: Yup.string().required('此為必填欄位'),
     representativeEmail: Yup.string().email('email格式不對').required('此為必填欄位'),
     companyName: Yup.string(),
     companyPhone: Yup.string(),
@@ -155,29 +155,35 @@ const steps = ['提案資料', '回饋方案', '團隊資料', '提領/物流設
 
 const Form = () => {
   const dispatch = useAppDispatch();
-  const [patchUser, { isLoading: patchUserLoading }] = usePatchUserMutation();
-  // const userData = useAppSelector(selectUser);
+  const [postProposal, { isLoading: postProposalLoading }] = usePostProposalMutation();
+  const userData = useAppSelector(selectUser);
 
   const [activeStep, setActiveStep] = useState(0);
   const [firstStep, setFirstStep] = useState(true);
-  const [proposalForm, setProposalForm] = useState({});
+  const [isPreview, setIsPreview] = useState(false);
+  // const [proposalForm, setProposalForm] = useState({});
+  const [proposalSuccess, setProposalSuccess] = useState(false);
 
   const {
     handleSubmit,
     setValue,
     getValues,
+    setFocus,
     reset,
     watch,
     control,
-    formState: { errors },
+    formState,
+    formState: { errors, isDirty, isSubmitting, touchedFields, submitCount },
   } = useForm<IProjectState>({
+    mode: 'all',
     resolver: yupResolver(schema),
     defaultValues: useMemo(() => {
       return {
         projectType: 0,
         projectName: '',
         projectDescription: '',
-        projectImage: '',
+        projectImage:
+          'https://firebasestorage.googleapis.com/v0/b/mujibu.appspot.com/o/images%2Fdefault%2Fdefault_image.jpg?alt=media&token=eafe76e5-ea42-4eb2-9fb0-dde5b3fd7dd4',
         projectCategory: 0,
         goalAmount: 0,
         startTime: dayjs().startOf('day').toDate() || null,
@@ -192,7 +198,8 @@ const Form = () => {
             planType: '',
             planDiscountPrice: 0,
             planOriginalPrice: 0,
-            planImage: '',
+            planImage:
+              'https://firebasestorage.googleapis.com/v0/b/mujibu.appspot.com/o/images%2Fdefault%2Fdefault_image.jpg?alt=media&token=eafe76e5-ea42-4eb2-9fb0-dde5b3fd7dd4',
             planQuantity: 0,
             planStartTime: dayjs().startOf('day').toDate() || null,
             planEndTime: dayjs().add(1, 'day').startOf('day').toDate() || null,
@@ -204,7 +211,8 @@ const Form = () => {
         projectTeam: {
           teamName: '',
           teamIntroduction: '',
-          teamAvatar: '',
+          teamAvatar:
+            'https://firebasestorage.googleapis.com/v0/b/mujibu.appspot.com/o/images%2Fdefault%2Fdefault_image.jpg?alt=media&token=eafe76e5-ea42-4eb2-9fb0-dde5b3fd7dd4',
           representativeName: '',
           representativeMobile: '',
           representativePhone: '',
@@ -258,38 +266,48 @@ const Form = () => {
     name: 'projectPlans',
   });
 
+  const projectPlansNum = watch('projectPlans');
+  const isDelivery = watch('shippingSettings.deliveryInfo.deliverySwitch');
+
   const handleGetValues = () => {
     const formData = getValues();
     setProposalForm(formData);
     console.log(formData);
   };
 
-  const onSubmit: SubmitHandler<IProjectState> = async (data) => {
-    console.log('form data : ', data);
-    // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const handleStep1 = () => {
+    const checkData = getValues();
+    console.log(checkData);
+    if (
+      firstStep &&
+      checkData.projectName !== '' &&
+      checkData.projectDescription !== '' &&
+      checkData.projectContent !== '' &&
+      checkData.goalAmount !== 0
+    ) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setFirstStep(false);
+      handleSubmit(onSubmit)();
+    } else if (
+      firstStep ||
+      checkData.projectName == '' ||
+      checkData.projectDescription == '' ||
+      checkData.projectContent == '' ||
+      checkData.goalAmount == 0
+    ) {
+      handleSubmit(onSubmit)();
+      setFirstStep(false);
+    } else {
+      handleNext();
+    }
   };
 
-  const projectPlansNum = watch('projectPlans');
-  const isDelivery = watch('shippingSettings.deliveryInfo.deliverySwitch');
-
-  useEffect(() => {
-    if ((projectPlansNum && projectPlansNum.length > 1) || isDelivery) {
-      handleSubmit(onSubmit)();
-    }
-  }, [projectPlansNum, isDelivery, handleSubmit]);
-
   const handleNext = () => {
-    handleSubmit(onSubmit)();
-    handleGetValues();
-
     let shouldIncrementStep = true;
-    // console.log(projectPlansNum.length, 'plan');
-
     switch (activeStep) {
       case 0:
-        if (firstStep || !!errors.projectName || !!errors.projectDescription || !!errors.goalAmount) {
+        if (!!errors.projectName || !!errors.projectDescription || errors.projectContent || !!errors.goalAmount) {
           shouldIncrementStep = false;
-          setFirstStep(false);
         }
         break;
       case 1:
@@ -319,6 +337,56 @@ const Form = () => {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
+  const handleStep5 = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setIsPreview(true);
+  };
+
+  const onSubmit: SubmitHandler<IProjectState> = useCallback(
+    async (data) => {
+      // console.log(activeStep);
+      if (isPreview) {
+        data.projectProposer = userData._id;
+
+        console.log('final !! proposal form data : ', data);
+
+        try {
+          const res = await postProposal({ body: data }).unwrap();
+          const postData = {
+            ...res,
+            status: res.status,
+          };
+          console.log('postData', postData);
+          if (postData?.status == 'Success') {
+            setProposalSuccess(true);
+            setIsPreview(false);
+          } else {
+            setProposalSuccess(false);
+            setIsPreview(false);
+          }
+        } catch (err) {
+          setProposalSuccess(false);
+          setIsPreview(false);
+          console.log(err);
+        }
+      }
+    },
+    [userData._id, activeStep, postProposal, isPreview],
+  );
+
+  useEffect(() => {
+    if ((projectPlansNum && projectPlansNum.length > 1) || isDelivery) {
+      setIsPreview(false);
+      handleSubmit(onSubmit)();
+    }
+  }, [projectPlansNum, isDelivery, handleSubmit, onSubmit]);
+
+  useEffect(() => {
+    if (isPreview) {
+      handleSubmit(onSubmit)();
+    }
+  }, [handleSubmit, isPreview, onSubmit]);
 
   return (
     <div className="bg-gray-light">
@@ -355,7 +423,6 @@ const Form = () => {
           </div>
         </div>
       </div>
-
       <div className="max-w-screen-md mx-auto md:py-5">
         <div className="hidden md:block w-full bg-gray-dark text-secondary text-center px-5 py-3 rounded-md border border-solid border-secondary-10">
           <Typography component="h2" variant="h5">
@@ -382,7 +449,7 @@ const Form = () => {
           {activeStep === 4 && (
             // <ProposalStep5 proposalForm={proposalForm} />
             <>
-              <Typography className="text-primary mb-5 text-center" component="h3" variant="h6">
+              <Typography className="text-primary my-5 md:mt-0 text-center" component="h3" variant="h6">
                 請確認您填寫好的提案資料
               </Typography>
               <div className="relative flex flex-col space-y-3">
@@ -421,9 +488,20 @@ const Form = () => {
               </div>
             </>
           )}
-          {activeStep === 5 && <ProposalStep6 setValue={setValue} />}
+          {activeStep === 5 && (
+            <ProposalStep6
+              setValue={setValue}
+              proposalSuccess={proposalSuccess}
+              postProposalLoading={postProposalLoading}
+            />
+          )}
 
-          <div className="w-full border-0 border-t border-solid border-secondary-10 md:px-5 md:py-4 fixed bottom-0 left-0 bg-white z-10">
+          <div
+            className={clsxm(
+              activeStep === 5 && proposalSuccess && 'hidden',
+              'w-full border-0 border-t border-solid border-secondary-10 md:px-5 md:py-4 fixed bottom-0 left-0 bg-white z-10',
+            )}
+          >
             <div className="hidden md:flex justify-between max-w-screen-xl mx-auto">
               <Button
                 disabled={activeStep === 0}
@@ -434,6 +512,7 @@ const Form = () => {
               >
                 返回上一步
               </Button>
+
               <div className="flex space-x-5">
                 {activeStep !== steps.length - 1 && (
                   <LoadingButton
@@ -448,21 +527,27 @@ const Form = () => {
                   </LoadingButton>
                 )}
 
-                {activeStep === steps.length - 2 && (
-                  <Button type="submit" variant="contained" startIcon={<CheckIcon />}>
-                    送出提案
+                {activeStep === 0 && (
+                  <Button onClick={handleStep1} variant="contained" startIcon={<RedoIcon />}>
+                    {`下一步：${steps[activeStep + 1]}`}
                   </Button>
                 )}
-                {activeStep !== steps.length - 2 && activeStep !== steps.length - 1 && (
+                {activeStep > 0 && activeStep < steps.length - 2 && (
                   <Button onClick={handleNext} variant="contained" startIcon={<RedoIcon />}>
                     {`下一步：${steps[activeStep + 1]}`}
+                  </Button>
+                )}
+
+                {activeStep === steps.length - 2 && (
+                  <Button onClick={handleStep5} type="button" variant="contained" startIcon={<CheckIcon />}>
+                    送出提案
                   </Button>
                 )}
               </div>
             </div>
 
             <MobileStepper
-              className="md:hidden"
+              className={clsxm(activeStep === 5 && proposalSuccess && 'hidden', 'md:hidden')}
               variant="text"
               steps={6}
               position="static"
@@ -474,10 +559,26 @@ const Form = () => {
                 </Button>
               }
               nextButton={
-                <Button size="small" onClick={handleNext} disabled={activeStep === 5}>
-                  {activeStep === steps.length - 2 ? '送出提案' : '下一步'}
-                  <KeyboardArrowRight />
-                </Button>
+                activeStep === 0 ? (
+                  <Button size="small" onClick={handleStep1}>
+                    下一步
+                    <KeyboardArrowRight />
+                  </Button>
+                ) : activeStep >= steps.length - 2 ? (
+                  <Button
+                    className={clsxm(activeStep === steps.length - 1 && 'invisible')}
+                    size="small"
+                    onClick={handleStep5}
+                  >
+                    送出提案
+                    <KeyboardArrowRight />
+                  </Button>
+                ) : (
+                  <Button size="small" onClick={handleNext}>
+                    下一步
+                    <KeyboardArrowRight />
+                  </Button>
+                )
               }
             />
           </div>

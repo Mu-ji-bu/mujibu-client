@@ -1,5 +1,6 @@
 import { useState, useEffect, Key } from 'react';
-import { Typography, FormLabel, Button, IconButton, TextField, CardMedia } from '@mui/material';
+import dayjs from 'dayjs';
+import { Typography, FormLabel, Button, IconButton, CardMedia } from '@mui/material';
 import PhotoUpload from '@/components/block/photoUpload/PhotoUpload';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -13,9 +14,6 @@ import {
   Editor,
 } from '@/components/block/form';
 import { useFieldArray } from 'react-hook-form';
-
-const projectTypes = ['實體產品類', '虛擬計畫類'];
-const categoryItems = ['藝術', '設計', '電影', '音樂', '科技', '出版'];
 
 interface ProposalStep2Props {
   setValue?: any;
@@ -239,7 +237,27 @@ const ProposalStep2: React.FC<ProposalStep2Props> = ({
         ),
       )}
 
-      <Button onClick={() => append()} className="text-center" variant="outlined" startIcon={<AddCircleOutlineIcon />}>
+      <Button
+        onClick={() =>
+          append({
+            planName: '',
+            planType: '',
+            planDiscountPrice: 0,
+            planOriginalPrice: 0,
+            planImage:
+              'https://firebasestorage.googleapis.com/v0/b/mujibu.appspot.com/o/images%2Fdefault%2Fdefault_image.jpg?alt=media&token=eafe76e5-ea42-4eb2-9fb0-dde5b3fd7dd4',
+            planQuantity: 0,
+            planStartTime: dayjs().startOf('day').toDate() || null,
+            planEndTime: dayjs().add(1, 'day').startOf('day').toDate() || null,
+            planDescription: '',
+            otherNotes: [],
+            isRealProduct: true,
+          })
+        }
+        className="text-center"
+        variant="outlined"
+        startIcon={<AddCircleOutlineIcon />}
+      >
         新增方案
       </Button>
     </div>
