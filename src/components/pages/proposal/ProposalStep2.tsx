@@ -143,7 +143,12 @@ const ProposalStep2: React.FC<ProposalStep2Props> = ({
                     </div>
                   ) : (
                     <div className="flex flex-col items-center p-5 justify-center bg-gray-light rounded-md">
-                      <PhotoUpload isPlan={true} index={index} setImageUploadedList={setImageUploadedList} />
+                      <PhotoUpload
+                        originalAvatar={getValues(`projectPlans.${index}.planImage`) || ''}
+                        isPlan={true}
+                        index={index}
+                        setImageUploadedList={setImageUploadedList}
+                      />
                     </div>
                   )}
                 </div>

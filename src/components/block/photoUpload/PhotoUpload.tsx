@@ -60,14 +60,19 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
 
   return (
     <>
-      {isPlan && imageFile && (
+      {isPlan && (
         <div className="w-full md:w-2/3 aspect-[2/1] rounded-md overflow-hidden mb-5">
           <Image
             className="w-full h-full object-cover"
             alt={originalName ?? 'unknown name'}
             width={400}
             height={200}
-            src={URL.createObjectURL(imageFile)}
+            src={
+              imageFile
+                ? URL.createObjectURL(imageFile)
+                : originalAvatar ??
+                  'https://firebasestorage.googleapis.com/v0/b/mujibu.appspot.com/o/images%2Fdefault%2Fdefault_image.jpg?alt=media&token=eafe76e5-ea42-4eb2-9fb0-dde5b3fd7dd4'
+            }
           />
         </div>
       )}
@@ -114,14 +119,19 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
         </div>
       )}
 
-      {isProposal && !isPlan && imageFile && (
+      {isProposal && !isPlan && (
         <div className="w-full md:w-2/3 aspect-[4/3] rounded-md overflow-hidden mb-5">
           <Image
             className="w-full h-full object-cover"
             alt={originalName ?? 'unknown name'}
             width={400}
             height={300}
-            src={URL.createObjectURL(imageFile)}
+            src={
+              imageFile
+                ? URL.createObjectURL(imageFile)
+                : originalAvatar ??
+                  'https://firebasestorage.googleapis.com/v0/b/mujibu.appspot.com/o/images%2Fdefault%2Fdefault_image.jpg?alt=media&token=eafe76e5-ea42-4eb2-9fb0-dde5b3fd7dd4'
+            }
           />
         </div>
       )}

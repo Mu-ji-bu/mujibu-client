@@ -47,7 +47,12 @@ const ProposalStep3: React.FC<ProposalStep3Props> = ({ control, errors, setValue
           </div>
         ) : (
           <div className="w-full md:w-1/2 shrink-0 flex flex-col items-center mb-5 md:mb-0">
-            <PhotoUpload isProposal={false} originalName={''} originalAvatar={''} setImageUploaded={setImageUploaded} />
+            <PhotoUpload
+              isProposal={false}
+              originalName={''}
+              originalAvatar={getValues('projectTeam.teamAvatar') || ''}
+              setImageUploaded={setImageUploaded}
+            />
           </div>
         )}
 
