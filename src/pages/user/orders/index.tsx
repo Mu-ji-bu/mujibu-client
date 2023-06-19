@@ -6,6 +6,7 @@ import OrderCard from '@/components/pages/user/OrderCard';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Typography } from '@mui/material';
 import Pagination from '@/components/block/pagination';
+import Seo from '@/components/Seo';
 
 interface Project {
   projectId: string;
@@ -110,14 +111,17 @@ const Orders = () => {
   }, [dispatch]);
 
   return (
-    <UserLayout>
-      <div className="flex flex-col space-y-5 mb-10">
-        {data.items && data.items.map((order, i) => <OrderCard key={`order_${i + 1}`} order={order} isPC={isPC} />)}
-      </div>
-      <div className="flex items-center justify-center">
-        <Pagination page={0} />
-      </div>
-    </UserLayout>
+    <>
+      <Seo templateTitle="贊助紀錄" />
+      <UserLayout>
+        <div className="flex flex-col space-y-5 mb-10">
+          {data.items && data.items.map((order, i) => <OrderCard key={`order_${i + 1}`} order={order} isPC={isPC} />)}
+        </div>
+        <div className="flex items-center justify-center">
+          <Pagination page={0} />
+        </div>
+      </UserLayout>
+    </>
   );
 };
 

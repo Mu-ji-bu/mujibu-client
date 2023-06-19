@@ -22,6 +22,7 @@ import {
   searchQueryEnum,
 } from '@/libraries/enum';
 import { useRouter } from 'next/router';
+import Seo from '@/components/Seo';
 
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   '& .MuiOutlinedInput-notchedOutline': {
@@ -70,6 +71,7 @@ const Projects = () => {
 
   return (
     <main className="max-w-screen-xl mx-auto p-5">
+      <Seo templateTitle="探索專案" />
       {isLoading ? (
         <Loading />
       ) : data !== undefined ? (
@@ -200,7 +202,7 @@ const Projects = () => {
             {Array.isArray(dataList) &&
               dataList.map((project: IProjectState) => (
                 <div
-                  onClick={() => router.push(`/projects/${project._id}`)}
+                  // onClick={() => router.push(`/projects/${project._id}`)}
                   key={project._id}
                   className="md:-mx-4 w-full md:w-1/2 lg:w-1/3"
                 >

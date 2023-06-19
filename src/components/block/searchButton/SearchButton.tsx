@@ -3,8 +3,10 @@ import { InputBase } from '@mui/material';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import Button from '../button/Button';
 import clsxm from '@/libraries/utils/clsxm';
+import { useRouter } from 'next/router';
 
 const SearchButton = () => {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
 
@@ -14,6 +16,7 @@ const SearchButton = () => {
   };
 
   const handleButtonClick = () => {
+    router.push('/projects');
     setOpen(!open);
   };
 

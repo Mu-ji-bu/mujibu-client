@@ -4,12 +4,16 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import ProjectsLayout from '@/components/layout/ProjectsLayout';
 import Loading from '@/components/Loading';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useGetCarouselDataQuery } from '@/store/services/homeApi';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import ProjectPlan from '@/components/pages/projects/ProjectPlan';
 import { useRouter } from 'next/router';
 import { useGetProjectByIdQuery } from '@/store/services/projectApi';
+import Seo from '@/components/Seo';
+import { useAppSelector } from '@/libraries/hooks/reduxHooks';
+import { selectUser } from '@/store/slices/userSlice';
+import { usePostUserCollectMutation } from '@/store/services/userApi';
 
 // interface DetailsProps {
 //   project: IProjectState;
@@ -51,6 +55,27 @@ const MsgBoard = () => {
 
   const project = useMemo((): IProjectState => data?.data || [], [data?.data]);
 
+  const user = useAppSelector(selectUser);
+  const userId = user._id;
+  const [followed, setFollowed] = useState(false);
+
+  const [postUserCollect, { isLoading: postUserCollectLoading }] = usePostUserCollectMutation();
+
+  const handleFollow = async () => {
+    if (!userId) {
+      return alert('請登入');
+    }
+    await postUserCollect({ userId, projectId }).then((res: any) => {
+      try {
+        if (res?.data.status === 'Success') {
+          setFollowed(true);
+        }
+      } catch (err) {
+        alert('已新增');
+      }
+    });
+  };
+
   const handleProjectPlanClick = (projectId: string, projectPlanId: string) => {
     console.log(`click on plan ${projectPlanId}`);
     // router.push(`/projects/select/`);
@@ -59,10 +84,11 @@ const MsgBoard = () => {
 
   return (
     <>
+      <Seo templateTitle="留言板" />
       {isLoading ? (
         <Loading />
       ) : (
-        <ProjectsLayout projectState={project} tabIndex={3}>
+        <ProjectsLayout projectState={project} tabIndex={3} handleFollow={handleFollow}>
           <div className="details w-full flex justify-center gap-6">
             <div className="flex flex-col w-2/3 gap-8">
               <div className="send-msg flex gap-3 items-center h-[100px] p-5 border border-solid border-secondary-10">

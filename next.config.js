@@ -15,6 +15,7 @@ const nextConfig = {
       'fastly.picsum.photos',
       'loremflickr.com',
       'plus.unsplash.com',
+      'assets.zeczec.com',
     ],
   },
 };

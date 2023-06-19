@@ -24,6 +24,7 @@ import { usePostUserCollectMutation, useDeleteUserCollectMutation } from '@/stor
 import ProjectPlan from '@/components/pages/projects/ProjectPlan';
 import ProjectsLayout from '@/components/layout/ProjectsLayout';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
+import Seo from '@/components/Seo';
 
 interface DetailsProps {
   project: IProjectState;
@@ -148,6 +149,7 @@ const Introduction = ({ project }: DetailsProps) => {
 
   return (
     <>
+      <Seo templateTitle="專案介紹" />
       {isLoading && !project ? (
         <Loading />
       ) : (

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -18,6 +18,7 @@ import ProjectPlan from '@/components/pages/projects/ProjectPlan';
 import ProjectsLayout from '@/components/layout/ProjectsLayout';
 import useBreakpoints from '@/libraries/hooks/useBreakPoints';
 import Loading from '@/components/Loading';
+import Seo from '@/components/Seo';
 
 const fakeProjectPlan: IPlanState = {
   _id: '1',
@@ -43,6 +44,8 @@ const fakeProjectPlan: IPlanState = {
 
 const Project = () => {
   const router = useRouter();
+  // 在 introduction/id 按上一頁，會來到這邊，這邊的 plan 不對，所以先改名為 id.tsx
+
   const { id: projectId } = router.query;
 
   const { data, isLoading } = useGetProjectByIdQuery(projectId);
@@ -74,6 +77,7 @@ const Project = () => {
 
   return (
     <>
+      <Seo templateTitle="專案介紹" />
       {isLoading ? (
         <Loading />
       ) : (

@@ -1,5 +1,12 @@
+import Seo from '@/components/Seo';
+
 const UserTerms = () => {
-  return <h1>F.3 使用條款</h1>;
+  return (
+    <>
+      <Seo templateTitle="使用條款" />
+      <h1>F.3 使用條款</h1>
+    </>
+  );
 };
 
 export default UserTerms;

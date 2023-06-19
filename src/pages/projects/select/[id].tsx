@@ -11,11 +11,28 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { IPlanState } from '@/types/plan';
 import PaymentForm from '@/components/pages/select/PaymentForm';
-import { useGetProjectByIdQuery } from '@/store/services/projectApi';
+import { getProjectById, getRunningQueriesThunk, useGetProjectByIdQuery } from '@/store/services/projectApi';
+import Seo from '@/components/Seo';
+import { wrapper } from '@/store/store';
 
-// interface DetailsProps {
-//   project: IProjectState;
-// }
+interface DetailsProps {
+  project: IProjectState;
+}
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  const { id } = context.query;
+  console.log('id', id);
+  if (typeof id === 'string') {
+    store.dispatch(getProjectById.initiate(id));
+  }
+  const [res] = await Promise.all(store.dispatch(getRunningQueriesThunk()));
+  console.log(res);
+  return {
+    props: {
+      project: (res.data as { status: string; data: IProjectState }).data,
+    },
+  };
+});
 
 // export const getStaticPaths: GetStaticPaths = async () => {
 //   const res = await fetch('https://mujibu-server-fau1.onrender.com/api/projects');
@@ -45,13 +62,13 @@ import { useGetProjectByIdQuery } from '@/store/services/projectApi';
 //   };
 // };
 
-// const ProjectSelectPage = ({ project }: DetailsProps) => {
-const ProjectSelectPage = () => {
+const ProjectSelectPage = ({ project }: DetailsProps) => {
+  // const ProjectSelectPage = () => {
   const router = useRouter();
   const { id: projectId } = router.query;
   const { data, isLoading, error, refetch } = useGetProjectByIdQuery(projectId);
 
-  const project = useMemo((): IProjectState => data?.data || [], [data?.data]);
+  // const project = useMemo((): IProjectState => data?.data || [], [data?.data]);
   const {
     _id,
     projectType,
@@ -107,7 +124,6 @@ const ProjectSelectPage = () => {
   }, [count, selectedPlan]);
 
   useEffect(() => {
-    console.log(router.query);
     if (!router.query.projectPlanId) return;
     // 取得 projectPlanId 參數的值
     setProjectPlanId(router.query.projectPlanId as string);
@@ -139,6 +155,7 @@ const ProjectSelectPage = () => {
 
   return (
     <div>
+      <Seo templateTitle="選擇方案" />
       <div className="select-top bg-gray-light">
         <div className="max-w-screen-xl mx-auto px-10">
           <div className="project-category py-5">
@@ -337,7 +354,7 @@ const ProjectSelectPage = () => {
                   前往結帳
                 </Button>
               )}
-              <PaymentForm prize={prize} isDisabled={!selectedPlan?.length} />
+              <PaymentForm prize={prize} isDisabled={count < 1 || !selectedPlan?.length} />
             </div>
           </div>
         </div>
