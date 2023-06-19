@@ -349,8 +349,8 @@ const Form = () => {
 
   const onSubmit: SubmitHandler<IProjectState> = useCallback(
     async (data) => {
-      // console.log(activeStep);
-      if (isPreview) {
+      console.log(activeStep);
+      if (isPreview && !proposalSuccess) {
         data.projectProposer = userData._id;
 
         console.log('final !! proposal form data : ', data);
@@ -380,17 +380,19 @@ const Form = () => {
   );
 
   useEffect(() => {
-    if ((projectPlansNum && projectPlansNum.length > 1) || isDelivery) {
+    if (projectPlansNum && projectPlansNum.length > 1 && !isPreview && !proposalSuccess) {
       setIsPreview(false);
       handleSubmit(onSubmit)();
+    } else {
+      return;
     }
-  }, [projectPlansNum, isDelivery, handleSubmit, onSubmit]);
+  }, [projectPlansNum, proposalSuccess]);
 
   useEffect(() => {
-    if (isPreview) {
+    if (isPreview && !proposalSuccess) {
       handleSubmit(onSubmit)();
     }
-  }, [handleSubmit, isPreview, onSubmit]);
+  }, [isPreview, proposalSuccess, handleSubmit, onSubmit]);
 
   return (
     <div className="bg-gray-light">
@@ -435,9 +437,12 @@ const Form = () => {
         </div>
 
         <form className="flex flex-col items-center md:py-5" onSubmit={handleSubmit(onSubmit)}>
-          {activeStep === 0 && <ProposalStep1 setValue={setValue} errors={errors} control={control} />}
+          {activeStep === 0 && (
+            <ProposalStep1 getValues={getValues} setValue={setValue} errors={errors} control={control} />
+          )}
           {activeStep === 1 && (
             <ProposalStep2
+              getValues={getValues}
               setValue={setValue}
               errors={errors}
               control={control}
@@ -446,7 +451,9 @@ const Form = () => {
               remove={remove}
             />
           )}
-          {activeStep === 2 && <ProposalStep3 setValue={setValue} errors={errors} control={control} />}
+          {activeStep === 2 && (
+            <ProposalStep3 getValues={getValues} setValue={setValue} errors={errors} control={control} />
+          )}
           {activeStep === 3 && (
             <ProposalStep4 setValue={setValue} getValues={getValues} errors={errors} control={control} watch={watch} />
           )}

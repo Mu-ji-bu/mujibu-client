@@ -19,7 +19,7 @@ import { IProjectState } from '@/types/project';
 import { useGetCarouselDataQuery } from '@/store/services/homeApi';
 import { useGetProjectByIdQuery, getRunningQueriesThunk, getProjectById } from '@/store/services/projectApi';
 import { selectUser } from '@/store/slices/userSlice';
-import { usePostUserCollectMutation } from '@/store/services/userApi';
+import { usePostUserCollectMutation, useDeleteUserCollectMutation } from '@/store/services/userApi';
 
 import ProjectPlan from '@/components/pages/projects/ProjectPlan';
 import ProjectsLayout from '@/components/layout/ProjectsLayout';
@@ -87,23 +87,39 @@ const Introduction = ({ project }: DetailsProps) => {
   // const project = useMemo((): IProjectState => data?.data || [], [data?.data]);
   const user = useAppSelector(selectUser);
   const userId = user._id;
-  const [followed, setFollowed] = useState(false);
+  const userFollow = user.collects?.includes(String(projectId));
+  const [followed, setFollowed] = useState<boolean>(userFollow || false);
 
   const [postUserCollect, { isLoading: postUserCollectLoading }] = usePostUserCollectMutation();
+  const [deleteUserCollect, { isLoading: deleteUserCollectLoading }] = useDeleteUserCollectMutation();
+
+  const onCancelFollow = async (projectId: string) => {
+    try {
+      const result = await deleteUserCollect({ userId, projectId }).unwrap();
+    } catch (error) {
+      throw Error('onCancelFollow');
+    }
+  };
 
   const handleFollow = async () => {
     if (!userId) {
       return alert('請登入');
     }
-    await postUserCollect({ userId, projectId }).then((res: any) => {
-      try {
-        if (res?.data.status === 'Success') {
-          setFollowed(true);
+
+    if (!followed) {
+      await postUserCollect({ userId, projectId }).then((res: any) => {
+        try {
+          if (res?.data.status === 'Success') {
+            setFollowed(true);
+          }
+        } catch (err) {
+          alert('已新增');
         }
-      } catch (err) {
-        alert('已新增');
-      }
-    });
+      });
+    } else {
+      onCancelFollow(String(projectId));
+      setFollowed(false);
+    }
   };
   const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
   const [sample, setSample] = useState('');
@@ -111,6 +127,10 @@ const Introduction = ({ project }: DetailsProps) => {
   const handleProjectPlanClick = (projectId: string, projectPlanId: string) => {
     router.push(`/projects/select/${projectId}?projectPlanId=${projectPlanId}`);
   };
+
+  useEffect(() => {
+    setFollowed(user.collects?.includes(String(projectId)) || false);
+  }, [user.collects, projectId]);
 
   useEffect(() => {
     const fetchData = async () => {

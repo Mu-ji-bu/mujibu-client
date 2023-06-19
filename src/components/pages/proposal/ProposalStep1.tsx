@@ -98,7 +98,11 @@ const ProposalStep1: React.FC<ProposalStep1Props> = ({ control, errors, setValue
               </div>
             ) : (
               <div className="flex flex-col items-center p-5 justify-center bg-gray-light rounded-md">
-                <PhotoUpload isProposal={true} setImageUploaded={setImageUploaded} />
+                <PhotoUpload
+                  originalAvatar={getValues('projectImage') || ''}
+                  isProposal={true}
+                  setImageUploaded={setImageUploaded}
+                />
               </div>
             )}
           </div>
