@@ -194,6 +194,7 @@ export default function Home() {
                   <Image
                     src={'/feature/icon_feature_1@2x.png'}
                     alt="promise1"
+                    priority={true}
                     width={0}
                     height={0}
                     sizes="100vw"
@@ -212,6 +213,7 @@ export default function Home() {
                   <Image
                     src={'/feature/icon_feature_2@2x.png'}
                     alt="promise1"
+                    priority={true}
                     width={0}
                     height={0}
                     sizes="100vw"
