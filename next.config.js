@@ -17,6 +17,12 @@ const nextConfig = {
       'plus.unsplash.com',
       'assets.zeczec.com',
     ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
 };
 

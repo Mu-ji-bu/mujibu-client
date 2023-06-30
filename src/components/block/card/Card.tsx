@@ -144,9 +144,10 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
         onClick={() => {
           router.push(`/projects/introduction/${projectId}`);
         }}
+        className="overflow-hidden"
       >
         <CardMedia
-          className="rounded-lg object-cover"
+          className="rounded-lg object-cover hover:scale-105 transition ease-linear"
           component="img"
           alt={projectName}
           height="276"
@@ -168,19 +169,32 @@ const ImgMediaCard: React.FC<ImgMediaCardProps> = (props) => {
           )}
         </div>
         <div className="mt-2 mb-3 md:h-[90px] h-[72px]">
-          <Typography variant={isPC ? 'body20' : 'body16'}>{projectName}</Typography>
-        </div>
-        <div className="truncate whitespace-nowrap  text-primary hover:text-secondary visited:text-primary">
-          <Typography className="mr-1 opacity-60" component="span" variant={isPC ? 'h6' : 'caption'} color="secondary">
-            提案者
-          </Typography>
           <Link
-            href="#"
-            className="no-underline  text-primary  hover:text-secondary visited:text-primary font-normal md:font-medium text-sm md:text-base"
+            href={`/projects/introduction/${projectId}`}
+            className="text-secondary hover:text-secondary-66 visited:text-secondary no-underline"
           >
-            {projectTeam?.teamName || '沒有團隊也沒有提案者'}
+            <Typography variant={isPC ? 'body20' : 'body16'}>{projectName}</Typography>
           </Link>
         </div>
+        {projectTeam?._id && (
+          <div className="truncate whitespace-nowrap  text-primary hover:text-secondary visited:text-primary">
+            <Typography
+              className="mr-1 opacity-60"
+              component="span"
+              variant={isPC ? 'h6' : 'caption'}
+              color="secondary"
+            >
+              提案者
+            </Typography>
+            <Link
+              href={`/team/${projectTeam?._id}`}
+              className="no-underline  text-primary  hover:text-secondary visited:text-primary font-normal md:font-medium text-sm md:text-base"
+            >
+              {projectTeam?.teamName || '沒有團隊也沒有提案者'}
+            </Link>
+          </div>
+        )}
+
         {renderCardBottom()}
       </CardContent>
     </Card>

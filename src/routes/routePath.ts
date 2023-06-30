@@ -15,6 +15,7 @@ const routePath = {
   proposal: '/proposal',
   proposalForm: '/proposal/form',
   proposalId: '/proposal/[id]',
+  team: '/team',
   projects: '/projects',
   projectsIntroduction: '/projects/introduction',
   projectsNews: '/projects/news',

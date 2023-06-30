@@ -60,22 +60,22 @@ const CollectsCard: React.FC<CollectsCardProps> = ({ isPC, collect, onCancelFoll
           </Typography>
         </Link>
         <div className="mb-3 flex items-center">
-          <Typography
+          {/* <Typography
             className="mr-1 text-secondary-66 leading-none shrink-0"
             component="span"
             variant={isPC ? 'h6' : 'caption'}
             color="secondary"
           >
             提案者
-          </Typography>
-          <Link
-            href={collect.projectTeam?.projectId || ''}
+          </Typography> */}
+          {/* <Link
+            href={collect.projectTeam?._id || ''}
             className="no-underline line-clamp-1  text-primary  hover:text-secondary visited:text-primary"
           >
             <Typography component="span" variant={isPC ? 'h6' : 'caption'}>
               {collect.projectTeam?.teamName || '沒有團隊名稱'}
             </Typography>
-          </Link>
+          </Link> */}
         </div>
         <Button
           className="self-end"
