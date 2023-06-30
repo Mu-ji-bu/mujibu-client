@@ -29,13 +29,13 @@ export const userApiService = createApi({
         body: body,
       }),
     }),
-    gerUserCollect: builder.query<any, any>({
+    getUserCollect: builder.query<any, any>({
       query: (userId) => {
         if (userId) {
-          const gerUserCollectRoute = apiRoutes.gerUserCollectURL.replace(':userId', userId);
-          return gerUserCollectRoute;
+          return `${apiRoutes.gerUserCollectURL.replace(':userId', userId)}`;
+        } else {
+          throw new Error('Invalid userId');
         }
-        throw new Error('Invalid userId');
       },
     }),
     postUserCollect: builder.mutation<any, any>({
@@ -61,7 +61,7 @@ export const userApiService = createApi({
 
 export const {
   usePatchUserMutation,
-  useGerUserCollectQuery,
+  useGetUserCollectQuery,
   usePostUserCollectMutation,
   useDeleteUserCollectMutation,
 } = userApiService;

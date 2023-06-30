@@ -2,7 +2,7 @@ import LoopIcon from '@mui/icons-material/Loop';
 import Image from 'next/image';
 const Loading = ({ className = null }) => {
   return (
-    <div className={`h-screen w-screen flex flex-col justify-center items-center -mt-[64px] ${className}`}>
+    <div className={`h-screen flex flex-col justify-center items-center -mt-[64px] ${className}`}>
       <div className="aspect-square">
         <Image
           property="true"

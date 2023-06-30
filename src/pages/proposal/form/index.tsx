@@ -395,6 +395,10 @@ const Form = () => {
     }
   }, [isPreview, proposalSuccess, handleSubmit, onSubmit]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeStep]);
+
   return (
     <>
       <Seo templateTitle="提案表單" />

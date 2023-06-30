@@ -3,7 +3,7 @@ import type { IUserState } from './user';
 
 export declare interface ITeamState {
   _id?: string;
-  projects?: IProjectState[];
+  projectId?: IProjectState[];
   user?: IUserState;
   teamName?: string;
   teamIntroduction?: string;
