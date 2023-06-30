@@ -64,7 +64,7 @@ const initialState: IInitialState = {
     ],
     projectTeam: {
       _id: '',
-      projects: [],
+      projectId: [],
       user: {},
       teamName: '',
       teamIntroduction: '',
