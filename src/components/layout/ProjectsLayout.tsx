@@ -248,11 +248,11 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                   <div className="corporation flex items-center space-x-5 pb-3 mb-2 border-0 border-b border-solid border-secondary-10">
                     <Avatar className="w-[72px] h-[72px]" alt="teamName" src={projectTeam?.teamAvatar || ''}></Avatar>
                     <Link
-                      href={`${projectTeam?.socialWebsite || 'https://www.facebook.com/mujibu'}`}
+                      href={`/team/${projectTeam?._id}`}
                       className="text-xl no-underline visited:text-primary text-primary font-medium "
                     >
                       {`${
-                        projectTeam?.companyName || projectTeam?.teamName || 'LiteConnect Inc 輕連結有限公司(default)'
+                        projectTeam?.teamName || projectTeam?.companyName || 'LiteConnect Inc 輕連結有限公司(default)'
                       }`}
                     </Link>
                   </div>
@@ -260,7 +260,7 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                     <div className="socials-text">
                       <Typography component="span" variant="caption" className="text-secondary-66">
                         {/* dead */}
-                        已發起 1 個專案
+                        已發起 {projectTeam?.projectId?.length} 個專案
                       </Typography>
                     </div>
                     <div className="socials-btns">

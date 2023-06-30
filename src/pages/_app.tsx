@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import { useEffect } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import type { AppProps } from 'next/app';
 import { wrapper } from '../store/store';
@@ -16,9 +17,15 @@ import 'dayjs/locale/zh-tw';
 import { Elements } from '@stripe/react-stripe-js';
 import { stripePromise } from '@libraries/utils/stripe.utils';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 const App = ({ Component, ...rest }: AppProps) => {
   const { store, props } = wrapper?.useWrappedStore(rest);
+  const { pathname } = useRouter();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   /** 
     為了讓首頁和探索頁有資料，目前 mock api 先開著，但這樣會員中心的呈現資料會是專用測試。

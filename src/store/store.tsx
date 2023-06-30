@@ -15,6 +15,7 @@ import homeReducer from './slices/homeSlice';
 import { authApiService } from './services/authApi';
 import { userApiService } from './services/userApi';
 import { proposalApiService } from './services/proposalApi';
+import { teamApiService } from './services/teamApi';
 import { projectApiService } from './services/projectApi';
 import { uploadPhotoApiService } from './services/uploadPhotoApi';
 import { postApiService } from './services/postApi';
@@ -29,6 +30,7 @@ const reducers = combineReducers({
   [authApiService.reducerPath]: authApiService.reducer,
   [userApiService.reducerPath]: userApiService.reducer,
   [proposalApiService.reducerPath]: proposalApiService.reducer,
+  [teamApiService.reducerPath]: teamApiService.reducer,
   [uploadPhotoApiService.reducerPath]: uploadPhotoApiService.reducer,
   [postApiService.reducerPath]: postApiService.reducer,
   [projectApiService.reducerPath]: projectApiService.reducer,
@@ -43,6 +45,7 @@ export const makeStore = wrapMakeStore(() =>
         .concat(authApiService.middleware)
         .concat(userApiService.middleware)
         .concat(proposalApiService.middleware)
+        .concat(teamApiService.middleware)
         .concat(uploadPhotoApiService.middleware)
         .concat(postApiService.middleware)
         .concat(projectApiService.middleware)

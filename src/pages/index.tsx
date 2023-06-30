@@ -27,13 +27,13 @@ import { useAppDispatch } from '@/libraries/hooks/reduxHooks';
 export default function Home() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   // const { data, refetch } = useGetProjectDataQuery();
-  const { data: carouselDataRes } = useGetCarouselDataQuery();
-  const { data: hotDataRes } = useGetHotDataQuery();
-  const { data: newDataRes } = useGetNewDataQuery();
-  const { data: picksDataRes } = useGetPicksDataQuery();
-  const { data: successDataRes } = useGetSuccessDataQuery();
+  const { data: carouselDataRes, isLoading: carouselDataLoading } = useGetCarouselDataQuery();
+  const { data: hotDataRes, isLoading: hotDataLoading } = useGetHotDataQuery();
+  const { data: newDataRes, isLoading: newDataLoading } = useGetNewDataQuery();
+  const { data: picksDataRes, isLoading: picksDataLoading } = useGetPicksDataQuery();
+  const { data: successDataRes, isLoading: successDataLoading } = useGetSuccessDataQuery();
 
   const carouselDataList = useMemo(
     (): IProjectState[] | never[] => carouselDataRes?.data || [],
@@ -50,7 +50,7 @@ export default function Home() {
   const { isSm, isMd, isLg, isXl, is2Xl } = useBreakpoints();
 
   useEffect(() => {
-    setisLoading(true);
+    setIsLoading(true);
     if (carouselDataRes) {
       dispatch(setCarousel(carouselDataRes.data));
     }
@@ -66,12 +66,12 @@ export default function Home() {
     if (successDataRes) {
       dispatch(setSuccess(successDataRes.data));
     }
-    setisLoading(false);
+    setIsLoading(false);
   }, [carouselDataRes, hotDataRes, newDataRes, picksDataRes, successDataRes, dispatch]);
 
   // 假資料
   // useEffect(() => {
-  //   setisLoading(true);
+  //   setIsLoading(true);
 
   //   const fetchData = async () => {
   //     const generatedData = await generateData();
@@ -82,7 +82,7 @@ export default function Home() {
   //         projects: generatedData,
   //       },
   //     }));
-  //     setisLoading(false);
+  //     setIsLoading(false);
   //   };
 
   //   const dataTimeOut = setTimeout(fetchData, 1000);
@@ -94,7 +94,12 @@ export default function Home() {
 
   return (
     <main className="home w-full">
-      {isLoading ? (
+      {isLoading ||
+      carouselDataLoading ||
+      hotDataLoading ||
+      newDataLoading ||
+      picksDataLoading ||
+      successDataLoading ? (
         <Loading />
       ) : (
         <>

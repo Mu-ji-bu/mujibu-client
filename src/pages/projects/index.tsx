@@ -198,13 +198,13 @@ const Projects = () => {
               )}
             />
           </div>
-          <div className="flex flex-wrap justify-between gap-4 px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 px-5">
             {Array.isArray(dataList) &&
               dataList.map((project: IProjectState) => (
                 <div
                   // onClick={() => router.push(`/projects/${project._id}`)}
                   key={project._id}
-                  className="md:-mx-4 w-full md:w-1/2 lg:w-1/3"
+                  className="w-full"
                 >
                   <Card isPC={isMd} {...project} />
                 </div>

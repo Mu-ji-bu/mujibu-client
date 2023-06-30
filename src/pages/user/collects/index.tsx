@@ -6,15 +6,15 @@ import { setUserTabsPage } from '../../../store/slices/tabsSlice';
 import { selectUser } from '../../../store/slices/userSlice';
 import CollectsCard from '@/components/pages/user/CollectsCard';
 import ToggleButtons from '@/components/pages/user/ToggleButtons';
-import { useGerUserCollectQuery, useDeleteUserCollectMutation } from '@/store/services/userApi';
+import { useGetUserCollectQuery, useDeleteUserCollectMutation } from '@/store/services/userApi';
 import { projectFormEnum } from '@/libraries/enum';
 import Seo from '@/components/Seo';
 
 const Collects = () => {
   const user = useAppSelector(selectUser);
   const userId = user._id;
+  const { data: collectsData, error, refetch } = useGetUserCollectQuery(userId);
 
-  const { data: collectsData, refetch } = useGerUserCollectQuery(userId);
   const [deleteUserCollect, { isLoading: deleteUserCollectLoading }] = useDeleteUserCollectMutation();
 
   const isPC = useMediaQuery('(min-width:768px)'); //tailwind breakpoint md
@@ -45,10 +45,10 @@ const Collects = () => {
     console.log('useEffect :', userId);
 
     if (userId) {
-      console.log('useEffect :', userId);
+      console.log('useEffect2 :', userId);
       refetch();
     }
-  }, [userId]);
+  }, [userId, refetch]);
 
   return (
     <>

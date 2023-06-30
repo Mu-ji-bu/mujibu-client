@@ -3,13 +3,13 @@ import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@libraries/hooks/reduxHooks';
 import { setUserTabsPage, selectTabs } from '../../../store/slices/tabsSlice';
 import { selectUser } from '../../../store/slices/userSlice';
-import { useGerUserCollectQuery } from '@/store/services/userApi';
+import { useGetUserCollectQuery } from '@/store/services/userApi';
 
 const NavTabs: React.FC = () => {
   const { userTabs } = useAppSelector(selectTabs);
   const dispatch = useAppDispatch();
   const { _id } = useAppSelector(selectUser);
-  const { data: collectsData, refetch } = useGerUserCollectQuery(_id);
+  const { data: collectsData } = useGetUserCollectQuery(_id);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     dispatch(setUserTabsPage(newValue));
